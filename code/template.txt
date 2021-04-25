@@ -1,0 +1,25 @@
+from .Proxy import Proxy
+from robot.libraries.BuiltIn import BuiltIn
+import sys
+from robot.libraries.Screenshot import Screenshot
+from robot.api import logger
+import I18nListener as i18n
+
+class X(Proxy):
+    def __init__(self, arg_format):
+        arg_format[repr(['', ''])] = self
+    
+    def i18n_Proxy(self, func):
+        def proxy(self,):
+            X.show_warning(self, )
+    
+            return func(self, )
+        return proxy
+
+    def show_warning(self, ):
+        language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
+        test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
+        message_for_x = Proxy().deal_warning_message_for_one_word(, '')
+        if message_for_x != '':
+            message = language + test_name + message_for_x + ' '*3 + '\n' + 'You should verify translation is correct!'
+            logger.warn(message)
