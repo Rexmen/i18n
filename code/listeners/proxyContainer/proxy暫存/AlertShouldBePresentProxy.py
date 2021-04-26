@@ -11,7 +11,7 @@ class AlertShouldBePresentProxy(Proxy):  #驗證alert資訊有成功出現
                         # text: 腳本輸入的預期文字(support)
     def i18n_Proxy(self, func):
         def proxy(self, text='', action=ACCEPT, timeout=None):
-            logger.warn("fuck alert2")
+            logger.warn("")
             possible_translations = i18n.I18nListener.MAP.value(text) #support可能有多種翻譯
             if len(possible_translation) > 1:
                 AlertShouldBePresentProxy.show_warning(self, text) #因為存在一詞多譯，所以呼叫show_warning

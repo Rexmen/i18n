@@ -32,17 +32,17 @@ class I18nListener:
         self.locale = locale
         self.attrs = {}
         self.locale_dict = {'en-US':'United Kingdom - English', 
-                            'ja':'?�本 - ?�本�?', 
-                            'ko':'?�?�민�? - ?�국??', 
-                            'zh-CN':'中国 - 简体中??', 
-                            'zh-TW':'?�灣 - 繁�?中�?', 
+                            # 'ja':'?�本 - ?�本�?', 
+                            # 'ko':'?�?�민�? - ?�국??', 
+                            # 'zh-CN':'中国 - 简体中??', 
+                            'zh-TW':'台灣 - 繁體中文', 
                             'de-CH':'Schweiz - Deutsch'}
         MappingRoutesGenerator().generate()
-        for f in glob('%s/languageFiles/%s/*%s.json' % (os.path.dirname(os.path.abspath(__file__)), locale, locale)): #?�種語�?翻譯�?(common-xx.json more-xx.json etc.)
-            with open(f, 'r', encoding='UTF-8') as i18n_file: #將json檔�???
-                i18n_dict = json.load(i18n_file)  #將�??��?json結�?轉�??�python dict
+        for f in glob('%s/languageFiles/%s/*%s.json' % (os.path.dirname(os.path.abspath(__file__)), locale, locale)): #?�種語�?翻譯�?(common-xx.json more-xx.json etc.)
+            with open(f, 'r', encoding='UTF-8') as i18n_file: #將json檔�???
+                i18n_dict = json.load(i18n_file)  #將�??��?json結�?轉�??�python dict
             self.combine_i18n_dict(source_dict=i18n_dict, target_dict=I18nListener.TRANSLATION_FILE)
-        I18nListener.MAP = I18nMap(I18nListener.TRANSLATION_FILE, locale) #i18nMAP，傳?��??�翻譯�?dict?�TRANSLATION_FILE ?? 語�?
+        I18nListener.MAP = I18nMap(I18nListener.TRANSLATION_FILE, locale) #i18nMAP，傳?��??�翻譯�?dict?�TRANSLATION_FILE ?? 語�?
         I18nListener.LOCALE = locale # for get language Ex zh-TW, zh-CN
         I18nListener.Not_SHOW_WARNING_WORDS = self.parse_not_show_warning_words(not_show_warning_words)
         
@@ -50,7 +50,7 @@ class I18nListener:
         append all key, value of source_dict to target_dict
         source_dict is the dict of json file like 'common-zh-TW.json'...
     '''
-    def combine_i18n_dict(self, source_dict, target_dict): #寫�?份到TRANSLATION_FILE
+    def combine_i18n_dict(self, source_dict, target_dict): #寫�?份到TRANSLATION_FILE
         for key, value in source_dict.items():
             target_dict[key] = value
     
