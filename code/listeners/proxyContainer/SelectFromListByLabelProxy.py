@@ -10,12 +10,16 @@ class SelectFromListByLabelProxy(Proxy):
         arg_format[repr(['locator', 'labels'])] = self
     # select options from selection list by labels
     def i18n_Proxy(self, func):
-        def proxy(self, locator, *labels)
+        def proxy(self, locator, *labels):
             if not labels:
                 return func(self, locator, labels)
             SelectFromListByLabelProxy.show_warning(self, locator)
             # locator_translation = i18n.I18nListener.MAP.value(BuiltIn().replace_variables(locator))
-            labels_translation = i18n.I18nListener.MAP.values(labels)
+
+            labels_translation = ""
+            for i in i18n.I18nListener.MAP.values(labels):
+                labels_translation += ''.join(i)
+            logger.warn(labels_translation)
             return func(self, locator, labels_translation)
         return proxy
 

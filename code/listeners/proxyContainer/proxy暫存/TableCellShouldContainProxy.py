@@ -8,7 +8,7 @@ import I18nListener as i18n
 class TableCellShouldContainProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'row', 'column', 'expected', 'loglevel=TRACE'])] = self
-    
+        # <table>
     def i18n_Proxy(self, func):
         def proxy(self, locator, row, column, expected, loglevel=INFO)
             TableCellShouldContainProxy.show_warning(self, expected)

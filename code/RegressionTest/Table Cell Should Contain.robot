@@ -12,18 +12,11 @@ Test Setup    Run Keywords    Open Browser    https://ssl-ezscrum.csie.ntut.edu.
               ...      AND    Click Button    //*[@name='Next']
 
 *** Test Cases ***
-List selection should be
+Table cell should contain
     Wait Until Element Is Visible    //*[contains(@class, 'x-grid3-cell-inner') and normalize-space()='CapstoneRobotTest2']    ${shortPeriodOfTime}
     Double Click Element    //*[contains(@class, 'x-grid3-cell-inner') and normalize-space()='CapstoneRobotTest2']
     Wait Until Element Is Visible    //*[@id='Project_Top_Panel']    ${shortPeriodOfTime}
     Wait Until Element Is Visible    //*[@class='x-tree-node-anchor']//*[normalize-space()='TaskBoard']    ${shortPeriodOfTime}
     Double Click Element    //*[@class='x-tree-node-anchor']//*[normalize-space()='Scrum Report']
-    List Selection Should Be Sprint 19
+    
     [Teardown]    Close Browser
-
-*** Keywords ***
-List Selection Should Be Sprint 19
-    Select Frame    xpath://iframe[@id='remainingWorkReport']
-    # List Selection Should Be    //*[@id='ShowSprint']    Sprint 19
-    List Selection Should Be    //*[@id='ShowSprint']    Sprint 19
-    [Teardown]    Unselect Frame

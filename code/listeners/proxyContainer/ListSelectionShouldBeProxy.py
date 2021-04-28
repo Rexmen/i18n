@@ -9,6 +9,7 @@ class ListSelectionShouldBeProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'expected'])] = self
         #Verify selection list `locator` has `expected` options selected.
+        # selection list 在網頁中: <select>
     def i18n_Proxy(self, func):
         def proxy(self, locator, *expected):
             ListSelectionShouldBeProxy.show_warning(self, locator)
@@ -19,11 +20,13 @@ class ListSelectionShouldBeProxy(Proxy):
             values = self._get_values(options)
             if sorted(expected) not in [sorted(labels), sorted(values)]:
                 return func(self, locator, expected)
-            logger.warn(type(expected))
-            #翻譯locator，尚須修正
             # locator_translation = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value))
 
-            expected_translation = i18n.I18nListener.MAP.values(expected)
+            # expected_translation = i18n.I18nListener.MAP.values(expected)
+            expected_translation = ""
+            for i in i18n.I18nListener.MAP.values(expected):
+                expected_translation += ''.join(i)
+            # logger.warn(expected_translation)
             return func(self, locator, expected_translation)
         return proxy
 
