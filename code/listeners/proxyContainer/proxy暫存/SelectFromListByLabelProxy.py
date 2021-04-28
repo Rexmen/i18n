@@ -7,8 +7,8 @@ import I18nListener as i18n
 
 class SelectFromListByLabelProxy(Proxy):
     def __init__(self, arg_format):
-        arg_format[repr(['locator', '*labels'])] = self
-    
+        arg_format[repr(['locator', 'labels'])] = self
+    # select options from selection list by labels
     def i18n_Proxy(self, func):
         def proxy(self, locator, *labels)
             if not labels:
