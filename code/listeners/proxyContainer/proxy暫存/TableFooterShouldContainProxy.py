@@ -10,7 +10,7 @@ class TableFooterShouldContainProxy(Proxy):
         arg_format[repr(['locator', 'expected', 'loglevel=TRACE'])] = self
     
     def i18n_Proxy(self, func):
-        def proxy(self, locator, expected, loglevel='TRACE')
+        def proxy(self, locator, expected, loglevel='TRACE'):
             TableFooterShouldContainProxy.show_warning(self, locator, expected)
             locator_translation = i18n.I18nListener.MAP.value(BuiltIn().replace_variables(locator))
             expected_translation = i18n.I18nListener.MAP.value(expected)

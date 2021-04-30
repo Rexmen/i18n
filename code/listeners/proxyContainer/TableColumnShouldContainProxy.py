@@ -7,20 +7,14 @@ import I18nListener as i18n
 
 class TableColumnShouldContainProxy(Proxy):
     def __init__(self, arg_format):
-        arg_format[repr(['locator', 'column', 'expected', 'loglevel=TRACE'])] = self
+        arg_format[repr(['locator', 'column', 'expected', 'loglevel=\'TRACE\''])] = self
     
     def i18n_Proxy(self, func):
-        def proxy(self, locator, column, expected, loglevel='TRACE')
+        def proxy(self, locator, column, expected, loglevel='TRACE'):
             TableColumnShouldContainProxy.show_warning(self, locator, expected)
-            column_translation = i18n.I18nListener.MAP.value(column)
             expected_translation = i18n.I18nListener.MAP.value(expected)
-            locator_translation = i18n.I18nListener.MAP.value(BuiltIn().replace_variables(locator))
-            element = self._find_by_column(locator_translation, column_translation, expected_translation)
-            
-            if element is None:
-                return func(self, locator, column, expected, loglevel)
-            else:
-                return func(self, locator_translation, column_translation, expected_translation, loglevel)
+            logger.warn(''.join(expected_translation))
+            return func(self, locator, column, ''.join(expected_translation), loglevel)
         return proxy
 
     def show_warning(self, locator, expected):

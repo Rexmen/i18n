@@ -7,16 +7,14 @@ import I18nListener as i18n
 
 class TableCellShouldContainProxy(Proxy):
     def __init__(self, arg_format):
-        arg_format[repr(['locator', 'row', 'column', 'expected', 'loglevel=TRACE'])] = self
+        arg_format[repr(['locator', 'row', 'column', 'expected', 'loglevel=\'TRACE\''])] = self
         # <table>
     def i18n_Proxy(self, func):
-        def proxy(self, locator, row, column, expected, loglevel=INFO)
+        def proxy(self, locator, row, column, expected, loglevel='TRACE'):
             TableCellShouldContainProxy.show_warning(self, expected)
-            content = self.get_table_cell(locator, row, column, loglevel)
-            if expected in content:
-                expected_translation = i18n.I18nListener.MAP.value(expected)
-                return func(self, locator, row, column, expected_translation, loglevel)
-            return func(self, locator, row, column, expected, loglevel=INFO)
+            expected_translation = i18n.I18nListener.MAP.value(expected)
+            logger.warn(''.join(expected_translation))
+            return func(self, locator, row, column, ''.join(expected_translation), loglevel)
         return proxy
 
     def show_warning(self, expected):
