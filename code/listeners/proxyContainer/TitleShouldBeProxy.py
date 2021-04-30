@@ -10,13 +10,11 @@ class TitleShouldBe(Proxy):
         arg_format[repr(['title', 'message=None'])] = self
     
     def i18n_Proxy(self, func):
-        def proxy(self, title, message=None)
+        def proxy(self, title, message=None):
             TitleShouldBe.show_warning(self, title)
             title_translation = i18n.I18nListener.MAP.value(title)
-            actual = self.get_title()
-            if actual != title:
-                return func(self, title, message)    
-            return func(self, title_translation, message)
+            logger.warn(''.join(title_translation))
+            return func(self, ''.join(title_translation), message)
         return proxy
 
     def show_warning(self, title):
