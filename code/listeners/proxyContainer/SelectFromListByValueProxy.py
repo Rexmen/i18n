@@ -8,7 +8,7 @@ import I18nListener as i18n
 class SelectFromListByValueProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'values'])] = self
-    
+        # UnselectFromListByValue 也適用此方法， 但unselect僅能用在multi-selections
     def i18n_Proxy(self, func):
         def proxy(self, locator, *values):
             if not values:

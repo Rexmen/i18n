@@ -8,12 +8,13 @@ import I18nListener as i18n
 class TableShouldContainProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'expected', 'loglevel=\'TRACE\''])] = self
-    
+        # TableHeaderShouldContain & TableFooterShouldContain 也適用此keyword
     def i18n_Proxy(self, func):
         def proxy(self, locator, expected, loglevel='TRACE'):
             TableShouldContainProxy.show_warning(self, locator, expected)
             expected_translation = i18n.I18nListener.MAP.value(expected)
             logger.warn(expected_translation)
+            # logger.warn("test")
             return func(self, locator, ''.join(expected_translation), loglevel)
         return proxy
 

@@ -26,3 +26,8 @@ Table column should contain
     Wait Until Element Is Visible    //*[contains(@class, 'x-grid3-cell-inner') and normalize-space()='CapstoneRobotTest2']    ${shortPeriodOfTime}
     Table Column Should Contain    //*[contains(@class, 'x-panel-bwrap')]//table    2    binchen561(Bing)
     Close Browser
+
+Table cell should contain
+    Wait Until Element Is Visible    //*[contains(@class, 'x-grid3-cell-inner') and normalize-space()='CapstoneRobotTest2']    ${shortPeriodOfTime}
+    Table Cell Should Contain    //*[contains(@class, 'x-panel-bwrap')]//table    1    2    binchen561(Bing)
+    Close Browser

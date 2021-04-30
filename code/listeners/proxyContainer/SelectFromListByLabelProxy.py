@@ -9,6 +9,7 @@ class SelectFromListByLabelProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'labels'])] = self
     # select options from selection list by labels
+    # UnselectFromListByLabel 也適用此方法， 但unselect僅能用在multi-selections
     def i18n_Proxy(self, func):
         def proxy(self, locator, *labels):
             if not labels:
