@@ -29,6 +29,7 @@ class I18nListener:
 
     def __init__(self, locale='en-US', not_show_warning_words='None'):
         self.is_admin_language_set=False
+        self.is_ui_open=False
         self.locale = locale
         self.attrs = {}
         self.locale_dict = {'en-US':'United Kingdom - English', 
@@ -45,8 +46,7 @@ class I18nListener:
         I18nListener.MAP = I18nMap(I18nListener.TRANSLATION_FILE, locale) #i18nMAP，傳入擁有翻譯檔dict的TRANSLATION_FILE 和 語言
         I18nListener.LOCALE = locale # for get language Ex zh-TW, zh-CN
         I18nListener.Not_SHOW_WARNING_WORDS = self.parse_not_show_warning_words(not_show_warning_words)
-        import ManyTranslations
-        ManyTranslations.run()
+
     '''
         append all key, value of source_dict to target_dict
         source_dict is the dict of json file like 'common-zh-TW.json'...
@@ -67,3 +67,9 @@ class I18nListener:
                 words_string = f.read()
         words = words_string.split('+')
         return words
+
+    def end_suite(self, name, attrs):
+        if not self.is_ui_open:
+            self.is_ui_open=True
+            import ManyTranslations
+            ManyTranslations.run()

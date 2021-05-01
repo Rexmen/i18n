@@ -13,7 +13,7 @@ def run():
     canvas.grid(columnspan=3, rowspan=3)
 
     #logo
-    logo = Image.open('logo.png')
+    logo = Image.open('code/gui/logo.png')
     logo = ImageTk.PhotoImage(logo)
     logo_label = Label(image = logo)
     logo_label.image = logo
