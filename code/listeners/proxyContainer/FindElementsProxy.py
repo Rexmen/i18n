@@ -23,6 +23,7 @@ class FindElementsProxy(Proxy):
             # logger.warn(locator)
             is_actual = False
             if len(locator) > 1:
+                i18n.I18nListener.Is_Multi_Trans = True
                 word_translation = i18n.I18nListener.MAP.values(multiple_translation_words)
                 ui.add_translations(multiple_translation_words, word_translation)
                 for i, translation_locator in enumerate(locator):

@@ -26,6 +26,7 @@ class I18nListener:
     TRANSLATION_FILE = json.loads("{}") # json -> python
     LOCALE = None
     Not_SHOW_WARNING_WORDS = []
+    Is_Multi_Trans=False
 
     def __init__(self, locale='en-US', not_show_warning_words='None'):
         self.is_admin_language_set=False
@@ -69,7 +70,9 @@ class I18nListener:
         return words
 
     def end_suite(self, name, attrs):
-        if not self.is_ui_open:
+        #FIXME 判斷若當前無UI開啟，且滿足有一詞多譯的情況，才需要開啟UI
+        # logger.warn(I18nListener.Is_Multi_Trans)
+        if not self.is_ui_open and I18nListener.Is_Multi_Trans:
             self.is_ui_open=True
             import ManyTranslations
             ManyTranslations.run()

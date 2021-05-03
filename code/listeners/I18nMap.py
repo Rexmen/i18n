@@ -113,6 +113,7 @@ class I18nMap:
         return list(set(result))
 
     def get_possible_translation(self, value):
+        #FIXME 在此處加上判斷，先開啟setting查看是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
         try:
             result = []
             for mapping_route in self.translation_mapping_routes[value]:   #用value當key抓出translation_mapping_routes裡的特定values
