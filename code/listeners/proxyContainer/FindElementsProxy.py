@@ -5,6 +5,7 @@ from robot.libraries.Screenshot import Screenshot
 from robot.api import logger
 import I18nListener as i18n
 import sys
+import ManyTranslations as ui
 
 class FindElementsProxy(Proxy):
     def __init__(self, arg_format):
@@ -18,8 +19,12 @@ class FindElementsProxy(Proxy):
             BuiltIn().import_library('SeleniumLibrary')
             locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value))
             multiple_translation_words = i18n.I18nListener.MAP.get_multiple_translation_words()
+            # logger.warn(multiple_translation_words)
+            # logger.warn(locator)
             is_actual = False
             if len(locator) > 1:
+                word_translation = i18n.I18nListener.MAP.values(multiple_translation_words)
+                ui.add_translations(multiple_translation_words, word_translation)
                 for i, translation_locator in enumerate(locator):
                     xpath += '|' + translation_locator.replace('xpath:', '') if i != 0 else translation_locator.replace('xpath:', '')
                     is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator)
