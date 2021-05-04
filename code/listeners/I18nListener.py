@@ -27,6 +27,7 @@ class I18nListener:
     LOCALE = None
     Not_SHOW_WARNING_WORDS = []
     Is_Multi_Trans=False
+    SETTING_TRANS = {}
 
     def __init__(self, locale='en-US', not_show_warning_words='None'):
         self.is_admin_language_set=False
@@ -60,7 +61,17 @@ class I18nListener:
         if not self.is_admin_language_set:#set the admin language in the first suite start
             self.is_admin_language_set=True
             BuiltIn().set_global_variable('${language}',self.locale_dict[self.locale])
-    
+        with open("code/listeners/setting.txt", 'a+') as file:
+            if os.stat("code/listeners/setting.txt").st_size != 0:
+                file.seek(0)  #這行很重要，將指針指到文件頭
+                for line in file.readlines():
+                    # logger.warn("in for")
+                    split_key_value = []
+                    split_key_value=line.strip("\n").split(':')
+                    # logger.warn(split_key_value)
+                    I18nListener.SETTING_TRANS[split_key_value[0]] = split_key_value[1]
+                    # logger.warn(I18nListener.SETTING_TRANS)
+
     def parse_not_show_warning_words(self, words_string):
         if words_string == "Not_show_warning.txt":
             Not_show_warning_txt = glob('%s/Not_show_warning.txt' % (os.path.dirname(os.path.abspath(__file__))))[0]
@@ -70,7 +81,7 @@ class I18nListener:
         return words
 
     def end_suite(self, name, attrs):
-        #FIXME 判斷若當前無UI開啟，且滿足有一詞多譯的情況，才需要開啟UI
+        # 判斷若當前無UI開啟，且滿足有一詞多譯的情況，才需要開啟UI
         # logger.warn(I18nListener.Is_Multi_Trans)
         if not self.is_ui_open and I18nListener.Is_Multi_Trans:
             self.is_ui_open=True

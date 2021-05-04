@@ -113,11 +113,16 @@ class I18nMap:
         return list(set(result))
 
     def get_possible_translation(self, value):
-        #FIXME 在此處加上判斷，先開啟setting查看是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
-        try:
-            result = []
-            for mapping_route in self.translation_mapping_routes[value]:   #用value當key抓出translation_mapping_routes裡的特定values
-                result.append(eval("self.translation_file%s" % mapping_route))
-        except (KeyError):
-            raise KeyError
-        return result
+        # 在此處加上判斷，先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
+        result = []
+        if value in i18n.I18nListener.SETTING_TRANS.keys():
+            result.append(i18n.I18nListener.SETTING_TRANS[value])
+            # logger.warn(result)
+            return result
+        else:
+            try:
+                for mapping_route in self.translation_mapping_routes[value]:   #用value當key抓出translation_mapping_routes裡的特定values
+                    result.append(eval("self.translation_file%s" % mapping_route))
+            except (KeyError):
+                raise KeyError
+            return result

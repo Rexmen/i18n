@@ -20,7 +20,7 @@ def run():
         if translations_dic :
             first_key = list(translations_dic)[0]
             for i, data in enumerate(translations_dic[first_key]):
-                logger.warn(data)
+                # logger.warn(data)
                 if i==0:
                     ctext1.set(data)
                 elif i==1:
@@ -38,7 +38,7 @@ def run():
             logger.warn(contents)
             out_file.write(contents)
             win.destroy()
-            
+
     win = Tk()    
     ctext1 = StringVar()
     ctext2 = StringVar()
