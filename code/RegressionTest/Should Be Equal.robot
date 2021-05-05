@@ -23,7 +23,6 @@ First argument or second argument Exist multiple translations of the word
 123
     Should Be Equal    More    More
 
-
 *** Keywords ***
 Open Browser To Microsoft Page
     ${microsoftUrl} =    Set Variable    https://www.microsoft.com/

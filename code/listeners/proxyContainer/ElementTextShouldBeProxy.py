@@ -16,8 +16,8 @@ class ElementTextShouldBeProxy(Proxy):
             actual_text = ''
             if len(possible_translations) > 1:
                 i18n.I18nListener.Is_Multi_Trans = True
-                multiple_translation_words = []
-                multiple_translation_words.append(expected)
+                multiple_translation_words = []     
+                multiple_translation_words.append(expected) #將expected word包裝成list格式
                 # logger.warn(multiple_translation_words)
                 ui.add_translations(multiple_translation_words, possible_translations)
                 ElementTextShouldBeProxy.show_warning(self, expected, 'Expected')

@@ -4,6 +4,7 @@ import sys
 from robot.libraries.Screenshot import Screenshot
 from robot.api import logger
 import I18nListener as i18n
+import ManyTranslations as ui
 
 class ShouldBeEqualProxy(Proxy):
     def __init__(self, arg_format):
@@ -11,18 +12,36 @@ class ShouldBeEqualProxy(Proxy):
     
     def i18n_Proxy(self, func):
         def proxy(self, first, second, msg=None, values=True, ignore_case=False, formatter='str'):
-            logger.warn("ShouldBeEqual")
+            # logger.warn("ShouldBeEqual")
             if 'not' in func.__name__:
                 compare = lambda x,y:True if x != y else False
             else:
                 compare = lambda x,y:True if x == y else False
-            ShouldBeEqualProxy.show_warning(self, first, second)
-            for first_translation in i18n.I18nListener.MAP.value(first):
-                for second_translation in i18n.I18nListener.MAP.value(second):
-                    if compare(first_translation,second_translation):
-                        return func(self, first_translation, second_translation, msg, values, ignore_case, formatter)
-            return func(self, first, second, msg, values, ignore_case, formatter)
-        
+            # logger.warn(first)
+            first_trans = i18n.I18nListener.MAP.value(first)
+            logger.warn(first_trans)
+            second_trans = i18n.I18nListener.MAP.value(second)
+            if len(first_trans) >1 or len(second_trans) > 1 :
+                logger.warn("have multi trans")
+                i18n.I18nListener.Is_Multi_Trans = True
+                ShouldBeEqualProxy.show_warning(self, first, second)  
+                if len(first_trans) > 1:
+                    multiple_translation_words = []     
+                    multiple_translation_words.append(first) #將expected word包裝成list格式
+                    ui.add_translations(multiple_translation_words, first_trans)
+
+                if len(second_trans) > 1 and first_trans != second_trans :
+                    multiple_translation_words = []     
+                    multiple_translation_words.append(second) #將expected word包裝成list格式
+                    ui.add_translations(multiple_translation_words, second_trans)
+                
+                for ft in first_trans:
+                    for st in second_trans:
+                        if compare(ft,st):
+                            return func(self, ft, st, msg, values, ignore_case, formatter)
+                return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter)
+            else: 
+                return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter)
         return proxy
     
     def deal_translate_message(self, value, message_title):
