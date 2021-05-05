@@ -10,9 +10,11 @@ translations_dic = {}
 def add_translations(multiple_translation_words, translations):
     # logger.warn(multiple_translation_words)
     # logger.warn(translations)
-    # logger.warn(len(multiple_translation_words))
-    for i in range(len(multiple_translation_words)):
-        translations_dic[multiple_translation_words[i]] = translations[i]
+    if type(translations[0]) == list:
+        # logger.warn("yes")
+        translations = translations[0]
+    for i in range(len(multiple_translation_words)): #看有幾個有一詞多譯的字
+        translations_dic[multiple_translation_words[i]] = translations
     # logger.warn(translations_dic)
 
 def run():

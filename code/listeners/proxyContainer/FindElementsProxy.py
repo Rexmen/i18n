@@ -10,19 +10,22 @@ import ManyTranslations as ui
 class FindElementsProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['by=\'id\'', 'value=None'])] = self
-
+        # value是要找的element的locator , by沒有甚麼作用(印出"xpath"?)
     def i18n_Proxy(self, func):
         def proxy(self, by='id', value=None):
+            # logger.warn(by)
             if isinstance(value, WebElement):
                 return func(self, by, value)
             xpath = ''
             BuiltIn().import_library('SeleniumLibrary')
-            locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value))
-            multiple_translation_words = i18n.I18nListener.MAP.get_multiple_translation_words()
-            # logger.warn(multiple_translation_words)
+            #以下的翻譯方法針對的是"xpath內有需要翻譯的文字"
+            locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value)) #會呼叫i18nMap的locator(),將xpath傳入,
+                #內部會翻譯xpath內的文字部分，並會設定multiple_translation_words，讓下一行get_multiple_translation_words()取用
+            multiple_translation_words = i18n.I18nListener.MAP.get_multiple_translation_words() 
             # logger.warn(locator)
             is_actual = False
             if len(locator) > 1:
+                # logger.warn(multiple_translation_words)
                 i18n.I18nListener.Is_Multi_Trans = True
                 word_translation = i18n.I18nListener.MAP.values(multiple_translation_words)
                 ui.add_translations(multiple_translation_words, word_translation)

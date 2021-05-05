@@ -56,7 +56,7 @@ class I18nMap:
         translated_xpath = [xpath]
         locate_rule = combine_locate_rule(new_locate_rule) #如果有new rule，會回傳default+新rule，否則回傳default
         all_match_words = find_all_match_word(xpath, locate_rule) #將xpath和rule傳入找所有符合字詞
-        for rule, matches in all_match_words.items(): #rule是key matches是value 
+        for rule, matches in all_match_words.items(): #rule是key, matches是value 
             for match in matches:
                 match_group = locate_rule[rule]
                 quot_group = match_group - 1 

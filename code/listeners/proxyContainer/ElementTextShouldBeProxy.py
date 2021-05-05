@@ -4,16 +4,22 @@ import sys
 from robot.libraries.Screenshot import Screenshot
 from robot.api import logger
 import I18nListener as i18n
+import ManyTranslations as ui
 
 class ElementTextShouldBeProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'expected', 'message=None', 'ignore_case=False'])] = self
     
     def i18n_Proxy(self, func):
-        def proxy(self, locator, expected, message=None, ignore_case=False): #locator://*[@text='支援'] expected:support
+        def proxy(self, locator, expected, message=None, ignore_case=False): #locator://*[@text='支援'](locator有時並不需要翻譯) expected:support
             possible_translations = i18n.I18nListener.MAP.value(expected) #support可能map成支援/支援服務
             actual_text = ''
             if len(possible_translations) > 1:
+                i18n.I18nListener.Is_Multi_Trans = True
+                multiple_translation_words = []
+                multiple_translation_words.append(expected)
+                # logger.warn(multiple_translation_words)
+                ui.add_translations(multiple_translation_words, possible_translations)
                 ElementTextShouldBeProxy.show_warning(self, expected, 'Expected')
                 BuiltIn().import_library('SeleniumLibrary')
                 actual_text = BuiltIn().run_keyword('Get Text', locator) #有多種翻譯，取得locator的字當作actual text(支援)
