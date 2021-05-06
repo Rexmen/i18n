@@ -3,8 +3,8 @@ Force Tags    ElementShouldBeEqual
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    ../self_util.py
-Test Setup    Run Keywords    Open Browser To Microsoft Page
-...                    AND    Change Language    expectedLanguage=${language}
+# Test Setup    Run Keywords    Open Browser To Microsoft Page
+# ...                    AND    Change Language    expectedLanguage=${language}
 # Test Teardown    Close Browser
 
 *** Test Cases ***
@@ -22,7 +22,7 @@ First argument or second argument Exist multiple translations of the word
 
 123
     Should Be Equal    More    More
-    Should Be Equal    More    More
+    # Should Be Equal    More    More
     
     # Should Be Equal    Support    Support
 
