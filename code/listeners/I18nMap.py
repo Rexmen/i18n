@@ -30,11 +30,11 @@ class I18nMap:
     '''
     def locator(self, xpath, new_locate_rule={}): #會被某些需要翻譯locator的proxy呼叫
         def combine_locate_rule(locate_rule):  
-            default_rule = {
-                    '((text|normalize-space)\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4,
-                    '((text|normalize-space)\((text\(\))?\)\, ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4,
-                    '((@title) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3,
-                    '((@title), ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3
+            default_rule = { # 以下是regular expression
+                    '((text|normalize-space)\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4, #這段會get到text()='xxx' 或 normalize-space()='xxx'
+                    '((text|normalize-space)\((text\(\))?\)\, ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4, #這段會get到text(), 'xxx' 或 normalize-space(), 'xxx'
+                    '((@title) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3, #這段會get到@title='xxx'
+                    '((@title), ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3  #這段會get到@title, 'xxx'
                 }
             if len(new_locate_rule):
                 temp = dict(default_rule.items() + new_locate_rule.items())
@@ -56,9 +56,9 @@ class I18nMap:
         translated_xpath = [xpath]
         locate_rule = combine_locate_rule(new_locate_rule) #如果有new rule，會回傳default+新rule，否則回傳default
         all_match_words = find_all_match_word(xpath, locate_rule) #將xpath和rule傳入找所有符合字詞
-        for rule, matches in all_match_words.items(): #rule是key, matches是value 
-            for match in matches:
-                match_group = locate_rule[rule]
+        for rule, matches in all_match_words.items(): #all_match_words是dict, rule是key, matches是value 
+            for match in matches: # 同種rule查找到的match可能不只一筆 ex: text()='xxx' & 
+                match_group = locate_rule[rule] #拿到rule的編號
                 quot_group = match_group - 1 
                 self.is_exist_multiple_translation_words(match[match_group])
                 translated_xpath = self.translate(match=match[match_group], quot=match[quot_group], xpaths=translated_xpath) # group 0 as self, group 4 as match, group 3 as quot 

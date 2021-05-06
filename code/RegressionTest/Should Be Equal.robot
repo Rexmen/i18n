@@ -3,14 +3,14 @@ Force Tags    ElementShouldBeEqual
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    ../self_util.py
-# Test Setup    Run Keywords    Open Browser To Microsoft Page
-# ...                    AND    Change Language    expectedLanguage=${language}
+Test Setup    Run Keywords    Open Browser To Microsoft Page
+...                    AND    Change Language    expectedLanguage=${language}
 # Test Teardown    Close Browser
 
 *** Test Cases ***
 Check "More" Text is expected
     Go To Support Page
-    ${more} =    Set Variable    //*[text()='More']
+    ${more} =    Set Variable    //*[text()='More' and ../../preceding-sibling::*[contains(@class,'LNK_OFFICE_TEMPLATES')]//*[text()='Templates']]
     ${moreText} =    Get Text After It Is Visible    ${more}
     Should Be Equal    More    ${moreText}
 
@@ -22,6 +22,8 @@ First argument or second argument Exist multiple translations of the word
 
 123
     Should Be Equal    More    More
+    Should Be Equal    More    More
+    
     # Should Be Equal    Support    Support
 
 *** Keywords ***
@@ -68,7 +70,7 @@ Support Page Should Be Shown
 
 Get Text After It Is Visible
     [Arguments]    ${locator}
-    Wait Until Page Contains Element    ${locator}    timeout=${normalPeriodOfTime}    error=Element should be visible.\n${locator}
-    Wait Until Element Is Visible    ${locator}    timeout=${normalPeriodOfTime}    error=Element should be visible.\n${locator}
+    Wait Until Page Contains Element    ${locator}    timeout=${shortPeriodOfTime}    error=Element should be visible.\n${locator}
+    Wait Until Element Is Visible    ${locator}    timeout=${shortPeriodOfTime}    error=Element should be visible.\n${locator}
     ${text} =    Get Text    ${locator}
     [Return]    ${text}

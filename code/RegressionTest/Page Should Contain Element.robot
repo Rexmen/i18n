@@ -5,13 +5,13 @@ Library    SeleniumLibrary
 Library    ../self_util.py
 Test Setup    Run Keywords    Open Browser To Microsoft Page
 ...                    AND    Change Language    expectedLanguage=${language}
-Test Teardown    Close Browser
+# Test Teardown    Close Browser
 
 *** Test Cases ***
 Check "Microsoft Support" webelement is on the support page
     Go To Support Page
-    ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
-    Page Should Contain Element    ${MicrosoftSupport}
+    # ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
+    # Page Should Contain Element    ${MicrosoftSupport}
 
 *** Keywords ***
 Open Browser To Microsoft Page
