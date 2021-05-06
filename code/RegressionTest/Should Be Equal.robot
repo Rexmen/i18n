@@ -22,7 +22,7 @@ First argument or second argument Exist multiple translations of the word
 
 123
     Should Be Equal    More    More
-    Should Be Equal    Support    Support
+    # Should Be Equal    Support    Support
 
 *** Keywords ***
 Open Browser To Microsoft Page

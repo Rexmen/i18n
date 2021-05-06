@@ -55,6 +55,33 @@ def run():
     logo_label.image = logo
     logo_label.grid(columnspan=3, row=0, sticky=N+W+E)
 
+    # def draw_trans_options(self):
+    #     self.labels = []
+    #     self.radios = []
+    #     self.radio_vars = []
+    #     self.ltexts = []
+    #     self.rtexts = []
+    #     for i in range(3):
+    #         check_radio = StringVar()
+    #         self.radio_vars.append(check_radio)
+    #         temp = []
+    #         rtext1 = StringVar()
+    #         rtext2 = StringVar()
+    #         temp.append(rtext1, rtext2)
+    #         self.rtexts.append(temp)
+
+    #         self.labels.append(Label(self, text='dict key')
+    #         self.labels[i].grid(column=0, row=i+1, sticky=W+N)
+    #         for j in len(rtexts[i]):
+    #             if j==0:
+    #                 default_value = 1
+    #             else: 
+    #                 default_value = 0
+    #             samerow_radio = []
+    #             self.samerow_radio.append(Radiobutton(self, variable=radio_vars[i], textvariable=temp[j], value=default_value ))
+    #             self.samerow_radio.append(Radiobutton(self, variable=radio_vars[i], textvariable=temp[j], value=default_value ))
+    #             self.radios[j].
+
     # 待翻譯字 Label
     ctext1 = StringVar()
     ctext2 = StringVar()
@@ -80,11 +107,15 @@ def run():
     text.set("Submit")
     btn.grid(row=6,column=2, sticky=S+E)
 
-    # canvas = Canvas(win, width=600, height=300)
-    # canvas.grid(columnspan=3, rowspan=3)
+    # def createGameURLs(self):
+    # self.button = []
+    # for i in range(3):
+    #     self.button.append(Button(self, text='Game '+str(i+1),command=lambda:self.open_this(i)))
+    #     self.button[i].grid(column=4, row=i+1, sticky=W)
+    # def open_this(self, myNum):
+    #     print(myNum)
 
-    # t=threading.Thread(target=autoClose) 
-    # t.start()
+
     win.mainloop()
 
 if __name__=='__main__':
