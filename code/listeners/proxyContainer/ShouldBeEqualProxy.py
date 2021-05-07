@@ -28,12 +28,12 @@ class ShouldBeEqualProxy(Proxy):
                 if len(first_trans) > 1:
                     multiple_translation_words = []     
                     multiple_translation_words.append(first) #將expected word包裝成list格式
-                    ui.add_translations(multiple_translation_words, first_trans)
+                    ui.UI.add_translations(self, multiple_translation_words, first_trans)
 
                 if len(second_trans) > 1 and first_trans != second_trans :
                     multiple_translation_words = []     
                     multiple_translation_words.append(second) #將expected word包裝成list格式
-                    ui.add_translations(multiple_translation_words, second_trans)
+                    ui.UI.add_translations(self, multiple_translation_words, second_trans)
                 
                 for ft in first_trans:
                     for st in second_trans:

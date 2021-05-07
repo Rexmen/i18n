@@ -86,4 +86,4 @@ class I18nListener:
         if not self.is_ui_open and I18nListener.Is_Multi_Trans:
             self.is_ui_open=True
             import ManyTranslations
-            ManyTranslations.run()
+            ManyTranslations.UI()
