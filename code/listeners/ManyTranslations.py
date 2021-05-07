@@ -7,7 +7,7 @@ from robot.api import logger
 import tkinter.font as tkFont
 
 class UI:
-    translations_dic = {} 
+    translations_dict = {} 
 
     def __init__(self):
         self.run()
@@ -19,28 +19,24 @@ class UI:
             # logger.warn("yes")
             translations = translations[0]
         for i in range(len(multiple_translation_words)): #看有幾個有一詞多譯的字
-            UI.translations_dic[multiple_translation_words[i]] = translations
+            UI.translations_dict[multiple_translation_words[i]] = translations
         # logger.warn(translations_dic)
 
-    def show_translations_dic(self):
-        if UI.translations_dic :
-            first_key = list(translations_dic)[0]
-            for i, data in enumerate(translations_dic[first_key]):
-                # logger.warn(data)
-                if i==0:
-                    ctext1.set(data)
-                elif i==1:
-                    ctext2.set(data)
-            # logger.warn(trans_options)
-            text1.set("%s 可以被翻譯成: " % first_key)
+    def get_transdic_keys_and_values(self):
+        if UI.translations_dict:
+            for key in UI.translations_dict.keys():
+                self.label_texts.append(key)
+            for value in UI.translations_dict.values():
+                self.radio_texts.append(value)
+                # logger.warn(label_texts)
     
     def output_setting_file(self):
         with open("code/listeners/setting.txt", "a") as out_file:
             contents = ""
             if checkVar1.get() == 1:
-                contents = list(UI.translations_dic)[0] + ":" + ctext1.get() + "\n"
+                contents = list(UI.translations_dict)[0] + ":" + ctext1.get() + "\n"
             else:
-                contents = list(UI.translations_dic)[0] + ":" + ctext2.get() + "\n"
+                contents = list(UI.translations_dict)[0] + ":" + ctext2.get() + "\n"
             logger.warn(contents)
             out_file.write(contents)
             self.win.destroy()
@@ -48,38 +44,41 @@ class UI:
     def draw_trans_options(self):
         self.labels = []
         self.radios = []
+        self.radio_vars = []
         self.radio_texts = []
-        # self.radio_vars = []
-        # self.ltexts = []
-        for i in range(3): #先預設有3列 label
-            # check_radio = StringVar()
-            # self.radio_vars.append(check_radio)
+        self.label_texts = []
+        self.get_transdic_keys_and_values()
+        for i in range(len(self.label_texts)): #根據有幾列label 來印出
+
+            self.radio_vars.append(IntVar())
+            # logger.warn(self.radio_vars)
+            self.radios.append([])
             # radio_text_row = []
             # rtext1 = StringVar()
             # rtext2 = StringVar()
-            # temp.append(rtext1, rtext2)
             # self.rtexts.append(temp)
 
-            self.labels.append(Label(self.win, text='dict key'))
-            self.labels[i].grid(column=0, row=i, sticky=W+N)
-            #這邊要去create出每一列中的radio button
-            for j in len(radio_texts[i]):
-            #     if j==0:
-            #         default_value = 1
-            #     else: 
-            #         default_value = 0
-            #     samerow_radio = []
-            #     self.samerow_radio.append(Radiobutton(self, variable=radio_vars[i], textvariable=temp[j], value=default_value ))
+            self.labels.append(Label(self.win, text="%s 可以被翻譯成: " % self.label_texts[i], font=self.fontStyle)) #創出三列label
+            self.labels[i].grid( row=i, sticky=W+N)
+            #create出每一列中的radio button
+            for j in range(len(self.radio_texts[i])):
+                if j==0:
+                    default_value = 1
+                else:
+                    default_value = 0
+                self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j],font=self.fontStyle, value=default_value ))
+                self.radios[i][j].grid(columnspan=1, column=1+j, row=i, sticky=W+N)
+    
     def run(self):
         self.win = Tk()    
         # logger.warn("tk")
         self.win.title("一詞多譯")
         # win.geometry('500x500+700+300')
         canvas = Canvas(self.win, width=300, height=500)
-        canvas.grid(columnspan=3, rowspan=3)
+        canvas.grid(rowspan=3)
         
+        self.fontStyle = tkFont.Font(family ="Raleway", size=20)
         self.draw_trans_options()
-        fontStyle = tkFont.Font(family ="Raleway", size=20)
         # # 待翻譯字 Label
         # ctext1 = StringVar()
         # ctext2 = StringVar()
@@ -96,12 +95,12 @@ class UI:
         # cbox2.grid(column=2, row=0, sticky=W+N)
 
         # 標語 Label
-        instructions = Label(self.win, text="Choose the translation(s) you want!!", font=fontStyle)
+        instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
         instructions.grid(row=6, sticky=S+W)
 
         # 提交 Button
         text = StringVar()
-        btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=fontStyle, bg="#20bebe", fg="white", height=2, width=15)
+        btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
         text.set("Submit")
         btn.grid(row=6,column=2, sticky=S+E)
 
