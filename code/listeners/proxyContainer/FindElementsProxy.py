@@ -31,7 +31,7 @@ class FindElementsProxy(Proxy):
                 ui.add_translations(multiple_translation_words, word_translation)
                 for i, translation_locator in enumerate(locator):
                     xpath += '|' + translation_locator.replace('xpath:', '') if i != 0 else translation_locator.replace('xpath:', '')
-                    is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator)
+                    is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator) #如果畫面上有該翻譯
                     if is_actual:
                         actual_locator_message = "System use the locator:'%s' to run!\n" %translation_locator
                         logger.info(actual_locator_message)

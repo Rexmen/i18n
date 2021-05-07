@@ -113,7 +113,8 @@ class I18nMap:
         return list(set(result))
 
     def get_possible_translation(self, value):
-        # 在此處加上判斷，先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
+        # 先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
+        #FIXME 此處要加上判斷，看是否能透過對照'腳本名稱'&'腳本呼叫'的行數，來判斷是否取用設定檔的翻譯
         result = []
         if value in i18n.I18nListener.SETTING_TRANS.keys():
             result.append(i18n.I18nListener.SETTING_TRANS[value])

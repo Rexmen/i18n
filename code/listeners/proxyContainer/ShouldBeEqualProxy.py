@@ -28,7 +28,7 @@ class ShouldBeEqualProxy(Proxy):
                 for ft in first_trans:
                     for st in second_trans:
                         if compare(ft,st):
-                            #FIXME 現在只有會pass的翻譯詞需要顯示在UI上
+                            # 現在只有會pass的翻譯詞需要顯示在UI上
                             i18n.I18nListener.Is_Multi_Trans = True
                             if len(first_trans) > 1:
                                 multiple_translation_words = []     

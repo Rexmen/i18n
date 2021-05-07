@@ -70,21 +70,7 @@ class UI:
         
         self.fontStyle = tkFont.Font(family ="Raleway", size=20)
         self.draw_trans_options()
-        # # 待翻譯字 Label
-        # ctext1 = StringVar()
-        # ctext2 = StringVar()
-        # text1 = StringVar()
-        # interpretation = Label(win, textvariable=text1, command= show_translations_dic(), font=fontStyle)
-        # interpretation.grid( column=0, row=0, sticky=W+N)
         
-        # # 一詞多譯選項 Radiobutton
-        # checkVar1 = IntVar() 
-        # cbox1 = Radiobutton(win, variable=checkVar1, textvariable=ctext1, font=fontStyle, value=1)
-        # cbox1.grid(column=1, row=0, sticky=W+N)
-
-        # cbox2 = Radiobutton(win, variable=checkVar1, textvariable=ctext2, font=fontStyle, value=0)
-        # cbox2.grid(column=2, row=0, sticky=W+N)
-
         # 標語 Label
         instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
         instructions.grid(row=6, sticky=S+W)
