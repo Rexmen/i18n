@@ -19,28 +19,32 @@ class ShouldBeEqualProxy(Proxy):
                 compare = lambda x,y:True if x == y else False
             # logger.warn(first)
             first_trans = i18n.I18nListener.MAP.value(first)
-            logger.warn(first_trans)
+            # logger.warn(first_trans)
             second_trans = i18n.I18nListener.MAP.value(second)
             if len(first_trans) >1 or len(second_trans) > 1 :
-                logger.warn("have multi trans")
-                i18n.I18nListener.Is_Multi_Trans = True
+                # logger.warn("have multi trans")
                 ShouldBeEqualProxy.show_warning(self, first, second)  
-                if len(first_trans) > 1:
-                    multiple_translation_words = []     
-                    multiple_translation_words.append(first) #將expected word包裝成list格式
-                    ui.UI.add_translations(self, multiple_translation_words, first_trans)
-
-                if len(second_trans) > 1 and first_trans != second_trans :
-                    multiple_translation_words = []     
-                    multiple_translation_words.append(second) #將expected word包裝成list格式
-                    ui.UI.add_translations(self, multiple_translation_words, second_trans)
-                
+                temp_return_value=[]
                 for ft in first_trans:
                     for st in second_trans:
                         if compare(ft,st):
-                            return func(self, ft, st, msg, values, ignore_case, formatter)
-                return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter)
-            else: 
+                            #FIXME 現在只有會pass的翻譯詞需要顯示在UI上
+                            i18n.I18nListener.Is_Multi_Trans = True
+                            if len(first_trans) > 1:
+                                multiple_translation_words = []     
+                                multiple_translation_words.append(first) #將expected word包裝成list格式
+                                ui.UI.add_translations(self, multiple_translation_words, first_trans)
+
+                            if len(second_trans) > 1 and first_trans != second_trans :
+                                multiple_translation_words = []     
+                                multiple_translation_words.append(second) #將expected word包裝成list格式
+                                ui.UI.add_translations(self, multiple_translation_words, second_trans)
+                            if not temp_return_value:
+                                temp_return_value.append(ft)
+                                temp_return_value.append(st)
+            if temp_return_value:
+                return func(self, temp_return_value[0], temp_return_value[1], msg, values, ignore_case, formatter)
+            else:
                 return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter)
         return proxy
     

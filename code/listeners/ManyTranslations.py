@@ -33,10 +33,10 @@ class UI:
     def output_setting_file(self):
         with open("code/listeners/setting.txt", "a") as out_file:
             contents = ""
-            if checkVar1.get() == 1:
-                contents = list(UI.translations_dict)[0] + ":" + ctext1.get() + "\n"
-            else:
-                contents = list(UI.translations_dict)[0] + ":" + ctext2.get() + "\n"
+            for i in range(len(self.label_texts)):
+                now_selected = self.radio_vars[i].get()
+                logger.warn(now_selected)
+                contents += self.label_texts[i] + ":" + self.radio_texts[i][now_selected] + "\n"
             logger.warn(contents)
             out_file.write(contents)
             self.win.destroy()
@@ -49,23 +49,14 @@ class UI:
         self.label_texts = []
         self.get_transdic_keys_and_values()
         for i in range(len(self.label_texts)): #根據有幾列label 來印出
-
             self.radio_vars.append(IntVar())
             # logger.warn(self.radio_vars)
             self.radios.append([])
-            # radio_text_row = []
-            # rtext1 = StringVar()
-            # rtext2 = StringVar()
-            # self.rtexts.append(temp)
-
             self.labels.append(Label(self.win, text="%s 可以被翻譯成: " % self.label_texts[i], font=self.fontStyle)) #創出三列label
             self.labels[i].grid( row=i, sticky=W+N)
             #create出每一列中的radio button
             for j in range(len(self.radio_texts[i])):
-                if j==0:
-                    default_value = 1
-                else:
-                    default_value = 0
+                default_value = j
                 self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j],font=self.fontStyle, value=default_value ))
                 self.radios[i][j].grid(columnspan=1, column=1+j, row=i, sticky=W+N)
     
