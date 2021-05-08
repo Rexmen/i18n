@@ -8,7 +8,7 @@ import tkinter.font as tkFont
 
 class UI:
     translations_dict = {} 
-
+    origin_xpaths_or_arguments = []
     def __init__(self):
         self.run()
 
@@ -35,8 +35,8 @@ class UI:
             contents = ""
             for i in range(len(self.label_texts)):
                 now_selected = self.radio_vars[i].get()
-                logger.warn(now_selected)
-                contents += self.label_texts[i] + ":" + self.radio_texts[i][now_selected] + "\n"
+                # logger.warn(now_selected)
+                contents += str(UI.origin_xpaths_or_arguments[i]) + ":" + self.label_texts[i] + ":" + self.radio_texts[i][now_selected] + "\n"
             logger.warn(contents)
             out_file.write(contents)
             self.win.destroy()
@@ -48,11 +48,12 @@ class UI:
         self.radio_texts = []
         self.label_texts = []
         self.get_transdic_keys_and_values()
-        for i in range(len(self.label_texts)): #根據有幾列label 來印出
+        for i in range(len(self.label_texts)): #根據有幾列label 來印出'完整參數&label'&'radiobtn'
             self.radio_vars.append(IntVar())
             # logger.warn(self.radio_vars)
             self.radios.append([])
-            self.labels.append(Label(self.win, text="%s 可以被翻譯成: " % self.label_texts[i], font=self.fontStyle)) #創出三列label
+            self.labels.append(Label(self.win, text="完整參數是:%s, %s可以被翻譯成: " % 
+            (UI.origin_xpaths_or_arguments[i],self.label_texts[i]), font=self.fontStyle)) #創出label(s)
             self.labels[i].grid( row=i, sticky=W+N)
             #create出每一列中的radio button
             for j in range(len(self.radio_texts[i])):

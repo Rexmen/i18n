@@ -28,13 +28,13 @@ class Proxy():
         '''
         raise('You should implement it!')
     
-    def deal_warning_message_for_one_word(self, word, message_title):
+    def deal_warning_message_for_one_word(self, word,full_args, message_title):
         # should be equal 搬來的
         # from I18nListener import I18nListener
         message = ' '*3
         counter = 1
         should_return = False
-        possible_translations = i18n.I18nListener.MAP.value(word)
+        possible_translations = i18n.I18nListener.MAP.value(word, full_args)
         if len(possible_translations) > 1: 
             should_return = True
             message_value = str(counter) + '. ' + 'Multiple translations of the word: \'%s\'' %word + '\n' + ' '*6

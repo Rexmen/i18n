@@ -102,24 +102,25 @@ class I18nMap:
         return list(set(translate_list))
 
     #For list should be equal, set should be equal...
-    def values(self, values):
-        return [self.value(v) for v in values]
+    def values(self, values, full_args):
+        return [self.value(v, full_args) for v in values]
 
-    def value(self, value):
+    def value(self, value, full_args):
         try:
-            result = self.get_possible_translation(value)
+            result = self.get_possible_translation(value, full_args)
         except (KeyError):
             return [value]
         return list(set(result))
 
-    def get_possible_translation(self, value):
+    def get_possible_translation(self, value, full_args):
         # 先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
-        #FIXME 此處要加上判斷，看是否能透過對照'腳本名稱'&'腳本呼叫'的行數，來判斷是否取用設定檔的翻譯
+        #FIXME 此處要加上判斷，看是否能透過對照'腳本名稱'& '該keyword的所有參數'，來判斷是否取用設定檔的翻譯
         result = []
         if value in i18n.I18nListener.SETTING_TRANS.keys():
-            result.append(i18n.I18nListener.SETTING_TRANS[value])
-            # logger.warn(result)
-            return result
+            if i18n.I18nListener.SETTING_ARGS[value] == full_args:
+                result.append(i18n.I18nListener.SETTING_TRANS[value])
+                # logger.warn(result)
+                return result
         else:
             try:
                 for mapping_route in self.translation_mapping_routes[value]:   #用value當key抓出translation_mapping_routes裡的特定values

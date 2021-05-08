@@ -28,6 +28,7 @@ class I18nListener:
     Not_SHOW_WARNING_WORDS = []
     Is_Multi_Trans=False
     SETTING_TRANS = {}
+    SETTING_ARGS = {}
 
     def __init__(self, locale='en-US', not_show_warning_words='None'):
         self.is_admin_language_set=False
@@ -68,8 +69,13 @@ class I18nListener:
                     # logger.warn("in for")
                     split_key_value = []
                     split_key_value=line.strip("\n").split(':')
-                    # logger.warn(split_key_value)
-                    I18nListener.SETTING_TRANS[split_key_value[0]] = split_key_value[1]
+                    split_key_value[0] = [split_key_value[0].strip("[]\'").replace("\', \'", ",").split(",")[0]
+                    , split_key_value[0].strip("[]\'").replace("\', \'", ",").split(",")[1]]
+                    # logger.warn(split_key_value)]
+                    I18nListener.SETTING_TRANS[split_key_value[1]] = split_key_value[2]
+                    I18nListener.SETTING_ARGS[split_key_value[1]] = split_key_value[0]
+                    # logger.warn(type(split_key_value[0]))
+                    # logger.warn(type(split_key_value[0]))
                     # logger.warn(I18nListener.SETTING_TRANS)
 
     def parse_not_show_warning_words(self, words_string):
