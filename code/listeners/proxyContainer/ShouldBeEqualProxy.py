@@ -25,27 +25,23 @@ class ShouldBeEqualProxy(Proxy):
                 # logger.warn("have multi trans")
                 ShouldBeEqualProxy.show_warning(self, first, second)  
                 temp_return_value=[]
+                if len(first_trans) > 1:
+                    multiple_translation_words = []     
+                    multiple_translation_words.append(first) #將expected word包裝成list格式
+                    ui.UI.add_translations(self, multiple_translation_words, first_trans) #將翻譯詞加進等等UI會用到的dictionary中
+
+                if len(second_trans) > 1 and first_trans != second_trans :
+                    multiple_translation_words = []     
+                    multiple_translation_words.append(second) #將expected word包裝成list格式
+                    ui.UI.add_translations(self, multiple_translation_words, second_trans) #將翻譯詞加進等等UI會用到的dictionary中
                 for ft in first_trans:
                     for st in second_trans:
                         if compare(ft,st):
-                            # 現在只有會pass的翻譯詞需要顯示在UI上
+                            # FIXME 現在會fail的話不顯示UI(但會過的話會把"所有"翻譯詞顯示在UI上)(參考上面實作)
                             i18n.I18nListener.Is_Multi_Trans = True
-                            if len(first_trans) > 1:
-                                multiple_translation_words = []     
-                                multiple_translation_words.append(first) #將expected word包裝成list格式
-                                ui.UI.add_translations(self, multiple_translation_words, first_trans)
-
-                            if len(second_trans) > 1 and first_trans != second_trans :
-                                multiple_translation_words = []     
-                                multiple_translation_words.append(second) #將expected word包裝成list格式
-                                ui.UI.add_translations(self, multiple_translation_words, second_trans)
-                            if not temp_return_value:
-                                temp_return_value.append(ft)
-                                temp_return_value.append(st)
-            if temp_return_value:
-                return func(self, temp_return_value[0], temp_return_value[1], msg, values, ignore_case, formatter)
-            else:
-                return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter)
+                            return func(self, ft, st, msg, values, ignore_case, formatter)
+            return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter) 
+            #執行到這行可能有兩種情況: 1.沒有一詞多譯(回傳第一組翻譯，也就是原本的翻譯) 2.一詞多譯的翻譯詞找不到會讓case過的(回傳第一組翻譯)
         return proxy
     
     def deal_translate_message(self, value, message_title):
