@@ -70,8 +70,6 @@ class I18nListener:
                     split_key_value = []
                     split_key_value=line.strip("\n").split('~')
                     read_args = split_key_value[0].split('#')
-
-                    #FIXME
                     # logger.warn(split_key_value)]
                     I18nListener.SETTING_TRANS[split_key_value[1]] = split_key_value[2]
                     I18nListener.SETTING_ARGS[split_key_value[1]] = read_args
