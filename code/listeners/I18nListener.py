@@ -68,13 +68,15 @@ class I18nListener:
                 for line in file.readlines():
                     # logger.warn("in for")
                     split_key_value = []
-                    split_key_value=line.strip("\n").split(':')
-                    split_key_value[0] = [split_key_value[0].strip("[]\'").replace("\', \'", ",").split(",")[0]
-                    , split_key_value[0].strip("[]\'").replace("\', \'", ",").split(",")[1]]
+                    split_key_value=line.strip("\n").split('~')
+                    read_args = split_key_value[0].split('#')
+
+                    #FIXME
                     # logger.warn(split_key_value)]
                     I18nListener.SETTING_TRANS[split_key_value[1]] = split_key_value[2]
-                    I18nListener.SETTING_ARGS[split_key_value[1]] = split_key_value[0]
-                    # logger.warn(type(split_key_value[0]))
+                    I18nListener.SETTING_ARGS[split_key_value[1]] = read_args
+                    # logger.warn(read_args)
+                    # logger.warn(type(read_args))
                     # logger.warn(type(split_key_value[0]))
                     # logger.warn(I18nListener.SETTING_TRANS)
 
@@ -90,6 +92,7 @@ class I18nListener:
         # 判斷若當前無UI開啟，且滿足有一詞多譯的情況，才需要開啟UI
         # logger.warn(I18nListener.Is_Multi_Trans)
         if not self.is_ui_open and I18nListener.Is_Multi_Trans:
+            # logger.warn("index out of range here")
             self.is_ui_open=True
             import ManyTranslations
             ManyTranslations.UI()

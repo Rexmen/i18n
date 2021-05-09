@@ -36,7 +36,11 @@ class UI:
             for i in range(len(self.label_texts)):
                 now_selected = self.radio_vars[i].get()
                 # logger.warn(now_selected)
-                contents += str(UI.origin_xpaths_or_arguments[i]) + ":" + self.label_texts[i] + ":" + self.radio_texts[i][now_selected] + "\n"
+                format_args=""
+                for j in UI.origin_xpaths_or_arguments[i]:
+                    format_args += j + "#"
+                format_args = format_args[:-1]
+                contents += format_args + "~" + self.label_texts[i] + "~" + self.radio_texts[i][now_selected] + "\n"
             logger.warn(contents)
             out_file.write(contents)
             self.win.destroy()

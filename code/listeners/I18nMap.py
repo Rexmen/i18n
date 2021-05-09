@@ -19,16 +19,18 @@ class I18nMap:
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f) # json -> python
     
-    def is_exist_multiple_translation_words(self, text):
-            if len(self.value(text)) > 1: #跑value()，看看翻譯是否大於一個
+    def is_exist_multiple_translation_words(self, text, full_args):
+            logger.warn(self.value(text, full_args))
+            if len(self.value(text, full_args)) > 1: #跑value()，看看翻譯是否多於一種
                 self.multiple_translation_words.append(text) 
+                logger.warn(self.multiple_translation_words)
     
     '''
         new_locate_rule -> key should be the regular expression rule
                            I will use findall to find the word that is needed to translate .
                            so value should be the your match word group position.
     '''
-    def locator(self, xpath, new_locate_rule={}): #會被某些需要翻譯locator的proxy呼叫
+    def locator(self, xpath, full_args, new_locate_rule={}): #會被那些需要翻譯locator的proxy呼叫
         def combine_locate_rule(locate_rule):  
             default_rule = { # 以下是regular expression
                     '((text|normalize-space)\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4, #這段會get到text()='xxx' 或 normalize-space()='xxx'
@@ -47,7 +49,7 @@ class I18nMap:
             all_match_words = {}
             for rule in locate_rule.keys():
                 matches = re.findall(rule, xpath)
-                all_match_words[rule] = matches
+                all_match_words[rule] = matches # ex: all_match_words={ rule1://*[text()='test'], ...}
             return all_match_words
         #從這行開始讀
         self.multiple_translation_words = []    
@@ -57,12 +59,17 @@ class I18nMap:
         locate_rule = combine_locate_rule(new_locate_rule) #如果有new rule，會回傳default+新rule，否則回傳default
         all_match_words = find_all_match_word(xpath, locate_rule) #將xpath和rule傳入找所有符合字詞
         for rule, matches in all_match_words.items(): #all_match_words是dict, rule是key, matches是value 
-            for match in matches: # 同種rule查找到的match可能不只一筆 ex: text()='xxx' & 
+            for match in matches: # 同種rule查找到的match可能不只一筆 ex: text()='xxx' & text()='yyy'
                 match_group = locate_rule[rule] #拿到rule的編號
                 quot_group = match_group - 1 
-                self.is_exist_multiple_translation_words(match[match_group])
-                translated_xpath = self.translate(match=match[match_group], quot=match[quot_group], xpaths=translated_xpath) # group 0 as self, group 4 as match, group 3 as quot 
-        if xpath != list(translated_xpath)[0] :
+                # logger.warn(match)
+                # logger.warn(match[match_group])
+                self.is_exist_multiple_translation_words(match[match_group], full_args) #檢驗是否有一個以上翻譯
+                # match[match_group]是可以被翻譯的word
+                #以下實際將xpath翻譯,
+                translated_xpath = self.translate(full_args, match=match[match_group], quot=match[quot_group], 
+                xpaths=translated_xpath) # group 0 as self, group 4 as match, group 3 as quot 
+        if xpath != list(translated_xpath)[0] : # 表示有成功被翻譯(不管個數)，所以長的不一樣了
             self.log_translation_info(xpath, translated_xpath)
         return translated_xpath
     
@@ -92,14 +99,14 @@ class I18nMap:
         return self.multiple_translation_words
 
      # Our target is "XXX" if without quot that it will translate the wrong target.
-    def translate(self, match, quot, xpaths):
+    def translate(self,full_args, match, quot, xpaths):
         origin = quot + match + quot
         translate_list = []
-        for translation in self.value(match):
+        for translation in self.value(match, full_args):
             value = quot + translation + quot
             for xpath in xpaths:
                 translate_list.append(xpath.replace(origin, value))
-        return list(set(translate_list))
+        return list(set(translate_list))    #最後會把所有可能的翻譯後xpath(s)都裝進list回傳
 
     #For list should be equal, set should be equal...
     def values(self, values, full_args):
@@ -108,6 +115,7 @@ class I18nMap:
     def value(self, value, full_args):
         try:
             result = self.get_possible_translation(value, full_args)
+            # logger.warn(result)
         except (KeyError):
             return [value]
         return list(set(result))
@@ -116,11 +124,14 @@ class I18nMap:
         # 先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
         #FIXME 此處要加上判斷，看是否能透過對照'腳本名稱'& '該keyword的所有參數'，來判斷是否取用設定檔的翻譯
         result = []
-        if value in i18n.I18nListener.SETTING_TRANS.keys():
-            if i18n.I18nListener.SETTING_ARGS[value] == full_args:
-                result.append(i18n.I18nListener.SETTING_TRANS[value])
-                # logger.warn(result)
-                return result
+        if value in i18n.I18nListener.SETTING_TRANS.keys() and i18n.I18nListener.SETTING_ARGS[value] == full_args:
+            # logger.warn(full_args)
+            # logger.warn(type(full_args))
+            # logger.warn(type(i18n.I18nListener.SETTING_ARGS[value]))
+            # logger.warn("have word")
+            result.append(i18n.I18nListener.SETTING_TRANS[value])
+            # logger.warn(result)
+            return result
         else:
             try:
                 for mapping_route in self.translation_mapping_routes[value]:   #用value當key抓出translation_mapping_routes裡的特定values

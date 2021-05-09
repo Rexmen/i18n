@@ -11,24 +11,29 @@ class FindElementsProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['by=\'id\'', 'value=None'])] = self
         # value是要找的element的locator , by沒有甚麼作用(印出"xpath"?)
+        # 'Page Should Contain Element' 會呼叫此proxy
     def i18n_Proxy(self, func):
         def proxy(self, by='id', value=None):
             # logger.warn(by)
             if isinstance(value, WebElement):
                 return func(self, by, value)
             xpath = ''
+            full_args = [value]
+            # logger.warn(full_args[0])
             BuiltIn().import_library('SeleniumLibrary')
             #以下的翻譯方法針對的是"xpath內有需要翻譯的文字"
-            locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value)) #會呼叫i18nMap的locator(),將xpath傳入,
+            locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value), full_args) #會呼叫i18nMap的locator(),將xpath傳入,
                 #內部會翻譯xpath內的文字部分，並會設定multiple_translation_words，讓下一行get_multiple_translation_words()取用
             multiple_translation_words = i18n.I18nListener.MAP.get_multiple_translation_words() 
-            # logger.warn(locator)
+            # logger.warn(multiple_translation_words)
             is_actual = False
             if len(locator) > 1:
                 # logger.warn(multiple_translation_words)
                 i18n.I18nListener.Is_Multi_Trans = True
-                word_translation = i18n.I18nListener.MAP.values(multiple_translation_words)
-                ui.add_translations(multiple_translation_words, word_translation)
+                ui.UI.origin_xpaths_or_arguments.append(full_args)
+                word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
+                # logger.warn(word_translation)
+                ui.UI.add_translations(self, multiple_translation_words, word_translation)
                 for i, translation_locator in enumerate(locator):
                     xpath += '|' + translation_locator.replace('xpath:', '') if i != 0 else translation_locator.replace('xpath:', '')
                     is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator) #如果畫面上有該翻譯
@@ -40,7 +45,7 @@ class FindElementsProxy(Proxy):
             FindElementsProxy.show_warning(self, xpath, value, multiple_translation_words) # if Exist multiple translations of the word show warning
             return func(self, by, BuiltIn().replace_variables(xpath))
         return proxy
-    
+
     def show_warning(self, xpath_with_or, locator, multiple_translation_words):
         if '|' in  xpath_with_or:
             language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
