@@ -6,8 +6,8 @@ Library    Collections
 Library    ../self_util.py
 
 *** Test Cases ***
-123
-    &{dict1} =    Create Dictionary    key=Support
-    &{dict2} =    Create Dictionary    key=Support
+Dictionaries should be equal
+    &{dict1} =    Create Dictionary    Software=Support
+    &{dict2} =    Create Dictionary    Software=Support
     # Log    ${dict1}
     Dictionaries Should Be Equal    ${dict1}    ${dict2}

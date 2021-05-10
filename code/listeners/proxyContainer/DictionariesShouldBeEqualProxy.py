@@ -4,35 +4,85 @@ import sys
 from robot.libraries.Screenshot import Screenshot
 from robot.api import logger
 import I18nListener as i18n
+import ManyTranslations as ui
+from robot.libraries.Collections import _Dictionary
 
 class DictionariesShouldBeEqualProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['dict1', 'dict2', 'msg=None', 'values=True'])] = self
-    
+        # DictionaryShouldBeEqual 和 DictionaryShouldContainSubDictionary 都會呼叫此proxy
     def i18n_Proxy(self, func):
         def proxy(self, dict1, dict2, msg=None, values=True):
-            
-            # DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2)
-            if 'not' in func.__name__:
-                compare = lambda x,y:True if x != y else False
-            else:
-                compare = lambda x,y:True if x == y else False
-            for dict1_key, dict2_key in zip(dict1.keys(), dict2.keys()):
-                dict1_translation = i18n.I18nListener.MAP.value(dict1[dict1_key])
-                dict2_translation = i18n.I18nListener.MAP.value(dict2[dict2_key])
-                if compare(dict1_translation, dict2_translation):
-                    dict1[dict1_key] = dict1_translation
-                    dict2[dict2_key] = dict2_translation
-                    # logger.warn(dict2)
-                    return func(self, dict1, dict2, msg, values)
-            return func(self, dict1, dict2, msg, values)
+            #定義'比較'的邏輯
+            compare = lambda x,y:True if x == y else False
+            #創出該次呼叫的參數紀錄
+            full_args = [str(dict1), str(dict2)] #將dictionary轉str, 方便之後資料讀寫
+
+            #翻譯
+            #因為dictionary無法直接翻譯，所以拆成keys和values去分別翻譯，回傳值是list
+            dict1_keys_trans = i18n.I18nListener.MAP.values(list(dict1.keys()), full_args)
+            dict1_values_trans = i18n.I18nListener.MAP.values(list(dict1.values()), full_args)
+            dict2_keys_trans = i18n.I18nListener.MAP.values(list(dict2.keys()), full_args)
+            dict2_values_trans = i18n.I18nListener.MAP.values(list(dict2.values()), full_args)
+            whole_trans = []  # 將所有翻譯結果放在一起，用來判斷是否有包含一詞多譯
+            whole_trans.append(dict1_keys_trans)
+            whole_trans.append(dict1_values_trans)
+            whole_trans.append(dict2_keys_trans)
+            whole_trans.append(dict2_values_trans)
+            dict_have_multi_trans = False
+            for i in range(4):
+                for dt in whole_trans[i]: 
+                    # logger.warn(dt)
+                    if len(dt)>1:
+                        dict_have_multi_trans = True 
+                        break
+
+            #遭遇一詞多譯
+            if dict_have_multi_trans:
+                DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2, full_args) #show warning
+                #檢查case會pass or fail(使用原生library的function)
+                keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
+                diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
+                if not diffs:  # pass
+                    # 對預計開啟的UI做一些準備
+                    # logger.warn("有一詞多譯，並且pass")
+                    i18n.I18nListener.Is_Multi_Trans = True
+                    ui.UI.origin_xpaths_or_arguments.append(full_args)
+
+                    for i, dt in enumerate(dict1_keys_trans):
+                        if len(dt)>1 and list(dict1.keys())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            multi_trans_word = [list(dict1.keys())[i]]                                # 還是要移交add_translations處理
+                            ui.UI.add_translations(self, multi_trans_word, dt)
+                    for i, dt in enumerate(dict1_values_trans):
+                        if len(dt)>1 and list(dict1.values())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            multi_trans_word = [list(dict1.values())[i]]                                # 還是要移交add_translations處理
+                            ui.UI.add_translations(self, multi_trans_word, dt)                    
+                    for i, dt in enumerate(dict2_keys_trans):
+                        if len(dt)>1 and list(dict2.keys())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            multi_trans_word = [list(dict2.keys())[i]]                                # 還是要移交add_translations處理
+                            ui.UI.add_translations(self, multi_trans_word, dt)                    
+                    for i, dt in enumerate(dict2_values_trans):
+                        if len(dt)>1 and list(dict2.values())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            multi_trans_word = [list(dict2.values())[i]]                                # 還是要移交add_translations處理
+                            ui.UI.add_translations(self, multi_trans_word, dt)  
+            #以下不管(pass, fail) (有無一詞多譯)都要做 
+            #將dict1、dict2的 翻譯過後的key,value合併 
+            # logger.warn(dict1_keys_trans)
+            # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替
+            dict1 = dict(zip(list(dict1.keys()), dict1_values_trans)) 
+            dict2 = dict(zip(list(dict2.keys()), dict2_values_trans))
+            #將處理好的翻譯回傳給robot原生keyword           
+            return func(self, dict1, dict2, msg, values)                              
         return proxy
 
-    def show_warning(self, dict1, dict2):
+    def show_warning(self, dict1, dict2, full_args):
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
-        message_for_dict1 = Proxy().deal_warning_message_for_one_word(dict1, 'Dict1')
-        message_for_dict2 = Proxy().deal_warning_message_for_one_word(dict2, 'Dict2')
-        message = language + test_name + message_for_dict1 + ' '*3 + '\n' + message_for_dict2 + '\n' + 'You should verify translation is correct!'
-        if message_for_dict1 != '' or message_for_dict2 != '':
+        message_for_dict1_key = Proxy().deal_warning_message_for_list(dict1.keys(), full_args, 'Dict1KEY')
+        message_for_dict1_value = Proxy().deal_warning_message_for_list(dict1.values(), full_args, 'Dict1VALUE')
+        message_for_dict2_key = Proxy().deal_warning_message_for_list(dict2.keys(), full_args, 'Dict2KEY')
+        message_for_dict2_value = Proxy().deal_warning_message_for_list(dict2.values(), full_args, 'Dict2VALUE')
+        message = language + test_name + message_for_dict1_key + '\n' + message_for_dict1_value + '\n' \
+        + message_for_dict2_key + '\n' + message_for_dict2_value + '\n' + 'You should verify translation is correct!'
+        if message_for_dict1_key or message_for_dict1_value or message_for_dict2_key or message_for_dict2_value:
             logger.warn(message)

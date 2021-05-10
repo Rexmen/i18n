@@ -20,7 +20,7 @@ class CountValuesInListProxy(Proxy):
 
             #翻譯看看
             list_trans = i18n.I18nListener.MAP.values(list_, full_args)
-            # logger.warn(list_trans)
+            logger.warn(list_trans)
             list_have_multi_trans = False
             for lt in list_trans:
                 if len(lt)>1:
