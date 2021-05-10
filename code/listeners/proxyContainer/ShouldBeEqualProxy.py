@@ -23,6 +23,7 @@ class ShouldBeEqualProxy(Proxy):
             first_trans = i18n.I18nListener.MAP.value(first, full_args)
             # logger.warn(first_trans)
             second_trans = i18n.I18nListener.MAP.value(second, full_args)
+
             if len(first_trans) >1 or len(second_trans) > 1 : #遭遇一詞多譯
                 # logger.warn("have multi trans")
                 ShouldBeEqualProxy.show_warning(self, first, second, full_args)  
@@ -34,14 +35,14 @@ class ShouldBeEqualProxy(Proxy):
                             i18n.I18nListener.Is_Multi_Trans = True
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
                             if len(first_trans) > 1:
-                                multiple_translation_words = []     
-                                multiple_translation_words.append(first) #將expected word包裝成list格式
-                                ui.UI.add_translations(self, multiple_translation_words, first_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                                multiple_translation_word = []     
+                                multiple_translation_word.append(first) #將expected word包裝成list格式
+                                ui.UI.add_translations(self, multiple_translation_word, first_trans) #將翻譯詞加進等等UI會用到的dictionary中
 
                             if len(second_trans) > 1 and first_trans != second_trans :
-                                multiple_translation_words = []     
-                                multiple_translation_words.append(second) #將expected word包裝成list格式
-                                ui.UI.add_translations(self, multiple_translation_words, second_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                                multiple_translation_word = []     
+                                multiple_translation_word.append(second) #將expected word包裝成list格式
+                                ui.UI.add_translations(self, multiple_translation_word, second_trans) #將翻譯詞加進等等UI會用到的dictionary中
                             return func(self, ft, st, msg, values, ignore_case, formatter)
             return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter) 
             #執行到這行可能有兩種情況: 1.沒有一詞多譯(回傳第一組翻譯，也就是原本的翻譯) 2.一詞多譯的翻譯詞找不到會讓case過的(回傳第一組翻譯)

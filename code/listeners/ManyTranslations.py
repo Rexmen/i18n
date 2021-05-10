@@ -15,9 +15,10 @@ class UI:
     def add_translations(self, multiple_translation_words, translations):
         # logger.warn(multiple_translation_words)
         # logger.warn(translations)
-        if type(translations[0]) == list:
+        if type(translations[0]) == list:  #FIXME 釐清這行原因
             # logger.warn("yes")
             translations = translations[0]
+        #FIXME 下面這行是否可以拿掉
         for i in range(len(multiple_translation_words)): #看有幾個有一詞多譯的字
             UI.translations_dict[multiple_translation_words[i]] = translations
         # logger.warn(translations_dic)
@@ -38,6 +39,9 @@ class UI:
                 # logger.warn(now_selected)
                 format_args=""
                 for j in UI.origin_xpaths_or_arguments[i]:
+                    # logger.warn(j)
+                    # if type(j)==list:
+                    #     j = str(j)
                     format_args += j + "#"
                 format_args = format_args[:-1]
                 contents += format_args + "~" + self.label_texts[i] + "~" + self.radio_texts[i][now_selected] + "\n"

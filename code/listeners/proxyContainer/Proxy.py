@@ -48,12 +48,12 @@ class Proxy():
             message = ''
         return message
     
-    def deal_warning_message_for_list(self, deal_list, message_title):
+    def deal_warning_message_for_list(self, deal_list, full_args, message_title):
         message = ' '*3
         counter = 1
         should_return = False
         for temp in deal_list:
-            possible_translations = i18n.I18nListener.MAP.value(temp)
+            possible_translations = i18n.I18nListener.MAP.value(temp, full_args)
             if len(possible_translations) > 1: 
                 should_return = True
                 message_value = str(counter) + '. ' + 'Multiple translation of the word: \'%s\'' %''.join(temp) + '\n' + ' '*6
