@@ -8,9 +8,10 @@ import I18nListener as i18n
 class DictionaryShouldContainKeyProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['dictionary', 'key', 'msg=None'])] = self
-    
+        #FIXME 不知為何， DictionaryShouldContainItem也會使用到此proxy
     def i18n_Proxy(self, func):
         def proxy(self, dictionary, key, msg=None):
+            logger.warn("HI, that running")
             if not dictionary or not key:
                 return func(self, dictionary, key, value, msg)
             if 'not' in func.__name__:
@@ -35,7 +36,7 @@ class DictionaryShouldContainKeyProxy(Proxy):
     def show_warning(self, dictionary):
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
-        message_for_dict = Proxy().deal_warning_message_for_one_word(dict, 'DICT')
+        message_for_dict = Proxy().deal_warning_message_for_one_word(dictionary, 'DICT')
         if message_for_dict != '':
             message = language + test_name + message_for_dict + ' '*3 + '\n' + 'You should verify translation is correct!'
             logger.warn(message)

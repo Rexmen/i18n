@@ -11,6 +11,7 @@ class DictionaryShouldContainValueProxy(Proxy):
     
     def i18n_Proxy(self, func):
         def proxy(self, dictionary, value, msg=None):
+            logger.warn("hi3")
             if not dictionary or not value:
                 return func(self, dictionary, value, msg)
             compare = lambda x,y:True if x == y else False
