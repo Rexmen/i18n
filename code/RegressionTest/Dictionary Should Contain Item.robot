@@ -30,9 +30,3 @@ Dictionary should not contain value
     &{dict1} =    Create Dictionary    Software=Support
     # Log    ${dict1}
     Dictionary Should Not Contain Value    ${dict1}    test
-
-Dictionary should contain sub dictionary
-    &{dict1} =    Create Dictionary    Software=Support    A=B
-    &{dict2} =    Create Dictionary    Software=Support    A=B
-    # Log    ${dict1}
-    Dictionary Should Contain Sub Dictionary    ${dict1}    ${dict2}

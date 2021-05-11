@@ -41,8 +41,20 @@ class DictionariesShouldBeEqualProxy(Proxy):
             if dict_have_multi_trans:
                 DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2, full_args) #show warning
                 #檢查case會pass or fail(使用原生library的function)
-                keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
-                diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
+                if 'contain_sub' in func.__name__: #呼叫此proxy的是DictionaryShouldContainSubDictionary
+                    keys = self.get_dictionary_keys(dict2)
+                    contain_key = True  
+                    for k in keys:
+                        if k not in dict1:
+                            contain_key = False
+                            break
+                    if contain_key and not list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2)):
+                        diffs = False
+                    else:
+                        diffs = True
+                elif 'equal' in func.__name__: #呼叫此proxy的是DictionaryShouldBeEqual
+                    keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
+                    diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
                 if not diffs:  # pass
                     # 對預計開啟的UI做一些準備
                     # logger.warn("有一詞多譯，並且pass")
