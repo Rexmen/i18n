@@ -13,7 +13,7 @@ class I18nMap:
         self.translation_file = translation_file #i18ntranslation dict(在之前已把json格式翻譯檔轉成了python dictionary)
         self.translation_mapping_routes = self.read_translation_mapping_routes() #存入mappingRoutes.json裡面的資料
         self.multiple_translation_words = []
-        self.no_need_trans_attirbutes = ["@id"]
+        self.no_need_trans_attirbutes = ["@id", "@class"]
 
     def read_translation_mapping_routes(self):
         json_path = glob('%s/mappingRoutes.json' % (os.path.dirname(os.path.abspath(__file__))))[0]
@@ -22,9 +22,10 @@ class I18nMap:
     
     def is_exist_multiple_translation_words(self, text, full_args):
             # logger.warn(self.value(text, full_args))
-            if len(self.value(text, full_args)) > 1: #跑value()，看看翻譯是否多於一種
+            if len(self.value(text, full_args)) > 1 and text not in self.multiple_translation_words: #跑value()，看看翻譯是否多於一種
+                # logger.warn("multi_trans word +1~")
+                # logger.warn(text)
                 self.multiple_translation_words.append(text) 
-                # logger.warn(self.multiple_translation_words)
     
     '''
         new_locate_rule -> key should be the regular expression rule
@@ -34,10 +35,10 @@ class I18nMap:
     def locator(self, xpath, full_args, new_locate_rule={}): #會被那些需要翻譯locator的proxy呼叫
         def combine_locate_rule(rule_at, rule_bracket, locate_rule):  
             default_rule = { # 以下是regular expression
-                    '(('+ rule_bracket + ')\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4, #這段會get到text()='xxx' 或 normalize-space()='xxx'
-                    '(('+ rule_bracket + ')\((text\(\))?\)\, ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))': 4, #這段會get到text(), 'xxx' 或 normalize-space(), 'xxx'
-                    '(('+ rule_at + ') ?= ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3, #這段會get到@title='xxx'
-                    '(('+ rule_at + '), ?(\'|\")(([0-9a-zA-Z.?&()]| )+)(\'|\"))' : 3  #這段會get到@title, 'xxx'
+                    '(('+ rule_bracket + ')\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))': 4, #這段會get到text()='xxx' 或 normalize-space()='xxx'
+                    '(('+ rule_bracket + ')\((text\(\))?\)\ ?, ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))': 4, #這段會get到text(), 'xxx' 或 normalize-space(), 'xxx'
+                    '(('+ rule_at + ') ?= ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))' : 3, #這段會get到@title='xxx'
+                    '(('+ rule_at + ') ?, ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))' : 3  #這段會get到@title, 'xxx'
                 }
             if len(new_locate_rule):
                 temp = dict(default_rule.items() + new_locate_rule.items())
@@ -50,6 +51,7 @@ class I18nMap:
             all_match_words = {}
             for rule in locate_rule.keys():
                 matches = re.findall(rule, xpath)
+                # logger.warn(matches)
                 all_match_words[rule] = matches # ex: all_match_words={ rule1://*[text()='test'], ...}
             return all_match_words
         #從這行開始讀
@@ -62,35 +64,37 @@ class I18nMap:
         #      的attributes都代表"可能要翻譯的屬性"，需要去檢查
         #   因此，原本的翻譯方式變得不適用了
 
-        # 透過一一檢查xpath中的每個attribute創出一套新的rule
-        rule_for_filter = {
+        # 透過一一檢查xpath中的每個attribute，來制定新的翻譯規則
+        rule_for_filter = {   #用來過濾出attribute的rule
             "(@[a-z-]*)":"@",
             "([a-z-]*\(\))":"()"
         }
         new_rule = []
         rule_for_insert_at = ""
         rule_for_insert_bracket = ""
-        all_match_attributes = find_all_match_word(xpath, rule_for_filter)
+        all_match_attributes = find_all_match_word(xpath, rule_for_filter) #挑出xpath中所有的可能被翻譯attribute
         for rule, matches in all_match_attributes.items():
             for match in matches:
                 c = 0
                 if match not in self.no_need_trans_attirbutes:
                     if rule_for_filter[rule] == "@":
                         rule_for_insert_at += "|" + match if c!=0 else match
+                        # logger.warn(rule_for_insert_at)
                         c+=1
                     elif rule_for_filter[rule] == "()":
                         match = match.strip("()")
                         rule_for_insert_bracket += "|" + match if c!=0 else match
                         c+=1
-        # logger.warn(rule_for_insert_at)
-        # logger.warn(rule_for_insert_bracket)
-        # 把要插入的rule代入，創造出一套新的locate_rule
+        # 把要插入的rule代入，和default的rule結合，創造出一套新的locate_rule
         locate_rule = combine_locate_rule(rule_for_insert_at, rule_for_insert_bracket, new_locate_rule) 
+        # logger.warn(locate_rule)
         # 之後再沿用以前的方法去把xpath內需要翻譯的部分做翻譯
         
         # 下面這行會利用rule去實際得 找出符合規則的xpath段落
         all_match_words = find_all_match_word(xpath, locate_rule) #將xpath和rule傳入找所有符合字詞
+        # logger.warn(all_match_words)
         for rule, matches in all_match_words.items(): #all_match_words是dict, rule是key, matches是value 
+            # logger.warn(matches)
             for match in matches: # 同種rule查找到的match可能不只一筆 ex: text()='xxx' & text()='yyy'
                 match_group = locate_rule[rule] #拿到rule的編號
                 quot_group = match_group - 1 
