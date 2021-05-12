@@ -7,9 +7,12 @@ Library    ../self_util.py
 
 *** Test Cases ***
 Dictionary should contain item
-    &{dict1} =    Create Dictionary    Software=Support
+    # &{dict1} =    Create Dictionary    Software=Support
+    # # Log    ${dict1}
+    # Dictionary Should Contain Item    ${dict1}    Software    Support
+    &{dict1} =    Create Dictionary    More=Support
     # Log    ${dict1}
-    Dictionary Should Contain Item    ${dict1}    Software    Support
+    Dictionary Should Contain Item    ${dict1}    More    Support
 
 Dictionary should contain key
     &{dict1} =    Create Dictionary    Software=Support
