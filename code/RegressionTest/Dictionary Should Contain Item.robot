@@ -15,12 +15,12 @@ Dictionary should contain item
     Dictionary Should Contain Item    ${dict1}    More    Support
 
 Dictionary should contain key
-    &{dict1} =    Create Dictionary    Software=Support
+    &{dict1} =    Create Dictionary    Support=Software
     # Log    ${dict1}
-    Dictionary Should Contain Key    ${dict1}    Software
+    Dictionary Should Contain Key    ${dict1}    Support
 
 Dictionary should not contain key
-    &{dict1} =    Create Dictionary    Software=Support
+    &{dict1} =    Create Dictionary    Support=Software
     # Log    ${dict1}
     Dictionary Should Not Contain Key    ${dict1}    test
 

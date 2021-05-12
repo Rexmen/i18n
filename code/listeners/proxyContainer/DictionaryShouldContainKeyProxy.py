@@ -19,8 +19,9 @@ class DictionaryShouldContainKeyProxy(Proxy):
             #因為dictionary無法直接翻譯，所以拆成keys和values去分別翻譯，回傳值是list
             dict_keys_trans = i18n.I18nListener.MAP.values(list(dictionary.keys()), full_args)
             dict_have_multi_trans  = False
-            if len(dict_keys_trans) >1:
-                dict_have_multi_trans  = True
+            for dt in dict_keys_trans:
+                if len(dt) >1:
+                    dict_have_multi_trans  = True
             key_trans = i18n.I18nListener.MAP.value(key, full_args)
 
             #遭遇一詞多譯
@@ -45,13 +46,13 @@ class DictionaryShouldContainKeyProxy(Proxy):
                     if len(key_trans) > 1 and key not in ui.UI.translations_dict.keys():
                         multiple_translation_word = [key]     
                         ui.UI.add_translations(self, multiple_translation_word, key_trans) #將翻譯詞加進等等UI會用到的dictionary中
-            #將dictionary 翻譯過後的key,value合併 
+            #將dictionary 翻譯過後的key合併 
             # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替
             # dictionary = dict(zip(list(dictionary.keys()), dictionary.values()))         
             #將處理好的翻譯回傳給robot原生keyword
             #FIXME 這邊比較麻煩，之後user選擇key的唯一翻譯後，目前還是只會回傳原本的key值
             # logger.warn(dictionary)
-            return func(self, dictionary, key)
+            return func(self, dictionary, key, msg)
         return proxy
 
     def show_warning(self, dictionary,key, full_args):
