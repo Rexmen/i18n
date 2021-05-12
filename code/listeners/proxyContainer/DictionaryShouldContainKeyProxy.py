@@ -22,6 +22,7 @@ class DictionaryShouldContainKeyProxy(Proxy):
             for dt in dict_keys_trans:
                 if len(dt) >1:
                     dict_have_multi_trans  = True
+                    break
             key_trans = i18n.I18nListener.MAP.value(key, full_args)
 
             #遭遇一詞多譯

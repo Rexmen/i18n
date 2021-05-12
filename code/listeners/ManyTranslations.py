@@ -15,12 +15,11 @@ class UI:
     def add_translations(self, multiple_translation_words, translations):
         # logger.warn(multiple_translation_words)
         # logger.warn(translations)
-        if not type(translations[0]) == list:  # 因為傳進來的translations型態會隨著'要翻譯詞'數量而不同
-            translations = [translations]
-        # 下面這行是因為multiple_translation_words可能有許多筆要翻譯的詞，考慮到同一條xpath中
-        # 有多處需要被翻譯
+        if not type(translations[0]) == list:  #因為傳進來的translations型態會隨著'要翻譯詞'數量而不同
+            translations = [translations]      #兩個以上，translations是list包list; 一個，list
+        # 下面這行是因為multiple_translation_words可能有許多筆要翻譯的詞，考慮到同一條xpath中有多處需要被翻譯
         for i in range(len(multiple_translation_words)): #看有幾個有一詞多譯的字
-            UI.translations_dict[multiple_translation_words[i]] = translations[i]  #就算有重複，根據dictionary2的特性，也會覆寫掉
+            UI.translations_dict[multiple_translation_words[i]] = translations[i] #就算有重複，根據dictionary的特性，也會覆寫掉
         # logger.warn(UI.translations_dict)
 
     def get_transdic_keys_and_values(self):
@@ -39,9 +38,6 @@ class UI:
                 # logger.warn(now_selected)
                 format_args=""
                 for j in UI.origin_xpaths_or_arguments[i]:
-                    # logger.warn(j)
-                    # if type(j)==list:
-                    #     j = str(j)
                     format_args += j + "#"
                 format_args = format_args[:-1]
                 contents += format_args + "~" + self.label_texts[i] + "~" + self.radio_texts[i][now_selected] + "\n"
