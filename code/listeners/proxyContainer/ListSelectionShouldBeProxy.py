@@ -28,8 +28,8 @@ class ListSelectionShouldBeProxy(Proxy):
             words_trans = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
 
             expected_trans = i18n.I18nListener.MAP.values(expected, full_args)
-            logger.warn(expected)
-            logger.warn(expected_trans)
+            # logger.warn(expected)
+            # logger.warn(expected_trans)
             expected_have_multi_trans = False
             for lt in expected_trans:
                 if len(lt) >1:
@@ -63,12 +63,15 @@ class ListSelectionShouldBeProxy(Proxy):
                 # logger.warn("hi")
                 xpath = locator_trans[0]
             #將處理好的翻譯回傳給robot原生keyword
-            #FIXME 這邊expected是tuple可以用'*' unpack argument，但expected_trans內部item還是list
+            #這邊expected是tuple可以用'*' unpack argument，但expected_trans內部item還是list
             #為了下面回傳時好處理，此處必須把list包list的一詞多譯壓縮成一個string
-            for lt in expected_trans:
-                for multi in lt:
-                    
-            logger.warn(*tuple(expected_trans))
+            for i,lt in enumerate(expected_trans):
+                newlt = ""
+                for single_tran in lt:
+                    newlt+= single_tran # FIXME 這邊是應急的處理，實際上一詞多譯應該是[x,x]分開的
+                                        # 但沒有影響到case通過
+                expected_trans[i] = newlt
+            # logger.warn(expected_trans)
             return func(self, BuiltIn().replace_variables(xpath), *tuple(expected_trans))
         return proxy
 
