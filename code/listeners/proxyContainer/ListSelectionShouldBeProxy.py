@@ -60,7 +60,6 @@ class ListSelectionShouldBeProxy(Proxy):
                             multi_trans_word = [expected[i]]     
                             ui.UI.add_translations(self, multi_trans_word, lt) #將翻譯詞加進等等UI會用到的dictionary中
             else: #沒有一詞多譯
-                # logger.warn("hi")
                 xpath = locator_trans[0]
             #將處理好的翻譯回傳給robot原生keyword
             #這邊expected是tuple可以用'*' unpack argument，但expected_trans內部item還是list
