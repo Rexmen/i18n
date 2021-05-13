@@ -25,5 +25,5 @@ List selection should be
 List Selection Should Be Sprint 19
     Select Frame    xpath://iframe[@id='remainingWorkReport']
     # List Selection Should Be    //*[@id='ShowSprint']    Sprint 19
-    List Selection Should Be    //*[@id='ShowSprint']    Sprint 19
+    List Selection Should Be    //*[@id='ShowSprint']    Sprint 20
     [Teardown]    Unselect Frame

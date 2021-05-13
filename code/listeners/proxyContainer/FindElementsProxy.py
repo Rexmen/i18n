@@ -18,9 +18,9 @@ class FindElementsProxy(Proxy):
             if isinstance(value, WebElement):
                 return func(self, by, value)
             xpath = ''
+            # logger.warn(type(value))
             full_args = [value]
             BuiltIn().import_library('SeleniumLibrary')
-            # logger.warn(BuiltIn().replace_variables(value))
             #以下的翻譯方法針對的是"xpath內有需要翻譯的文字"
             locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value), full_args) #會呼叫i18nMap的locator(),將xpath傳入,
                 #內部會翻譯xpath內的文字部分，並會設定multiple_translation_words，讓下一行get_multiple_translation_words()取用
@@ -29,14 +29,16 @@ class FindElementsProxy(Proxy):
             if len(locator) > 1:
                 # logger.warn(multiple_translation_words)
                 # logger.warn(locator)
+                #判斷case會過或fail
                 for i, translation_locator in enumerate(locator):
                     xpath += '|' + translation_locator.replace('xpath:', '') if i != 0 else translation_locator.replace('xpath:', '')
                     is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator) #如果畫面上有該翻譯
-                    if is_actual:
+                    if is_actual: #pass
                         ## 括起來的是新增的翻譯邏輯
                         i18n.I18nListener.Is_Multi_Trans = True
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
                         word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
+                        #FIXME multiple_translation_words有沒有可能是複數
                         ui.UI.add_translations(self, multiple_translation_words, word_translation)
                         ##
                         actual_locator_message = "System use the locator:'%s' to run!\n" %translation_locator
