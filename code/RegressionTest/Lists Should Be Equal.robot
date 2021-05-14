@@ -5,10 +5,10 @@ Resource    ./keywords.txt
 Library    Collections
 Library    SeleniumLibrary
 Library    ../self_util.py
-Test Setup    Run Keywords    Open Browser To Microsoft Page
-...                    AND    Change Language    expectedLanguage=${language}
-...                    AND    Go To Support Page
-Test Teardown    Close Browser
+# Test Setup    Run Keywords    Open Browser To Microsoft Page
+# ...                    AND    Change Language    expectedLanguage=${language}
+# ...                    AND    Go To Support Page
+# Test Teardown    Close Browser
 
 *** Variables ***
 @{expectedMenuTopBarTexts} =    Software    PCs & Devices    Entertainment    Business    Developer & IT    Other
@@ -20,6 +20,11 @@ Check Menu TopBar Texts are expected
     ${menuTopBarButtons} =    Set Variable    //button[contains(@role,'presentation')]
     ${menuTopBarTexts} =    Get TopBarButtons Text    ${menuTopBarButtons}
     Lists Should Be Equal    ${expectedMenuTopBarTexts}    ${menuTopBarTexts}
+
+Lists should be equal
+    @{list1} =    Set Variable    Software    Support
+    @{list2} =    Set Variable    Software    Support
+    Lists Should Be Equal    ${list1}    ${list2}
 
 *** Keywords ***
 Open More Menu
