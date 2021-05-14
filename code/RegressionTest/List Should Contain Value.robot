@@ -7,9 +7,9 @@ Library    ../self_util.py
 
 *** Test Cases ***
 List should contain value
-    @{list1} =    Create List    Software    支援
+    @{list1} =    Create List    Software    Support
     # Log    ${dict1}
-    List Should Contain Value    ${list1}    Support
+    List Should Contain Value    ${list1}    Software
 
 List should not contain value
     @{list1} =    Create List    Support
