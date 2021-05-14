@@ -6,8 +6,8 @@ Library    Collections
 Library    ../self_util.py
 
 *** Test Cases ***
-List should contain value
-    @{list1} =    Create List    Software    支援
-    # @{list2} =    Create List    Software    支援    支援
+List should not contain duplicates
+    @{list1} =    Create List    Software    Support
+    # @{list1} =    Create List    Software    Support    Support
     # Log    ${dict1}
     List Should Not Contain Duplicates    ${list1}

@@ -20,7 +20,7 @@ class ListShouldContainValueProxy(Proxy):
             list_trans = i18n.I18nListener.MAP.values(list_, full_args)
             value_trans = i18n.I18nListener.MAP.value(value, full_args)
 
-            list_have_multi_trans  = False
+            list_have_multi_trans = False
             for lt in list_trans:
                 if len(lt) >1:
                     list_have_multi_trans  = True
