@@ -17,7 +17,7 @@ class SelectFromListByLabelProxy(Proxy):
             if not labels:                          #檢查機制
                 return func(self, locator, labels)
             #創出該呼叫的參數紀錄
-            full_args = [locator, labels]
+            full_args = [locator, str(labels)]
 
             BuiltIn().import_library('SeleniumLibrary')
             #翻譯， 會翻譯xpath內有需要被翻譯的屬性(邏輯定義在i18nMap)，翻譯完需要屬性後會回傳整條xpath，
