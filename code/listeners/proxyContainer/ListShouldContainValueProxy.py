@@ -19,6 +19,8 @@ class ListShouldContainValueProxy(Proxy):
             #翻譯
             list_trans = i18n.I18nListener.MAP.values(list_, full_args)
             value_trans = i18n.I18nListener.MAP.value(value, full_args)
+            logger.warn(list_trans)
+            logger.warn(value_trans)
 
             list_have_multi_trans = False
             for lt in list_trans:

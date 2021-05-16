@@ -9,7 +9,7 @@ Library    ../self_util.py
 List should contain value
     @{list1} =    Create List    Software    Support
     # Log    ${dict1}
-    List Should Contain Value    ${list1}    Software
+    List Should Contain Value    ${list1}    Support
 
 List should not contain value
     @{list1} =    Create List    Support

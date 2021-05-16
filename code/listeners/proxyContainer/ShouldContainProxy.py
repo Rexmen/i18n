@@ -4,28 +4,94 @@ import sys
 from robot.libraries.Screenshot import Screenshot
 from robot.api import logger
 import I18nListener as i18n
+import ManyTranslations as ui
+from robot.utils import is_string, is_list_like
 
 class ShouldContainProxy(Proxy):   #container要包含item才算pass
     def __init__(self, arg_format):
         arg_format[repr(['container', 'item', 'msg=None', 'values=True', 'ignore_case=False'])] = self
-                        # container:一個腳本自定義的list([support, supply...]), item:腳本傳入的item(support)
+                        # container:可能是string或list,  item:通常是string
+                        # ShouldNotContain也會呼叫此keyword
     def i18n_Proxy(self, func):
         def proxy(self, container, item, msg=None, values=True, ignore_case=False):
-            logger.warn("fuck should contain")
-            ShouldContainProxy.show_warning(self, container, item)  #因為存在一詞多譯，所以呼叫show_warning
-            for translation_container in i18n.I18nListener.MAP.values(container): #對container裡的物件做map
-                for translation_item in i18n.I18nListener.MAP.value(item): #對item做map
-                    if translation_item in translation_container: # if 支援 in [支援服務, 提供...]
-                                                                  # if 支援服務 in 
-                        return func(self, translation_container, translation_item, msg, values, ignore_case)
-            return func(self, container, item, msg, values, ignore_case)
-        return proxy
+            #創出該呼叫的參數紀錄
+            full_args = [str(container), item] #container有機會是list，轉str，方便之後資料讀寫
+
+            #翻譯
+            container_trans = i18n.I18nListener.MAP.values(container, full_args)
+            item_trans = i18n.I18nListener.MAP.value(item, full_args)
+
+            container_have_multi_trans = False
+            if is_list_like(container):
+                for lt in container_trans:
+                    if len(lt) >1:
+                        container_have_multi_trans  = True
+                        break 
+            elif is_string(container):
+                if len(container_trans)>1:
+                    container_have_multi_trans = True
+
+            #遭遇一詞多譯
+            if container_have_multi_trans or len(item_trans)>1:
+                ShouldContainProxy.show_warning(self, container, item, full_args) #show warning
+                #檢查case會pass or fail
+                #FIXME 因為container有可能是抓畫面上翻譯過網頁的值，所以這邊的判斷
+                #      要考慮container和item不是同語言的情形
+                is_pass = False
+                if 'not' in func.__name__ :
+                    if is_string(container):
+                        container = container.lower()
+                    elif is_list_like(container):
+                        container = set(x.lower() if is_string(x) else x for x in container)
+                        # 若不同語言的情況下，item不在container內，有可能同語言下卻會包含
+                        # 所以要考慮item和item_trans，皆不在container中
+                        if item not in container and (index not in container for index in item_trans):
+                            is_pass = True
+                else:
+                    if is_string(container):
+                        container = container.lower()
+                        if item in container:
+                            is_pass = True
+                    elif is_list_like(container):
+                        container = set(x.lower() if is_string(x) else x for x in container)
+                        if item in container or (index in container for index in item_trans):
+                            is_pass = True
+
+                if is_pass: #pass
+                    # 對預計開啟的UI做一些準備
+                    i18n.I18nListener.Is_Multi_Trans = True
+                    ui.UI.origin_xpaths_or_arguments.append(full_args)
+
+                    if is_list_like(container):
+                        for i, lt in enumerate(container_trans):
+                            if len(lt)>1 and container[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                                multi_trans_word = [container[i]]                            # 還是要移交add_translations處理
+                                ui.UI.add_translations(self, multi_trans_word, lt)
+                    elif is_string(container):
+                        if len(container_trans)>1 and container not in ui.UI.translations_dict.keys():
+                            multiple_translation_word = [container]     
+                            ui.UI.add_translations(self, multiple_translation_word, container_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                    if len(item_trans)>1 and item not in ui.UI.translations_dict.keys():
+                        multiple_translation_word = [item]     
+                        ui.UI.add_translations(self, multiple_translation_word, item_trans) #將翻譯詞加進等等UI會用到的dictionary中
+
+            #將處理好的翻譯回傳給robot原生keyword
+            #  同上，因為有可能container是抓畫面上翻譯過網頁的值(只有唯一值)，
+            #  所以item_trans在一詞多譯的情況下，可能不會包含於container內，
+            #  而導致case出錯，目前是打算在proxy先測試過再做回傳
+            if is_list_like(item_trans):
+                for it in item_trans: #把item_trans一詞多譯換成會過的那個
+                    if [it] in container_trans:
+                        item_trans = [it]
+                        break
+            return func(self, container_trans, item_trans, msg)
+        return proxy                        
     
-    def show_warning(self, container, item):
+    def show_warning(self, container, item, full_args):
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
-        message_for_container = Proxy().deal_warning_message_for_list(container, 'container')
-        message_for_item = Proxy().deal_warning_message_for_one_word(item, 'Expected Contain')
-        if message_for_container != '' or message_for_item != '':
-            message = language + test_name + message_for_container + ' '*3 + '\n' +  message_for_item + '\n' + 'You should verify translation is correct!'
+        message_for_container = Proxy().deal_warning_message_for_list(container, full_args, 'CONTAINER')
+        message_for_item = Proxy().deal_warning_message_for_one_word(item, full_args, 'Expected Contain')
+        if message_for_container or message_for_item :
+            message = language + test_name + message_for_container + '\n' +  message_for_item + '\n' + 'You should verify translation is correct!'
             logger.warn(message)
