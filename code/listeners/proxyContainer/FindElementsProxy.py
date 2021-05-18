@@ -26,6 +26,7 @@ class FindElementsProxy(Proxy):
                 #內部會翻譯xpath內的文字部分，並會設定multiple_translation_words，讓下一行get_multiple_translation_words()取用
             multiple_translation_words = i18n.I18nListener.MAP.get_multiple_translation_words() 
             is_actual = False
+            #遭遇一詞多譯
             if len(locator) > 1:
                 # logger.warn(multiple_translation_words)
                 # logger.warn(locator)
@@ -37,8 +38,8 @@ class FindElementsProxy(Proxy):
                         ## 括起來的是新增的翻譯邏輯
                         i18n.I18nListener.Is_Multi_Trans = True
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
+
                         word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
-                        #FIXME multiple_translation_words有沒有可能是複數
                         ui.UI.add_translations(self, multiple_translation_words, word_translation)
                         ##
                         actual_locator_message = "System use the locator:'%s' to run!\n" %translation_locator
@@ -58,7 +59,7 @@ class FindElementsProxy(Proxy):
             # multiple_translation_words = list(set(multiple_translation_words))
             for multiple_translation_word in multiple_translation_words:
                 message_value = 'Multiple translations of the word:\'%s\'' % multiple_translation_word
-                message = language + 'Test Name: ' + test_name + '\n   ' + 'locator: ' + locator + '\n   ' + message_value + '\n\n' + 'You should verify translation is correct!'
+                message = language + 'Test Name: ' + test_name + '\n   ' + 'locator: ' + locator + '\n' + message_value + '\n\n' + 'You should verify translation is correct!'
                 if multiple_translation_word not in i18n.I18nListener.Not_SHOW_WARNING_WORDS:
                     logger.warn(message)
                     Screenshot().take_screenshot(width=700)

@@ -18,7 +18,7 @@ class TitleShouldBe(Proxy):
 
             #翻譯，如果有一詞多譯的話要藉由判斷，找出正確的翻詞回傳
             title_trans = i18n.I18nListener.MAP.value(title, full_args)
-            logger.warn(title_trans)
+            # logger.warn(title_trans)
 
             #遭遇一詞多譯
             if len(title_trans)>1:

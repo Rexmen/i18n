@@ -20,6 +20,7 @@ class ShouldContainProxy(Proxy):   #container要包含item才算pass
             #翻譯
             container_trans = i18n.I18nListener.MAP.values(container, full_args)
             item_trans = i18n.I18nListener.MAP.value(item, full_args)
+            logger.warn(item_trans)
 
             container_have_multi_trans = False
             if is_list_like(container):
