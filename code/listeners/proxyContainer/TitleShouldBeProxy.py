@@ -6,7 +6,7 @@ from robot.api import logger
 import I18nListener as i18n
 import ManyTranslations as ui
 
-class TitleShouldBe(Proxy):
+class TitleShouldBeProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['title', 'message=None'])] = self
         # 會和網頁視窗的title比較是否相同
@@ -22,7 +22,7 @@ class TitleShouldBe(Proxy):
 
             #遭遇一詞多譯
             if len(title_trans)>1:
-                TitleShouldBe.show_warning(self, title, full_args) #show warning
+                TitleShouldBeProxy.show_warning(self, title, full_args) #show warning
                 #檢查case會pass or fail
                 is_pass = False
                 actual = self.get_title()

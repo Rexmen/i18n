@@ -69,11 +69,11 @@ class UI:
         self.win = Tk()    
         # logger.warn("tk")
         self.win.title("一詞多譯")
-        # win.geometry('500x500+700+300')
-        canvas = Canvas(self.win, width=300, height=500)
+        self.win.geometry('+700+300')
+        canvas = Canvas(self.win, width=200, height=200)
         canvas.grid(rowspan=3)
         
-        self.fontStyle = tkFont.Font(family ="Raleway", size=20)
+        self.fontStyle = tkFont.Font(family ="Helvetica", size=14)
         self.draw_trans_options()
         
         # 標語 Label

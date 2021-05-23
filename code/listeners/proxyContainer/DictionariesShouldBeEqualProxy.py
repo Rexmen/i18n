@@ -10,7 +10,7 @@ from robot.libraries.Collections import _Dictionary
 class DictionariesShouldBeEqualProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['dict1', 'dict2', 'msg=None', 'values=True'])] = self
-        # DictionaryShouldBeEqual 和 DictionaryShouldContainSubDictionary 都會呼叫此proxy
+        # DictionariesShouldBeEqual 和 DictionaryShouldContainSubDictionary 都會呼叫此proxy
     def i18n_Proxy(self, func):
         def proxy(self, dict1, dict2, msg=None, values=True):
             #定義'比較'的邏輯
