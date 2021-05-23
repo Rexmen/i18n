@@ -58,12 +58,12 @@ class UI:
             self.radios.append([])
             self.labels.append(Label(self.win, text="完整參數是:%s, %s可以被翻譯成: " % 
             (UI.origin_xpaths_or_arguments[i],self.label_texts[i]), font=self.fontStyle)) #創出label(s)
-            self.labels[i].grid( row=i, sticky=W+N)
+            self.labels[i].grid( column=0,row=i, sticky=W+N+S, padx=10, pady=3)
             #create出每一列中的radio button
             for j in range(len(self.radio_texts[i])):
                 default_value = j
                 self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j],font=self.fontStyle, value=default_value ))
-                self.radios[i][j].grid(columnspan=1, column=1+j, row=i, sticky=W+N)
+                self.radios[i][j].grid(columnspan=1, column=1+j, row=i, sticky=W+N+S, pady=3)
     
     def run(self):
         self.win = Tk()    
@@ -71,20 +71,20 @@ class UI:
         self.win.title("一詞多譯")
         self.win.geometry('+700+300')
         canvas = Canvas(self.win, width=200, height=200)
-        canvas.grid(rowspan=3)
+        # canvas.grid(rowspan=2)
         
         self.fontStyle = tkFont.Font(family ="Helvetica", size=14)
         self.draw_trans_options()
         
         # 標語 Label
         instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
-        instructions.grid(row=6, sticky=S+W)
+        instructions.grid(row=6, sticky=S+W, padx=10, pady=5)
 
         # 提交 Button
         text = StringVar()
         btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
         text.set("Submit")
-        btn.grid(row=6,column=2, sticky=S+E)
+        btn.grid(row=6,column=2, sticky=S+E,padx=10, pady=5)
 
         self.win.mainloop()
 
