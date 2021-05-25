@@ -58,7 +58,15 @@ class UI:
                 contents += format_args + "~" + self.label_texts[i] + "~" + self.radio_texts[i][now_selected] + "\n"
             logger.warn(contents)
             out_file.write(contents)
-            self.win.destroy()
+
+            # 把已輸入的資料和 submit btn 在ui上隱藏
+            for i in range(len(self.labels)):
+                self.labels[i].grid_forget()
+                self.labels_word[i].grid_forget()
+                for j in range(len(self.radios[i])):
+                    self.radios[i][j].grid_forget()
+            self.btn_submit.grid_forget()
+            # self.win.destroy()
     
     def undo_trans(self):
         with open("code/listeners/setting.txt", "a+") as modi_file:
@@ -81,7 +89,7 @@ class UI:
                         new_data += line
                 modi_file.seek(0)
                 modi_file.truncate()
-                modi_file.write(new_data)            
+                modi_file.write(new_data)       
             #關閉record視窗
             self.record_ui.destroy()
 
@@ -158,20 +166,20 @@ class UI:
         self.draw_trans_options()
         
         # 標語 Label
-        instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
-        instructions.grid(row=10, sticky=S+W, padx=10, pady=5)
+        self.instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
+        self.instructions.grid(row=10, sticky=S+W, padx=10, pady=5)
+
+        # 顯示紀錄 Button
+        self.text_record = StringVar()
+        self.btn_record = Button(self.win, textvariable=self.text_record, command= self.open_record, font=self.fontStyle, bg="#8c4646", fg="white", height=2, width=15)
+        self.text_record.set("TransRecord")
+        self.btn_record.grid(row=10, column=1, sticky=S+E, padx=10, pady=5)
 
         # 提交 Button
-        text_record = StringVar()
-        btn_record = Button(self.win, textvariable=text_record, command= self.open_record, font=self.fontStyle, bg="#8c4646", fg="white", height=2, width=15)
-        text_record.set("TransRecord")
-        btn_record.grid(row=10, column=1, sticky=S+E, padx=10, pady=5)
-
-        # 提交 Button
-        text = StringVar()
-        btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
-        text.set("Submit")
-        btn.grid(row=10, column=1, sticky=S+E, padx=10, pady=5, columnspan=10)
+        self.text_submit = StringVar()
+        self.btn_submit = Button(self.win, textvariable=self.text_submit, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
+        self.text_submit.set("Submit")
+        self.btn_submit.grid(row=10, column=2, sticky=S+E, padx=10, pady=5, columnspan=10)
 
         self.win.mainloop()
 
