@@ -5,6 +5,8 @@ import threading
 from PIL import Image, ImageTk
 from robot.api import logger
 import tkinter.font as tkFont
+import os
+
 
 class UI:
     translations_key = []
@@ -42,7 +44,7 @@ class UI:
             for value in UI.translations_value:
                 self.radio_texts.append(value)
                 # logger.warn(label_texts)
-    
+
     def output_setting_file(self):
         with open("code/listeners/setting.txt", "a") as out_file:
             contents = ""
@@ -57,6 +59,31 @@ class UI:
             logger.warn(contents)
             out_file.write(contents)
             self.win.destroy()
+    
+    def undo_trans(self):
+        with open("code/listeners/setting.txt", "a+") as modi_file:
+            if os.stat("code/listeners/setting.txt").st_size != 0:
+                modi_file.seek(0)  #這行很重要，將指針指到文件頭
+
+                #先準備要清除的資料
+                content_rmv = []
+                for i in range(len(self.checkbtn_vars)):
+                    # logger.warn(self.checkbtn_vars[i].get())
+                    if self.checkbtn_vars[i].get() == 1:
+                        content_rmv.append(self.checkbtn_texts[i]+'\n')
+                # logger.warn(content_rmv)
+                
+                #開始掃描設定檔，並刪除符合的資料
+                new_data = ""
+                for line in modi_file.readlines():
+                    if line not in content_rmv:
+                        #這邊似乎無法直接修改值成""，所以最後採用覆寫的方式
+                        new_data += line
+                modi_file.seek(0)
+                modi_file.truncate()
+                modi_file.write(new_data)            
+            #關閉record視窗
+            self.record_ui.destroy()
 
     def draw_trans_options(self):
         self.labels = []
@@ -83,15 +110,48 @@ class UI:
             #create出每一列中的radio button
             for j in range(len(self.radio_texts[i])):
                 default_value = j
-                self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j],font=self.fontStyle, value=default_value ))
+                self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j], font=self.fontStyle, value=default_value))
                 self.radios[i][j].grid(columnspan=1, column=2+j, row=i, sticky=W+N+S, pady=3)
-    
+
+    def open_record(self):
+        self.record_ui = Toplevel(self.win)
+
+        #ui基礎設定
+        self.record_ui.title("使用者翻譯紀錄")
+        self.record_ui.geometry('+250+250')
+
+        #讀取setting.txt的內容，並列出
+        with open("code/listeners/setting.txt", 'a+') as file:
+            if os.stat("code/listeners/setting.txt").st_size != 0:
+                file.seek(0)  #這行很重要，將指針指到文件頭
+
+                #準備好checkbox資訊
+                self.checkbtns = []
+                self.checkbtn_vars = []
+                self.checkbtn_texts = []
+                for line in file.readlines():
+                    self.checkbtn_texts.append(line.strip('\n'))
+                    # logger.warn(line)
+                
+                #根據有幾筆資料，來創出checkbox
+                for i in range(len(self.checkbtn_texts)):
+                    self.checkbtn_vars.append(IntVar())
+                    self.checkbtns.append(Checkbutton(self.record_ui, variable=self.checkbtn_vars[i], text=self.checkbtn_texts[i], font=self.fontStyle, \
+                                                        bg='light green'))
+                    self.checkbtns[i].grid(column=0, row=i, sticky=W+N+S, padx=10, pady=3)
+            
+            # Undo Button
+            text_undo = StringVar()
+            btn_undo = Button(self.record_ui, textvariable=text_undo, command= self.undo_trans, font=self.fontStyle, bg="#ff8a15", fg="white", height=1, width=8)
+            text_undo.set("Undo")
+            btn_undo.grid(row=10, column=0, sticky=S+E, padx=10, pady=5, columnspan=3)
+
     def run(self):
         self.win = Tk()    
         # logger.warn("tk")
         self.win.title("一詞多譯")
         self.win.geometry('+200+300')
-        canvas = Canvas(self.win, width=200, height=200)
+        # canvas = Canvas(self.win, width=200, height=200)
         # canvas.grid(rowspan=2)
         
         self.fontStyle = tkFont.Font(family ="Helvetica", size=14)
@@ -102,12 +162,21 @@ class UI:
         instructions.grid(row=10, sticky=S+W, padx=10, pady=5)
 
         # 提交 Button
+        text_record = StringVar()
+        btn_record = Button(self.win, textvariable=text_record, command= self.open_record, font=self.fontStyle, bg="#8c4646", fg="white", height=2, width=15)
+        text_record.set("TransRecord")
+        btn_record.grid(row=10, column=1, sticky=S+E, padx=10, pady=5)
+
+        # 提交 Button
         text = StringVar()
         btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
         text.set("Submit")
-        btn.grid(row=10,column=1, sticky=S+E,padx=10, pady=5, columnspan=10)
+        btn.grid(row=10, column=1, sticky=S+E, padx=10, pady=5, columnspan=10)
 
         self.win.mainloop()
 
+
+
+  
 if __name__=='__main__':
     self.run()
