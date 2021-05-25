@@ -13,6 +13,9 @@ Test multiple user behavior on microsoft website
     Go To Support Page
     Support Button Text Should Be    Support
     Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
+    Click Element    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
+    ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
+    Page Should Contain Element    ${MicrosoftSupport}
 
 *** Keywords ***
 Support Button Text Should Be
