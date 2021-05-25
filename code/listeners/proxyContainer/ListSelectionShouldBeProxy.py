@@ -47,18 +47,21 @@ class ListSelectionShouldBeProxy(Proxy):
                 options = SelectElementKeywords._get_selected_options(self, locator)
                 labels = SelectElementKeywords._get_labels(options)
                 values = SelectElementKeywords._get_values(options)
+
                 if sorted(expected) in [sorted(labels), sorted(values)]: # pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
+                    
                     for i, word_trans in enumerate(words_trans):
-                        if len(word_trans)>1 and multiple_translation_words[i] not in ui.UI.translations_dict.keys():
-                            multi_trans_word = [multiple_translation_words[i]]                                
-                            ui.UI.add_translations(self, multi_trans_word, word_trans)
+                        if len(word_trans)>1 and str(full_args)+multiple_translation_words[i] not in ui.UI.unique_log:
+                            multi_trans_word = [multiple_translation_words[i]]              
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)                  
+                            ui.UI.add_translations(self, multi_trans_word, word_trans, full_args)
                     for i, lt in enumerate(expected_trans):
-                        if len(lt) > 1 and expected[i] not in ui.UI.translations_dict.keys():
+                        if len(lt) > 1 and str(full_args)+expected[i] not in ui.UI.unique_log:
                             multi_trans_word = [expected[i]]     
-                            ui.UI.add_translations(self, multi_trans_word, lt) #將翻譯詞加進等等UI會用到的dictionary中
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
+                            ui.UI.add_translations(self, multi_trans_word, lt, full_args) #將翻譯詞加進等等UI會用到的dictionary中
             else: #沒有一詞多譯
                 xpath = locator_trans[0]
             #將處理好的翻譯回傳給robot原生keyword

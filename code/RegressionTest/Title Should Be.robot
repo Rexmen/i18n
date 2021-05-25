@@ -7,7 +7,7 @@ Library    Collections
 Library    ../self_util.py
 Test Setup    Run Keywords    Open Browser To Microsoft Page
 ...                    AND    Change Language    expectedLanguage=${language}
-# Test Teardown    Close Browser
+Test Teardown    Close Browser
 
 *** Test Cases ***
 Title Should Be

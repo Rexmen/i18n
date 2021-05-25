@@ -38,11 +38,11 @@ class AlertShouldBePresentProxy(Proxy):  #驗證alert資訊有成功出現
                 if is_pass: #pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
 
-                    if len(text_trans)>1 and text not in ui.UI.translations_dict.keys():
+                    if len(text_trans)>1 and str(full_args)+text not in ui.UI.unique_log: #判斷不是重複(arg+翻譯詞都相同)的翻譯
                         multiple_translation_word = [text]     
-                        ui.UI.add_translations(self, multiple_translation_word, text_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multiple_translation_word, text_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
                     #有一詞多譯且case通過
                     return func(self, pass_tt, action, timeout)
             # 沒有遭遇一詞多譯 或者 有多個翻譯詞卻case失敗

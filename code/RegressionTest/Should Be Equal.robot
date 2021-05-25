@@ -20,7 +20,7 @@ First argument or second argument Exist multiple translations of the word
     ${supportButtonText} =    Get Text After It Is Visible    ${supportButton}
     Should Be Equal    ${supportButtonText}    Support
 
-123
+Test should be equal
     Should Be Equal    More    More
     Should Be Equal    Support    Support
 

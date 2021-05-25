@@ -5,19 +5,18 @@ Resource    ./keywords.txt
 Library    Collections
 Library    SeleniumLibrary
 Library    ../self_util.py
-# Test Setup    Run Keywords    Open Browser To Microsoft Page
-# ...                    AND    Change Language    expectedLanguage=${language}
-# ...                    AND    Go To Support Page
-# Test Teardown    Close Browser
+Test Setup    Run Keywords    Open Browser To Microsoft Page
+...                    AND    Change Language    expectedLanguage=${language}
+...                    AND    Go To Support Page
+Test Teardown    Close Browser
 
 *** Variables ***
-@{expectedMenuTopBarTexts} =    Software    PCs & Devices    Entertainment    Business    Developer & IT    Other
-@{expectedCommonTopBarTexts} =    Office    Windows    Surface    Xbox    Support
+@{expectedMenuTopBarTexts} =    Software    PCs & Devices    Entertainment    Business    Developer&IT    Other
 
 *** Test Cases ***
 Check Menu TopBar Texts are expected
     Open More Menu
-    ${menuTopBarButtons} =    Set Variable    //button[contains(@role,'presentation')]
+    ${menuTopBarButtons} =    Set Variable    //*[contains(@id, 'uhf-navspn-shellmenu')]
     ${menuTopBarTexts} =    Get TopBarButtons Text    ${menuTopBarButtons}
     Lists Should Be Equal    ${expectedMenuTopBarTexts}    ${menuTopBarTexts}
 
@@ -28,15 +27,13 @@ Lists should be equal
 
 *** Keywords ***
 Open More Menu
-    ${moreButton} =    Set Variable    //button[contains(normalize-space(), 'More')]
-    ${menuTopBarButtons} =    Set Variable    //button[contains(@role,'presentation')]
+    ${moreButton} =    Set Variable    //button[contains(normalize-space(), 'All Microsoft')]
+    Sleep    1s
     Click Element After It Is Visible    ${moreButton}
-    ${isOpened} =    Run Keyword And Return Status    Wait Until Element Is Visible    ${menuTopBarButtons}    timeout=${shortPeriodOfTime}    error=More Menu should be visible.\n
-    Run Keyword If    ${isOpened} == False    Open More Menu
+    Wait Until Element Is Visible    //*[contains(@class, 'f-multi-column') and @aria-hidden='false']    timeout=${shortPeriodOfTime}    error= All Microsoft menu should be visible.
+
 
 Get TopBarButtons Text
     [Arguments]    ${menuTopBarButtons}
-    ${topBarElements} =    Get WebElements    ${menuTopBarButtons}
     ${menuTopBarTexts} =    Get Texts After Page Contain Element    ${menuTopBarButtons}
-    Run Keyword And Return If    ${menuTopBarTexts.__len__()} != ${topBarElements.__len__()}    Get TopBarButtons Text    ${menuTopBarButtons}
     [Return]    ${menuTopBarTexts}

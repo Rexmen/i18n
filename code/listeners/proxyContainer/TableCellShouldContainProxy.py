@@ -47,15 +47,16 @@ class TableCellShouldContainProxy(Proxy):
                     if is_pass: #pass
                         # 對預計開啟的UI做一些準備
                         i18n.I18nListener.Is_Multi_Trans = True
-                        ui.UI.origin_xpaths_or_arguments.append(full_args)
                         
                         for i, wt in enumerate(word_trans):
-                            if len(wt)>1 and multiple_translation_words[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            if len(wt)>1 and str(full_args)+multiple_translation_words[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                                 multi_trans_word = [multiple_translation_words[i]]                            # 還是要移交add_translations處理
-                                ui.UI.add_translations(self, multi_trans_word, wt)
-                        if len(expected_trans) > 1 and expected not in ui.UI.translations_dict.keys():
+                                ui.UI.origin_xpaths_or_arguments.append(full_args)
+                                ui.UI.add_translations(self, multi_trans_word, wt, full_args)
+                        if len(expected_trans) > 1 and str(full_args)+expected not in ui.UI.unique_log:
                             multiple_translation_word = [expected]     
-                            ui.UI.add_translations(self, multiple_translation_word, expected_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
+                            ui.UI.add_translations(self, multiple_translation_word, expected_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
                         break
             else: #沒有一詞多譯的情況
                 xpath = locator_trans[0].replace('xpath:','')

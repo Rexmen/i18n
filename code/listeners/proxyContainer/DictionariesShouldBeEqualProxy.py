@@ -59,24 +59,27 @@ class DictionariesShouldBeEqualProxy(Proxy):
                     # 對預計開啟的UI做一些準備
                     # logger.warn("有一詞多譯，並且pass")
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
 
                     for i, dt in enumerate(dict1_keys_trans):
-                        if len(dt)>1 and list(dict1.keys())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict1.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             multi_trans_word = [list(dict1.keys())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt)
+                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)
                     for i, dt in enumerate(dict1_values_trans):
-                        if len(dt)>1 and list(dict1.values())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict1.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             multi_trans_word = [list(dict1.values())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt)                    
+                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)                    
                     for i, dt in enumerate(dict2_keys_trans):
-                        if len(dt)>1 and list(dict2.keys())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict2.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             multi_trans_word = [list(dict2.keys())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt)                    
+                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)                    
                     for i, dt in enumerate(dict2_values_trans):
-                        if len(dt)>1 and list(dict2.values())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict2.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             multi_trans_word = [list(dict2.values())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt)  
+                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)  
             #以下不管(pass, fail) (有無一詞多譯)都要做 
             #將dict1、dict2的 翻譯過後的key,value合併 
             # logger.warn(dict1_keys_trans)

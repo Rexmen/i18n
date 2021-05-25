@@ -40,11 +40,12 @@ class GetMatchCountProxy(Proxy):
                 if 'matches' in func.__name__:
                     GetMatchCountProxy.show_warning(self, list,full_args) #show warning
                 i18n.I18nListener.Is_Multi_Trans = True
-                ui.UI.origin_xpaths_or_arguments.append(full_args)
+                
                 for i, lt in enumerate(list_trans):
-                    if len(lt)>1 and list[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                    if len(lt)>1 and str(full_args)+list[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                         multi_trans_word = [list[i]]                                # 還是要移交add_translations處理
-                        ui.UI.add_translations(self, multi_trans_word, lt)
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multi_trans_word, lt, full_args)
             
             #此處不將翻譯過後的詞回傳，因為可能導致get不到正確的數量
             #僅在報表上會顯示list中會有一詞多譯warning的詞，並跳UI

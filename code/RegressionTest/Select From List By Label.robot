@@ -19,8 +19,8 @@ Select from list by label "Sprint 18"
     Wait Until Element Is Visible    //*[@class='x-tree-node-anchor']//*[normalize-space()='TaskBoard']    ${shortPeriodOfTime}
     Double Click Element    //*[@class='x-tree-node-anchor']//*[normalize-space()='Scrum Report']
     Select Frame    xpath://iframe[@id='remainingWorkReport']
-    Select From List By Label    //*[@id='ShowSprint']    Sprint 18    Sprint99
+    Select From List By Label    //*[@id='ShowSprint']    Sprint 18
     Sleep    1s
-    # List Selection Should Be    //*[@id='ShowSprint']    Sprint 18
+    List Selection Should Be    //*[@id='ShowSprint']    Sprint 18
     Unselect Frame
     Close Browser

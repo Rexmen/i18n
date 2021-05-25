@@ -18,12 +18,12 @@ List selection should be
     Wait Until Element Is Visible    //*[@id='Project_Top_Panel']    ${shortPeriodOfTime}
     Wait Until Element Is Visible    //*[@class='x-tree-node-anchor']//*[normalize-space()='TaskBoard']    ${shortPeriodOfTime}
     Double Click Element    //*[@class='x-tree-node-anchor']//*[normalize-space()='Scrum Report']
-    List Selection Should Be Sprint 19
+    List Selection Should Be Sprint 20
     [Teardown]    Close Browser
 
 *** Keywords ***
-List Selection Should Be Sprint 19
+List Selection Should Be Sprint 20
     Select Frame    xpath://iframe[@id='remainingWorkReport']
     # List Selection Should Be    //*[@id='ShowSprint']    Sprint 19
-    List Selection Should Be    //*[@id='ShowSprint']    Sprint 20
+    List Selection Should Be    //*[@id='ShowSprint']    Sprint 21
     [Teardown]    Unselect Frame

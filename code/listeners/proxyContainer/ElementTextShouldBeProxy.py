@@ -12,23 +12,33 @@ class ElementTextShouldBeProxy(Proxy): #FIXME 此proxy還有待refactor
     
     def i18n_Proxy(self, func):
         def proxy(self, locator, expected, message=None, ignore_case=False): #locator://*[@text='支援'](locator有時並不需要翻譯) expected:support
-
+            
+            #創出該呼叫的參數紀錄
             full_args = [locator, expected]
 
+            #翻譯
             possible_translations = i18n.I18nListener.MAP.value(expected, full_args) #support可能map成支援/支援服務
+
             actual_text = ''
+            #遭遇一詞多譯
             if len(possible_translations) > 1:
-                i18n.I18nListener.Is_Multi_Trans = True
-                # logger.warn("hi")
-                multiple_translation_words = []     
-                multiple_translation_words.append(expected) #將expected word包裝成list格式
-                # logger.warn(multiple_translation_words)
-                ui.UI.origin_xpaths_or_arguments.append(full_args)
-                ui.UI.add_translations(self, multiple_translation_words, possible_translations, full_args)
                 ElementTextShouldBeProxy.show_warning(self, expected, full_args)
+
+                #判斷原本case會過還是fail 
+
+                #pass
+                i18n.I18nListener.Is_Multi_Trans = True
+
+                if str(full_args)+expected not in ui.UI.unique_log:
+                    multiple_translation_words = []
+                    multiple_translation_words.append(expected) #將expected word包裝成list格式
+                    ui.UI.origin_xpaths_or_arguments.append(full_args)
+                    ui.UI.add_translations(self, multiple_translation_words, possible_translations, full_args)
+
                 BuiltIn().import_library('SeleniumLibrary')
-                actual_text = BuiltIn().run_keyword('Get Text', locator) #有多種翻譯，取得locator的字當作actual text(支援)
-            else:
+                actual_text = BuiltIn().run_keyword('Get Text', locator) #有多種翻譯，取得locator的字當作actual text #FIXME 此作法不是很好
+            
+            else:# 沒有遭遇一詞多譯 或者 有一詞多譯但case會fail
                 actual_text = possible_translations[0] #只有一種翻譯，取得map得到的結果當作actaul text
             actual_text_message = "'%s'is currently resolved as'%s'\n" %(expected, actual_text)
             logger.info(actual_text_message)

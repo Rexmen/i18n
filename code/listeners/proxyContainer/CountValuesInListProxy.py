@@ -34,16 +34,17 @@ class CountValuesInListProxy(Proxy):
                 # 此proxy因為是計算數量，所以沒有case fail的問題
                 # 對預計開啟的UI做一些準備
                 i18n.I18nListener.Is_Multi_Trans = True  
-                ui.UI.origin_xpaths_or_arguments.append(full_args)
                 
                 for i, lt in enumerate(list_trans):
-                    if len(lt)>1 and list_[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                    if len(lt)>1 and str(full_args)+list_[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                         multi_trans_word = [list_[i]]                                # 還是要移交add_translations處理
-                        ui.UI.add_translations(self, multi_trans_word, lt)
-                if len(value_trans) > 1 and value not in ui.UI.translations_dict.keys():
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multi_trans_word, lt, full_args)
+                if len(value_trans) > 1 and str(full_args)+value not in ui.UI.unique_log:
+                    ui.UI.origin_xpaths_or_arguments.append(full_args)
                     multi_trans_word = [value]
-                    ui.UI.add_translations(self, multi_trans_word, value_trans)
-            #將處理好的翻譯回傳給robot原生keyword           
+                    ui.UI.add_translations(self, multi_trans_word, value_trans,full_args)
+            #將處理好的翻譯回傳給robot原生keyword
             return func(self, list_trans, value_trans, start, end)
         return proxy   
     

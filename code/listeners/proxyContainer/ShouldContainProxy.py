@@ -16,11 +16,13 @@ class ShouldContainProxy(Proxy):   #container要包含item才算pass
         def proxy(self, container, item, msg=None, values=True, ignore_case=False):
             #創出該呼叫的參數紀錄
             full_args = [str(container), item] #container有機會是list，轉str，方便之後資料讀寫
+            # logger.warn(container)
 
             #翻譯
             container_trans = i18n.I18nListener.MAP.values(container, full_args)
             item_trans = i18n.I18nListener.MAP.value(item, full_args)
-            logger.warn(item_trans)
+            # logger.warn(item_trans)
+            # logger.warn(container_trans)
 
             container_have_multi_trans = False
             if is_list_like(container):
@@ -42,8 +44,9 @@ class ShouldContainProxy(Proxy):   #container要包含item才算pass
                 if 'not' in func.__name__ :
                     if is_string(container):
                         container = container.lower()
+                        if item not in container and (index not in container for index in item_trans):
+                            is_pass=True
                     elif is_list_like(container):
-                        container = set(x.lower() if is_string(x) else x for x in container)
                         # 若不同語言的情況下，item不在container內，有可能同語言下卻會包含
                         # 所以要考慮item和item_trans，皆不在container中
                         if item not in container and (index not in container for index in item_trans):
@@ -51,40 +54,45 @@ class ShouldContainProxy(Proxy):   #container要包含item才算pass
                 else:
                     if is_string(container):
                         container = container.lower()
-                        if item in container:
+                        if item in container or (index in container for index in item_trans):
                             is_pass = True
                     elif is_list_like(container):
-                        container = set(x.lower() if is_string(x) else x for x in container)
                         if item in container or (index in container for index in item_trans):
                             is_pass = True
 
                 if is_pass: #pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
 
                     if is_list_like(container):
                         for i, lt in enumerate(container_trans):
-                            if len(lt)>1 and container[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                            # logger.warn(container)
+                            # logger.warn(container[i])
+                            if len(lt)>1 and str(full_args)+container[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                                 multi_trans_word = [container[i]]                            # 還是要移交add_translations處理
-                                ui.UI.add_translations(self, multi_trans_word, lt)
+                                ui.UI.origin_xpaths_or_arguments.append(full_args)
+                                ui.UI.add_translations(self, multi_trans_word, lt, full_args)
                     elif is_string(container):
-                        if len(container_trans)>1 and container not in ui.UI.translations_dict.keys():
+                        if len(container_trans)>1 and str(full_args)+container not in ui.UI.unique_log:
                             multiple_translation_word = [container]     
-                            ui.UI.add_translations(self, multiple_translation_word, container_trans) #將翻譯詞加進等等UI會用到的dictionary中
-                    if len(item_trans)>1 and item not in ui.UI.translations_dict.keys():
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
+                            ui.UI.add_translations(self, multiple_translation_word, container_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                    if len(item_trans)>1 and str(full_args)+item not in ui.UI.unique_log:
                         multiple_translation_word = [item]     
-                        ui.UI.add_translations(self, multiple_translation_word, item_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multiple_translation_word, item_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
 
             #將處理好的翻譯回傳給robot原生keyword
-            #  同上，因為有可能container是抓畫面上翻譯過網頁的值(只有唯一值)，
+            #  原本預期會pass,因為有可能container是抓畫面上翻譯過網頁的值，
             #  所以item_trans在一詞多譯的情況下，可能不會包含於container內，
             #  而導致case出錯，目前是打算在proxy先測試過再做回傳
-            if is_list_like(item_trans):
-                for it in item_trans: #把item_trans一詞多譯換成會過的那個
-                    if [it] in container_trans:
-                        item_trans = [it]
-                        break
+            if 'not' not in func.__name__ :
+                if is_list_like(item_trans):
+                    for it in item_trans: #把item_trans一詞多譯換成會過的那個
+                        if [it] in container_trans:
+                            item_trans = [it]
+                            break
+            #FIXME should not contain還未定義，未來有機率出錯
             return func(self, container_trans, item_trans, msg)
         return proxy                        
     

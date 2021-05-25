@@ -33,11 +33,11 @@ class TitleShouldBeProxy(Proxy):
                 if is_pass: #pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
 
-                    if len(title_trans) > 1 and title not in ui.UI.translations_dict.keys():
+                    if len(title_trans) > 1 and str(full_args)+title not in ui.UI.unique_log:
                         multiple_translation_word = [title]     
-                        ui.UI.add_translations(self, multiple_translation_word, title_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multiple_translation_word, title_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
             #將處理好的翻譯回傳給robot原生keyword
             #因為畫面上的title是唯一值，如果直接將title_trans回傳，有可能發生錯誤
             #所以要先做過濾的動作

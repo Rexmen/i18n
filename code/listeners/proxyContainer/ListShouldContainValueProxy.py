@@ -19,8 +19,8 @@ class ListShouldContainValueProxy(Proxy):
             #翻譯
             list_trans = i18n.I18nListener.MAP.values(list_, full_args)
             value_trans = i18n.I18nListener.MAP.value(value, full_args)
-            logger.warn(list_trans)
-            logger.warn(value_trans)
+            # logger.warn(list_trans)
+            # logger.warn(value_trans)
 
             list_have_multi_trans = False
             for lt in list_trans:
@@ -42,15 +42,16 @@ class ListShouldContainValueProxy(Proxy):
                 if is_pass: #pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
 
                     for i, lt in enumerate(list_trans):
-                        if len(lt)>1 and list_[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(lt)>1 and str(full_args)+list_[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             multi_trans_word = [list_[i]]                            # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, lt)
-                    if len(value_trans) > 1 and value not in ui.UI.translations_dict.keys():
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
+                            ui.UI.add_translations(self, multi_trans_word, lt, full_args)
+                    if len(value_trans) > 1 and str(full_args)+value not in ui.UI.unique_log:
                         multiple_translation_word = [value]     
-                        ui.UI.add_translations(self, multiple_translation_word, value_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multiple_translation_word, value_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
             #將處理好的翻譯回傳給robot原生keyword
             return func(self, list_trans, value_trans, msg)
         return proxy

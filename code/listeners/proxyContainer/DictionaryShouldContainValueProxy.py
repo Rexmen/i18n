@@ -39,14 +39,16 @@ class DictionaryShouldContainValueProxy(Proxy):
                 if is_pass: #pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
+                    
                     for i, dt in enumerate(dict_values_trans):
-                        if len(dt)>1 and list(dictionary.values())[i] not in ui.UI.translations_dict.keys(): #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dictionary.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             multi_trans_word = [list(dictionary.values())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt)
-                    if len(value_trans) > 1 and value not in ui.UI.translations_dict.keys():
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
+                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)
+                    if len(value_trans) > 1 and str(full_args)+value not in ui.UI.unique_log:
                         multiple_translation_word = [value]     
-                        ui.UI.add_translations(self, multiple_translation_word, value_trans) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
+                        ui.UI.add_translations(self, multiple_translation_word, value_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
             #將dictionary 翻譯過後的 value 合併 
             dictionary = dict(zip(list(dictionary.keys()), dict_values_trans))         
             #將處理好的翻譯回傳給robot原生keyword
