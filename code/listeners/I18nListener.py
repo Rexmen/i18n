@@ -27,6 +27,7 @@ class I18nListener:
     LOCALE = None
     Not_SHOW_WARNING_WORDS = []
     Is_Multi_Trans=False
+    SETTING_KEYS = {}
     SETTING_TRANS = {}
     SETTING_ARGS = {}
 
@@ -65,14 +66,19 @@ class I18nListener:
         with open("code/listeners/setting.txt", 'a+') as file:
             if os.stat("code/listeners/setting.txt").st_size != 0:
                 file.seek(0)  #這行很重要，將指針指到文件頭
-                for line in file.readlines():
+                for i, line in enumerate(file.readlines()):
                     # logger.warn("in for")
                     split_key_value = []
                     split_key_value=line.strip("\n").split('~')
                     read_args = split_key_value[0].split('#')
                     # logger.warn(split_key_value)]
-                    I18nListener.SETTING_TRANS[split_key_value[1]] = split_key_value[2]
-                    I18nListener.SETTING_ARGS[split_key_value[1]] = read_args
+                    #FIXME 這邊將'翻譯詞'(key)當成去取'翻譯' 和 '參數部分'(full_args)的媒介
+                    #  但是，此種作法在 有多個相同翻譯詞(例如:多個support)在不同情況下有不同的翻譯，
+                    #  便會導致後面的 新翻譯 和 新full_args 將前面的洗掉(因為Dictionary的特性)
+                    #  因為 翻譯詞的不唯一性，我不該把其他資料與它連結，必須想另一種可能不借助dict的實作
+                    I18nListener.SETTING_KEYS[i] = split_key_value[1]
+                    I18nListener.SETTING_TRANS[i] = split_key_value[2]
+                    I18nListener.SETTING_ARGS[i] = read_args
                     # logger.warn(read_args)
                     # logger.warn(type(read_args))
                     # logger.warn(type(split_key_value[0]))

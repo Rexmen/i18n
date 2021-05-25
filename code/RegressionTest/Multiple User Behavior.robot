@@ -9,7 +9,13 @@ Test Setup    Run Keywords    Open Browser To Microsoft Page
 Test Teardown    Close Browser
 
 *** Test Cases ***
-Verify text of support button is expected
+Test multiple user behavior on microsoft website
     Go To Support Page
+    Support Button Text Should Be    Support
+    Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
+
+*** Keywords ***
+Support Button Text Should Be
+    [Arguments]    ${expected}
     ${supportButton} =    Set Variable    //*[@id = 'uhfCatLogo' ]
-    Element Text Should Be    ${supportButton}    Support
+    Element Text Should Be    ${supportButton}    ${expected}

@@ -160,13 +160,12 @@ class I18nMap:
         # 先查看setting是否有value的設定檔，若有則以設定檔為主，否則執行翻譯
         #FIXME 此處要加上判斷，看是否能透過對照'腳本名稱'& '該keyword的所有參數'，來判斷是否取用設定檔的翻譯
         result = []
-        if value in i18n.I18nListener.SETTING_TRANS.keys() and i18n.I18nListener.SETTING_ARGS[value] == full_args:
-            # logger.warn(full_args)
-            # logger.warn(type(full_args))
-            # logger.warn(type(i18n.I18nListener.SETTING_ARGS[value]))
-            # logger.warn("have word")
-            result.append(i18n.I18nListener.SETTING_TRANS[value])
-            # logger.warn(result)
+        for i in range(len(i18n.I18nListener.SETTING_KEYS)):
+            if i18n.I18nListener.SETTING_KEYS[i] == value and i18n.I18nListener.SETTING_ARGS[i] == full_args:
+                result.append(i18n.I18nListener.SETTING_TRANS[i])
+                # logger.warn(result)
+                break
+        if result:    
             return result
         else:
             try:
