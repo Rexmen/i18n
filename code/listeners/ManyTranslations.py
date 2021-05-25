@@ -60,23 +60,31 @@ class UI:
 
     def draw_trans_options(self):
         self.labels = []
+
+        self.labels_word = []
+        self.label_texts = []
+
         self.radios = []
         self.radio_vars = []
         self.radio_texts = []
-        self.label_texts = []
         self.get_transdic_keys_and_values()
         for i in range(len(self.label_texts)): #根據有幾列label 來印出'完整參數&label'&'radiobtn'
             self.radio_vars.append(IntVar())
             # logger.warn(self.radio_vars)
             self.radios.append([])
-            self.labels.append(Label(self.win, text="完整參數是:%s, %s可以被翻譯成: " % 
-            (UI.origin_xpaths_or_arguments[i],self.label_texts[i]), font=self.fontStyle)) #創出label(s)
+            self.labels.append(Label(self.win, text="完整參數是:%s  ," % 
+            (UI.origin_xpaths_or_arguments[i]), font=self.fontStyle)) #創出label(s)
             self.labels[i].grid( column=0,row=i, sticky=W+N+S, padx=10, pady=3)
+
+            self.labels_word.append(Label(self.win, text="%s可以被翻譯成: " % 
+            (self.label_texts[i]), font=self.fontStyle, fg = "red")) #創出label(s)
+            self.labels_word[i].grid( column=1,row=i, sticky=W+N+S, padx=10, pady=3)
+
             #create出每一列中的radio button
             for j in range(len(self.radio_texts[i])):
                 default_value = j
                 self.radios[i].append(Radiobutton(self.win, variable=self.radio_vars[i], text=self.radio_texts[i][j],font=self.fontStyle, value=default_value ))
-                self.radios[i][j].grid(columnspan=1, column=1+j, row=i, sticky=W+N+S, pady=3)
+                self.radios[i][j].grid(columnspan=1, column=2+j, row=i, sticky=W+N+S, pady=3)
     
     def run(self):
         self.win = Tk()    
@@ -91,13 +99,13 @@ class UI:
         
         # 標語 Label
         instructions = Label(self.win, text="Choose the translation(s) you want!!", font=self.fontStyle)
-        instructions.grid(row=6, sticky=S+W, padx=10, pady=5)
+        instructions.grid(row=10, sticky=S+W, padx=10, pady=5)
 
         # 提交 Button
         text = StringVar()
         btn = Button(self.win, textvariable=text, command= lambda:self.output_setting_file(), font=self.fontStyle, bg="#20bebe", fg="white", height=2, width=15)
         text.set("Submit")
-        btn.grid(row=6,column=2, sticky=S+E,padx=10, pady=5)
+        btn.grid(row=10,column=1, sticky=S+E,padx=10, pady=5, columnspan=10)
 
         self.win.mainloop()
 
