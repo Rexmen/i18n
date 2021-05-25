@@ -35,11 +35,12 @@ class FindElementsProxy(Proxy):
                     xpath += '|' + translation_locator.replace('xpath:', '') if i != 0 else translation_locator.replace('xpath:', '')
                     is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator) #如果畫面上有該翻譯
                     if is_actual: #pass
+                        # logger.warn("pass here")
                         ## 括起來的是新增的翻譯邏輯
                         i18n.I18nListener.Is_Multi_Trans = True
-                        ui.UI.origin_xpaths_or_arguments.append(full_args)
-
+                        
                         word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
+                        ui.UI.origin_xpaths_or_arguments.append(full_args)
                         ui.UI.add_translations(self, multiple_translation_words, word_translation)
                         ##
                         actual_locator_message = "System use the locator:'%s' to run!\n" %translation_locator

@@ -48,14 +48,15 @@ class SelectFromListByValueProxy(Proxy):
                 if sorted(values) in [sorted(all_values)]: # pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
-                    ui.UI.origin_xpaths_or_arguments.append(full_args)
                     for i, word_trans in enumerate(words_trans):
                         if len(word_trans)>1 and multiple_translation_words[i] not in ui.UI.translations_dict.keys():
                             multi_trans_word = [multiple_translation_words[i]]                                
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             ui.UI.add_translations(self, multi_trans_word, word_trans)
                     for i, lt in enumerate(values_trans):
                         if len(lt) > 1 and values[i] not in ui.UI.translations_dict.keys():
                             multi_trans_word = [values[i]]     
+                            ui.UI.origin_xpaths_or_arguments.append(full_args)
                             ui.UI.add_translations(self, multi_trans_word, lt) #將翻譯詞加進等等UI會用到的dictionary中
             else: #沒有一詞多譯
                 xpath = locator_trans[0]

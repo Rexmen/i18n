@@ -6,7 +6,7 @@ from robot.api import logger
 import I18nListener as i18n
 import ManyTranslations as ui
 
-class ElementTextShouldBeProxy(Proxy):
+class ElementTextShouldBeProxy(Proxy): #FIXME 此proxy還有待refactor
     def __init__(self, arg_format):
         arg_format[repr(['locator', 'expected', 'message=None', 'ignore_case=False'])] = self
     
@@ -19,11 +19,11 @@ class ElementTextShouldBeProxy(Proxy):
             actual_text = ''
             if len(possible_translations) > 1:
                 i18n.I18nListener.Is_Multi_Trans = True
-                ui.UI.origin_xpaths_or_arguments.append(full_args)
-
+                # logger.warn("hi")
                 multiple_translation_words = []     
                 multiple_translation_words.append(expected) #將expected word包裝成list格式
                 # logger.warn(multiple_translation_words)
+                ui.UI.origin_xpaths_or_arguments.append(full_args)
                 ui.UI.add_translations(self, multiple_translation_words, possible_translations)
                 ElementTextShouldBeProxy.show_warning(self, expected, full_args)
                 BuiltIn().import_library('SeleniumLibrary')

@@ -7,7 +7,8 @@ from robot.api import logger
 import tkinter.font as tkFont
 
 class UI:
-    translations_dict = {} 
+    translations_key = []
+    translations_value = []
     origin_xpaths_or_arguments = []
     def __init__(self):
         self.run()
@@ -18,17 +19,23 @@ class UI:
         if not type(translations[0]) == list:  #因為傳進來的translations型態會隨著'要翻譯詞'數量而不同
             translations = [translations]      #兩個以上，translations是list包list; 一個，list
         # 下面這行是因為multiple_translation_words可能有許多筆要翻譯的詞，考慮到同一條xpath中有多處需要被翻譯
-        for i in range(len(multiple_translation_words)): #看有幾個有一詞多譯的字
-            #FIXME 因為dict會覆寫的特性，導致我們無法將 '不同情況下相同的翻譯詞' 顯示在UI上給user選擇
-            # 希望改進成類似於讀取檔案時的寫法，把KEY VALUE分開儲存
-            UI.translations_dict[multiple_translation_words[i]] = translations[i] #就算有重複，根據dictionary的特性，也會覆寫掉
-        # logger.warn(UI.translations_dict)
+        # for i in range(len(multiple_translation_words)): 
+        # FIXME 今後只支援一次記錄下一組翻譯資訊，為了配合底下的邏輯修改
+        # 若findelementsProxy翻譯xpath時可能有多個翻譯詞的情形，則必須去改善自己的邏輯 可以參考 selectFromListByValue
+        # 也就是說，日後每輸入一組翻譯，就必須同時輸入一次origin_xpaths_or_arguments
+        
+        #FIXME 因為dict會覆寫的特性，導致我們無法將 '不同情況下相同的翻譯詞' 顯示在UI上給user選擇
+        # 希望改進成類似於讀取檔案時的寫法，把KEY VALUE分開儲存
+        UI.translations_key.append(multiple_translation_words[0])
+        UI.translations_value.append(translations[0])
+        # logger.warn(UI.translations_key)
+        # logger.warn(UI.translations_value)
 
-    def get_transdic_keys_and_values(self):
-        if UI.translations_dict:
-            for key in UI.translations_dict.keys():
+    def get_transdic_keys_and_values(self):# FIXME 此function日後是否有存在的必要
+        if UI.translations_key and UI.translations_value:
+            for key in UI.translations_key:
                 self.label_texts.append(key)
-            for value in UI.translations_dict.values():
+            for value in UI.translations_value:
                 self.radio_texts.append(value)
                 # logger.warn(label_texts)
     
