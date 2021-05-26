@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: RF-AWT-i18n
+Version: 0.0.1
+Summary: i18n tool for RF web testing
+Home-page: https://github.com/Rexmen/i18n.git
+Author: Bing
+Author-email: binchen561@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6.0
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# I18n Tool for RF AWT
+
+
