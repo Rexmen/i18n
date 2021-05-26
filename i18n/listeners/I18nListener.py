@@ -63,8 +63,8 @@ class I18nListener:
         if not self.is_admin_language_set:#set the admin language in the first suite start
             self.is_admin_language_set=True
             BuiltIn().set_global_variable('${language}',self.locale_dict[self.locale])
-        with open("code/listeners/setting.txt", 'a+') as file:
-            if os.stat("code/listeners/setting.txt").st_size != 0:
+        with open("i18n/listeners/setting.txt", 'a+') as file:
+            if os.stat("i18n/listeners/setting.txt").st_size != 0:
                 file.seek(0)  #這行很重要，將指針指到文件頭
                 for i, line in enumerate(file.readlines()):
                     # logger.warn("in for")

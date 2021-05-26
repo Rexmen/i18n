@@ -31,7 +31,7 @@ class MappingRoutesGenerator:
                 with open(os.path.normpath(language_file.path), 'r', encoding='utf-8') as f:
                     language_key_text_mappings = json.load(f) # json-> python
                     parse_i18n_key_mapping(language_key_text_mappings)
-            json.dump(i18n_json_routes_map, open('./code/listeners/mappingRoutes.json', "w"),indent=4) 
+            json.dump(i18n_json_routes_map, open('./i18n/listeners/mappingRoutes.json', "w"),indent=4) 
 
 if __name__=='__main__':
     MappingRoutesGenerator().generate()

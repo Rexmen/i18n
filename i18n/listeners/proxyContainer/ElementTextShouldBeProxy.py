@@ -39,7 +39,8 @@ class ElementTextShouldBeProxy(Proxy): #FIXME 此proxy還有待refactor
                 actual_text = BuiltIn().run_keyword('Get Text', locator) #有多種翻譯，取得locator的字當作actual text #FIXME 此作法不是很好
             
             else:# 沒有遭遇一詞多譯 或者 有一詞多譯但case會fail
-                actual_text = possible_translations[0] #只有一種翻譯，取得map得到的結果當作actaul text
+                actual_text = possible_translations[0]
+            
             actual_text_message = "'%s'is currently resolved as'%s'\n" %(expected, actual_text)
             logger.info(actual_text_message)
             return func(self, BuiltIn().replace_variables(locator), actual_text, message, ignore_case) if actual_text in possible_translations else func(self, BuiltIn().replace_variables(locator), expected, message, ignore_case)
