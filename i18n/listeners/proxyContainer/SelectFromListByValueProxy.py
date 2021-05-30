@@ -39,13 +39,19 @@ class SelectFromListByValueProxy(Proxy):
                 SelectFromListByValueProxy.show_warning(self, multiple_translation_words, values, full_args) #show warning
                 #對翻譯過後可能的多種xpath做串接
                 for i, lt in enumerate(locator_trans):
-                    xpath += '|' + locator_trans.replace('xpath', '') if i!=0 else locator_trans.replace('xpath', '')
+                    xpath += '|' + lt.replace('xpath', '') if i!=0 else lt.replace('xpath', '')
 
                 #判斷原本case會過還是fail (使用原生library)
                 all_options = SelectElementKeywords._get_options(self, locator)
                 all_values = SelectElementKeywords._get_values(all_options)
-                
-                if sorted(values) in [sorted(all_values)]: # pass
+                is_pass = False
+                for lt in values_trans:
+                    for single_tran in lt:
+                        if single_tran in all_values:
+                            is_pass = True
+                            break
+
+                if is_pass: # pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
                     for i, word_trans in enumerate(words_trans):
@@ -63,16 +69,16 @@ class SelectFromListByValueProxy(Proxy):
             #將處理好的翻譯回傳給robot原生keyword
             #這邊labels是tuple可以用'*' unpack argument，但labels_trans內部item還是list
             #為了下面回傳時好處理，此處必須把list包list的一詞多譯壓縮成一個string
-            newlt = ""
-            for lt in values_trans:
-                for single_tran in lt:
-                    newlt += single_tran + " " 
-                    # FIXME 這邊是應急的處理，實際上一詞多譯應該是[x,x]分開的
-                    # 且此處理會導致選不到畫面上的option
-                    # 應該想辦法把所有可能的翻譯詞都切開來
-            values_trans = [newlt[:-1]] #此作法的缺點是可能會有存在畫面上不存在的option
-            #目前想到的解法是用每個翻譯詞去比對畫面上實際會過的才跳UI
-            # logger.warn(expected_trans)
+            
+            # 若有翻譯會使case過，則用其置換labels_trans中的翻譯 #FIXME 可優化
+            all_options = SelectElementKeywords._get_options(self, locator)
+            all_values = SelectElementKeywords._get_labels(self, all_options)
+            for i, lt in enumerate(values_trans): 
+                    for single_tran in lt:
+                        if single_tran in all_values:
+                            values_trans[i] = single_tran
+                            break
+
             return func(self, BuiltIn().replace_variables(xpath), *tuple(values_trans))
         return proxy
 

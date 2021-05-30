@@ -42,13 +42,18 @@ class ListSelectionShouldBeProxy(Proxy):
                 ListSelectionShouldBeProxy.show_warning(self, multiple_translation_words,expected, full_args) #show warning
                 #對翻譯過後可能的多種xpath做串接
                 for i, lt in enumerate(locator_trans):
-                    xpath += '|' + locator_trans.replace('xpath', '') if i!=0 else locator_trans.replace('xpath', '')
+                    xpath += '|' + lt.replace('xpath', '') if i!=0 else lt.replace('xpath', '')
                 #判斷case會過還是fail (使用原生library)
                 options = SelectElementKeywords._get_selected_options(self, locator)
-                labels = SelectElementKeywords._get_labels(options)
-                values = SelectElementKeywords._get_values(options)
-
-                if sorted(expected) in [sorted(labels), sorted(values)]: # pass
+                labels = SelectElementKeywords._get_labels(self, options)
+                is_pass = False
+                for lt in expected_trans:
+                    for single_tran in lt:
+                        if single_tran in labels:
+                            is_pass = True
+                            break
+                
+                if is_pass: # pass
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
                     
@@ -67,13 +72,16 @@ class ListSelectionShouldBeProxy(Proxy):
             #將處理好的翻譯回傳給robot原生keyword
             #這邊expected是tuple可以用'*' unpack argument，但expected_trans內部item還是list
             #為了下面回傳時好處理，此處必須把list包list的一詞多譯壓縮成一個string
-            for i,lt in enumerate(expected_trans):
-                newlt = ""
-                for single_tran in lt:
-                    newlt+= single_tran # FIXME 這邊是應急的處理，實際上一詞多譯應該是[x,x]分開的
-                                        # 但沒有影響到case通過
-                expected_trans[i] = newlt
-            # logger.warn(expected_trans)
+            
+            # 若有翻譯會使case過，則用其置換labels_trans中的翻譯 #FIXME 可優化
+            all_options = SelectElementKeywords._get_options(self, locator)
+            all_labels = SelectElementKeywords._get_labels(self, all_options)
+            for i, lt in enumerate(expected_trans): 
+                    for single_tran in lt:
+                        if single_tran in all_labels:
+                            expected_trans[i] = single_tran
+                            break
+
             return func(self, BuiltIn().replace_variables(xpath), *tuple(expected_trans))
         return proxy
 

@@ -1,5 +1,5 @@
 *** Settings ***
-Force Tags    ElementShouldBeEqual
+Force Tags    SelectFromListByValue
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    Collections
