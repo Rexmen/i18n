@@ -4,7 +4,7 @@ Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    Collections
 Library    ../self_util.py
-Test Setup    Run Keywords    Open Browser    http:localhost:3000    Chrome
+Test Setup    Run Keywords    Open Browser    http://localhost:3000    Chrome
 ...                    AND    Maximize Browser Window
 Test Teardown    Close Browser
 
@@ -13,13 +13,11 @@ Table should contain "Support"
     ${table} =    Set Variable    //*[@id='i18n-table']
     Wait Until Element Is Visible    ${table}    ${shortPeriodOfTime}
     Table Should Contain    ${table}    Support
-    Close Browser
 
 Table row should contain "Support"
     ${table} =    Set Variable    //*[@id='i18n-table']
     Wait Until Element Is Visible    ${table}    ${shortPeriodOfTime}
     Table Row Should Contain    ${table}    1    Support
-    Close Browser
 
 Table column should contain "Support"
     ${table} =    Set Variable    //*[@id='i18n-table']

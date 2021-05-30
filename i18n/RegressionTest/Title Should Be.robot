@@ -1,14 +1,15 @@
 *** Settings ***
-Force Tags    ElementShouldBeEqual
+Force Tags    TitleShouldBe
 Resource    ../CommonVariables.txt
-Resource    ./Keywords.txt
 Library    SeleniumLibrary
 Library    Collections
 Library    ../self_util.py
-Test Setup    Run Keywords    Open Browser To Microsoft Page
-...                    AND    Change Language    expectedLanguage=${language}
+Test Setup    Run Keywords    Open Browser    http://localhost:3000    Chrome
+...                    AND    Maximize Browser Window
 Test Teardown    Close Browser
 
 *** Test Cases ***
 Title Should Be
-    Title Should Be    Microsoft – Official Home Page
+    ${pageHeader} =    Set Variable    //*[normalize-space()='I18n Testing Website']
+    Wait Until Element Is Visible    ${pageHeader}    timeout=${shortPeriodOfTime}
+    Title Should Be    I18n Web Testing
