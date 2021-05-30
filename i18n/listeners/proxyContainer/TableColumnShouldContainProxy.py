@@ -70,7 +70,7 @@ class TableColumnShouldContainProxy(Proxy):
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
         message_for_multi_trans_words = Proxy().deal_warning_message_for_list(multiple_translation_words, full_args, 'MULTI_TRANS_WORDS')
-        message_for_expected = Proxy().deal_warning_message_for_list(expected, full_args, 'EXPECTED')
+        message_for_expected = Proxy().deal_warning_message_for_one_word(expected, full_args, 'EXPECTED')
         if message_for_multi_trans_words or message_for_expected:
             message = language + test_name + message_for_multi_trans_words + '\n' +\
                       message_for_expected + '\n' + 'You should verify translation is correct!'
