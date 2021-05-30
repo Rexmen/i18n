@@ -9,7 +9,7 @@ Test Setup    Run Keywords    Open Browser To Microsoft Page
 Test Teardown    Close Browser
 
 *** Test Cases ***
-Test multiple user behavior on microsoft website
+Test multiple user behaviors on Microsoft website
     Go To Support Page
     Support Button Text Should Be    Support
     Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']

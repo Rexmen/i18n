@@ -18,6 +18,7 @@ Test web element is on th support page by given special attributes
     ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageSearchBox' and @placeholder ='How can we help you?']
     Page Should Contain Element    ${MicrosoftSupport}
 
+
 *** Keywords ***
 Open Browser To Microsoft Page
     ${microsoftUrl} =    Set Variable    https://www.microsoft.com/

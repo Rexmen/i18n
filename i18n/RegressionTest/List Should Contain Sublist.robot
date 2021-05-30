@@ -9,5 +9,4 @@ Library    ../self_util.py
 List should contain sublist
     @{list1} =    Create List    Support    Support    Software
     @{list2} =    Create List    Support    Software
-    # Log    ${dict1}
     List Should Contain Sub List    ${list1}    ${list2}

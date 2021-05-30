@@ -11,10 +11,10 @@ class FindElementsProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['by=\'id\'', 'value=None'])] = self
         # 'Page Should Contain Element' 會呼叫此proxy
-        # value是要找的element的locator , by沒有甚麼作用(印出"xpath"?)
+        # value是要找的element的locator , by(是"xpath:")
     def i18n_Proxy(self, func):
         def proxy(self, by='id', value=None):
-            if isinstance(value, WebElement):  #檢查機制，日後可拿掉
+            if isinstance(value, WebElement):  #檢查機制
                 return func(self, by, value)
             
             #創出該次呼叫的參數紀錄
@@ -31,7 +31,6 @@ class FindElementsProxy(Proxy):
             xpath = ''
             #遭遇一詞多譯
             if len(locator) > 1:
-                # logger.warn(locator)
                 FindElementsProxy.show_warning(self, value, multiple_translation_words, full_args)
 
                 #判斷case會過或fail
@@ -64,8 +63,8 @@ class FindElementsProxy(Proxy):
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = BuiltIn().get_variable_value("${TEST NAME}")
         message_for_words = Proxy().deal_warning_message_for_list(multiple_translation_words, full_args,  'MULTI_TRANS_WORDS')
-        message = language + 'Test Name: ' + test_name + '\n' + 'locator: ' + locator +\
+        message = language + 'Test Name: ' + test_name + '\n' + 'locator: ' + locator +'\n'+ \
               message_for_words + '\n' + 'You should verify translation is correct!'
         if message_for_words:
             logger.warn(message)
-            # Screenshot().take_screenshot(width=700)
+            Screenshot().take_screenshot(width=700)

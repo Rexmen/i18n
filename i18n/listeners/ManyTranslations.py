@@ -18,39 +18,25 @@ class UI:
         self.run()
 
     def add_translations(self, multi_trans_word, translations, full_args):
-        # logger.warn(multiple_translation_words)
-        # logger.warn(translations)
         if not type(translations[0]) == list:  #因為傳進來的translations型態會隨著'要翻譯詞'數量而不同
             translations = [translations]      #兩個以上，translations是list包list; 一個，list
-        # 下面這行是因為multiple_translation_words可能有許多筆要翻譯的詞，考慮到同一條xpath中有多處需要被翻譯
-        # for i in range(len(multiple_translation_words)): 
-        # FIXME 今後只支援一次記錄下一組翻譯資訊，為了配合底下的邏輯修改
-        # 若findelementsProxy翻譯xpath時可能有多個翻譯詞的情形，則必須去改善自己的邏輯 可以參考 selectFromListByValue
-        # 也就是說，日後每輸入一組翻譯，就必須同時輸入一次origin_xpaths_or_arguments
-        
-        #FIXME 因為dict會覆寫的特性，導致我們無法將 '不同情況下相同的翻譯詞' 顯示在UI上給user選擇
-        # 希望改進成類似於讀取檔案時的寫法，把KEY VALUE分開儲存
         
         UI.translations_key.append(multi_trans_word[0])
         UI.translations_value.append(translations[0])
         UI.unique_log.append(str(full_args) + multi_trans_word[0])
-        # logger.warn(UI.translations_key)
-        # logger.warn(UI.translations_value)
 
-    def get_transdic_keys_and_values(self):# FIXME 此function日後是否有存在的必要
+    def get_transdic_keys_and_values(self):
         if UI.translations_key and UI.translations_value:
             for key in UI.translations_key:
                 self.label_texts.append(key)
             for value in UI.translations_value:
                 self.radio_texts.append(value)
-                # logger.warn(label_texts)
 
     def output_setting_file(self):
         with open("i18n/listeners/setting.txt", "a") as out_file:
             contents = ""
             for i in range(len(self.label_texts)):
                 now_selected = self.radio_vars[i].get()
-                # logger.warn(now_selected)
                 format_args=""
                 for j in UI.origin_xpaths_or_arguments[i]:
                     format_args += j + "#"
@@ -66,7 +52,6 @@ class UI:
                 for j in range(len(self.radios[i])):
                     self.radios[i][j].grid_forget()
             self.btn_submit.grid_forget()
-            # self.win.destroy()
     
     def undo_trans(self):
         with open("i18n/listeners/setting.txt", "a+") as modi_file:
@@ -76,10 +61,8 @@ class UI:
                 #先準備要清除的資料
                 content_rmv = []
                 for i in range(len(self.checkbtn_vars)):
-                    # logger.warn(self.checkbtn_vars[i].get())
                     if self.checkbtn_vars[i].get() == 1:
                         content_rmv.append(self.checkbtn_texts[i]+'\n')
-                # logger.warn(content_rmv)
                 
                 #開始掃描設定檔，並刪除符合的資料
                 new_data = ""
@@ -105,7 +88,6 @@ class UI:
         self.get_transdic_keys_and_values()
         for i in range(len(self.label_texts)): #根據有幾列label 來印出'完整參數&label'&'radiobtn'
             self.radio_vars.append(IntVar())
-            # logger.warn(self.radio_vars)
             self.radios.append([])
             self.labels.append(Label(self.win, text="完整參數是:%s  ," % 
             (UI.origin_xpaths_or_arguments[i]), font=self.fontStyle)) #創出label(s)
@@ -123,7 +105,6 @@ class UI:
 
     def open_record(self):
         self.record_ui = Toplevel(self.win)
-
         #ui基礎設定
         self.record_ui.title("使用者翻譯紀錄")
         self.record_ui.geometry('+250+250')
@@ -139,7 +120,6 @@ class UI:
                 self.checkbtn_texts = []
                 for line in file.readlines():
                     self.checkbtn_texts.append(line.strip('\n'))
-                    # logger.warn(line)
                 
                 #根據有幾筆資料，來創出checkbox
                 for i in range(len(self.checkbtn_texts)):
@@ -156,12 +136,8 @@ class UI:
 
     def run(self):
         self.win = Tk()    
-        # logger.warn("tk")
         self.win.title("一詞多譯")
-        self.win.geometry('+200+300')
-        # canvas = Canvas(self.win, width=200, height=200)
-        # canvas.grid(rowspan=2)
-        
+        self.win.geometry('+200+300')        
         self.fontStyle = tkFont.Font(family ="Helvetica", size=14)
         self.draw_trans_options()
         

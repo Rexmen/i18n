@@ -34,7 +34,7 @@ class I18nMap:
     '''
     def locator(self, xpath, full_args, new_locate_rule={}): #會被那些需要翻譯locator的proxy呼叫
         def combine_locate_rule(rule_at, rule_bracket, locate_rule):  
-            default_rule = { # 以下是regular expression
+            default_rule = { # 以regular expression制定翻譯規則
                     '(('+ rule_bracket + ')\((text\(\))?\) ?= ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))': 4, #這段會get到text()='xxx' 或 normalize-space()='xxx'
                     '(('+ rule_bracket + ')\((text\(\))?\)\ ?, ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))': 4, #這段會get到text(), 'xxx' 或 normalize-space(), 'xxx'
                     '(('+ rule_at + ') ?= ?(\'|\")(([0-9a-zA-Z.?&()]| ?)+)(\'|\"))' : 3, #這段會get到@title='xxx'
@@ -51,25 +51,23 @@ class I18nMap:
             all_match_words = {}
             for rule in locate_rule.keys():
                 matches = re.findall(rule, xpath)
-                # logger.warn(matches)
                 all_match_words[rule] = matches # ex: all_match_words={ rule1://*[text()='test'], ...}
             return all_match_words
-        #從這行開始讀
+        #start
         self.multiple_translation_words = []    
         if not isinstance(xpath, str): #測看看xpath是不是string
             return [xpath]
         translated_xpath = [xpath]
-        #FIXME 現在我想要利用"排除法"改善翻譯邏輯，
-        #      不再是只根據rule去抓xpath，而是"沒有在no_need_trans_attirbutes"中
-        #      的attributes都代表"可能要翻譯的屬性"，需要去檢查
-        #   因此，原本的翻譯方式變得不適用了
+
+        #   利用"負面表列法"改善翻譯邏輯，
+        #   不再只根據rule去抓xpath，而是"沒有在no_need_trans_attirbutes"中
+        #   的attributes都代表"可能要翻譯的屬性"，需要去檢查
 
         # 透過一一檢查xpath中的每個attribute，來制定新的翻譯規則
         rule_for_filter = {   #用來過濾出attribute的rule
             "(@[a-z-]*)":"@",
             "([a-z-]*\(\))":"()"
         }
-        new_rule = []
         rule_for_insert_at = ""
         rule_for_insert_bracket = ""
         all_match_attributes = find_all_match_word(xpath, rule_for_filter) #挑出xpath中所有的可能被翻譯attribute
@@ -79,7 +77,6 @@ class I18nMap:
                 if match not in self.no_need_trans_attirbutes:
                     if rule_for_filter[rule] == "@":
                         rule_for_insert_at += "|" + match if c!=0 else match
-                        # logger.warn(rule_for_insert_at)
                         c+=1
                     elif rule_for_filter[rule] == "()":
                         match = match.strip("()")
@@ -87,7 +84,6 @@ class I18nMap:
                         c+=1
         # 把要插入的rule代入，和default的rule結合，創造出一套新的locate_rule
         locate_rule = combine_locate_rule(rule_for_insert_at, rule_for_insert_bracket, new_locate_rule) 
-        # logger.warn(locate_rule)
         # 之後再沿用以前的方法去把xpath內需要翻譯的部分做翻譯
         
         # 下面這行會利用rule去實際得 找出符合規則的xpath段落
