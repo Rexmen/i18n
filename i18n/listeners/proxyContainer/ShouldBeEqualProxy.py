@@ -63,13 +63,13 @@ class ShouldBeEqualProxy(Proxy):
             message = ('%s argument evaluates to' + ' ' + '\'%s\'') %(message_title, value)  + '\n'
         return message
 
-    def show_warning(self, first, second, full_args):
+    def show_warning(self, first, second, full_args): 
         language = 'i18n in %s:\n ' %i18n.I18nListener.LOCALE
         test_name = ('Test Name: %s') %BuiltIn().get_variable_value("${TEST NAME}") + '=> Exist multiple translations of the word' + '\n'
         message_for_first = Proxy().deal_warning_message_for_one_word(first, full_args,  'First')
         message_for_second = Proxy().deal_warning_message_for_one_word(second, full_args, 'Second')
         message = language + test_name + message_for_first + ' '*3 + '\n' +  message_for_second + '\n' + 'You should verify translation is correct!'
-        if message_for_first != '' or message_for_second != '':
+        if message_for_first or message_for_second:
             logger.warn(message)
         else:
             message_for_first = ShouldBeEqualProxy.deal_translate_message(self, first, full_args,'First')

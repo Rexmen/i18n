@@ -37,6 +37,11 @@ class DictionariesShouldBeEqualProxy(Proxy):
                         dict_have_multi_trans = True 
                         break
 
+            #FIXME
+            new_dict1 = {}
+            new_dict2 = {}
+            new_dict2=dict(zip(list(dict2.keys()), dict2_values_trans))
+
             #遭遇一詞多譯
             if dict_have_multi_trans:
                 DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2, full_args) #show warning
@@ -53,8 +58,23 @@ class DictionariesShouldBeEqualProxy(Proxy):
                     else:
                         diffs = True
                 elif 'equal' in func.__name__: #呼叫此proxy的是DictionaryShouldBeEqual
-                    keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
-                    diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
+                    try:
+                        keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
+                        diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
+                        for k in keys:
+                            if dict1[k] in dict2_values_trans[0]:
+                                diffs = False
+                    except:
+                    # 為了避免{['軟體']:['支援']}、{['軟體']:['支援', '支援服務']}
+                    # 被系統判定為不相等的情形: #FIXME
+                        for dict1_key in dict1.keys():
+                            for dict2_key in new_dict2.keys():
+                                if [dict1_key] in dict2_keys_trans and dict1[dict1_key] in new_dict2[dict2_key][0]:
+                                    new_dict1[dict2_key] = new_dict2[dict2_key]
+                                    diffs = False 
+                                else:
+                                    diffs = True
+                                    break
                 if not diffs:  # pass
                     # 對預計開啟的UI做一些準備
                     # logger.warn("有一詞多譯，並且pass")
@@ -82,12 +102,25 @@ class DictionariesShouldBeEqualProxy(Proxy):
                             ui.UI.add_translations(self, multi_trans_word, dt, full_args)  
             #以下不管(pass, fail) (有無一詞多譯)都要做 
             #將dict1、dict2的 翻譯過後的key,value合併 
-            # logger.warn(dict1_keys_trans)
             # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替
             dict1 = dict(zip(list(dict1.keys()), dict1_values_trans)) 
             dict2 = dict(zip(list(dict2.keys()), dict2_values_trans))
-            #將處理好的翻譯回傳給robot原生keyword           
-            return func(self, dict1, dict2, msg, values)                              
+            #將處理好的翻譯回傳給robot原生keyword
+            
+            #FIXME
+            for dict1_key in dict1.keys():
+                for dict2_key in dict2.keys():
+                    if [dict1_key] in dict2_keys_trans and dict1[dict1_key]== dict2[dict2_key]:
+                        dict1.pop(dict1_key, None)
+                        dict1[dict2_key] = dict2[dict2_key]
+                        return func(self, dict1, dict2)
+                    elif dict1_key== dict2_key and dict1[dict1_key][0] in dict2[dict2_key]:
+                        dict1[dict1_key] = dict2[dict2_key] 
+            if new_dict1:
+                return func(self, new_dict1, new_dict2, msg, values)     
+                
+            else:           
+                return func(self, dict1, dict2, msg, values)                              
         return proxy
 
     def show_warning(self, dict1, dict2, full_args):

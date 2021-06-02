@@ -44,6 +44,11 @@ class CountValuesInListProxy(Proxy):
                     multi_trans_word = [value]
                     ui.UI.add_translations(self, multi_trans_word, value_trans,full_args)
             #將處理好的翻譯回傳給robot原生keyword
+            #為避免畫面上抓取的list[支援], 參數support被翻譯為[支援, 支援服務],
+            #不會被count的問題:
+            for i, lt in enumerate(list_trans):
+                if lt[0] in value_trans:
+                    list_trans[i] = value_trans
             return func(self, list_trans, value_trans, start, end)
         return proxy   
     

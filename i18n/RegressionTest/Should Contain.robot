@@ -5,9 +5,9 @@ Resource    ./keywords.txt
 Library    Collections
 Library    SeleniumLibrary
 Library    ../self_util.py
-Test Setup    Run Keywords    Open Browser To Microsoft Page
-...                    AND    Change Language    expectedLanguage=${language}
-Test Teardown    Close Browser
+# Test Setup    Run Keywords    Open Browser To Microsoft Page
+# ...                    AND    Change Language    expectedLanguage=${language}
+# Test Teardown    Close Browser
 
 *** Test Cases ***
 Check office TopBar Dropdown contanis "Products"

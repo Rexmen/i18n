@@ -31,7 +31,7 @@ class RemoveValuesFromListProxy(Proxy):
             
             if list_have_multi_trans or values_have_multi_trans:
                 RemoveValuesFromListProxy.show_warning(self, list_, values, full_args) #show warning
-                #此case也沒有fail的問題，因為遇到key不在dictionary的話會自動忽略
+                #此case也沒有fail的問題，因為遇到value不在list的話會自動忽略
 
                 # 對預計開啟的UI做一些準備
                 i18n.I18nListener.Is_Multi_Trans = True

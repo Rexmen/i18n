@@ -7,7 +7,7 @@ Library    ../self_util.py
 
 *** Test Cases ***
 Remove values from list
-    @{list1} =    Create List    Support    Software
+    @{list1} =    Create List    支援    Software
     Remove Values From List    ${list1}    Support
-    List Should Contain Value    ${list1}    軟體
+    List Should Not Contain Value    ${list1}    支援
     Log    ${list1}
