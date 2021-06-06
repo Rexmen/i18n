@@ -9,8 +9,8 @@ Library    ../self_util.py
 Dictionaries should be equal
     # &{dict1} =    Create Dictionary    Software=支援
     # &{dict1} =    Create Dictionary    Software=Support
-    &{dict1} =    Create Dictionary    軟體=支援
     # &{dict1} =    Create Dictionary    Software=Support    A=B
+    &{dict1} =    Create Dictionary    軟體=支援
     &{dict2} =    Create Dictionary    Software=Support
     Dictionaries Should Be Equal    ${dict1}    ${dict2}
 

@@ -67,4 +67,4 @@ class FindElementsProxy(Proxy):
               message_for_words + '\n' + 'You should verify translation is correct!'
         if message_for_words:
             logger.warn(message)
-            Screenshot().take_screenshot(width=700)
+            # Screenshot().take_screenshot(width=700)

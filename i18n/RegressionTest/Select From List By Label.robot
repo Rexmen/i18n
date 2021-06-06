@@ -2,8 +2,6 @@
 Force Tags    SelectFromListByLabel
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
-Library    Collections
-Library    ../self_util.py
 Test Setup    Run Keywords    Open Browser    http://localhost:3000    Chrome
 ...                    AND    Maximize Browser Window
 Test Teardown    Close Browser

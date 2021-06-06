@@ -1,9 +1,9 @@
 *** Settings ***
 Force Tags    ElementTextShouldBe
-Resource    ../CommonVariables.txt
+# Resource    ../CommonVariables.txt
 Resource    ./Keywords.txt
 Library    SeleniumLibrary
-Library    ../self_util.py
+# Library    ../self_util.py
 Test Setup    Run Keywords    Open Browser To Microsoft Page
 ...                    AND    Change Language    expectedLanguage=${language}
 Test Teardown    Close Browser
@@ -15,6 +15,7 @@ Test multiple user behaviors on Microsoft website
     Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     Click Element    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
+    Sleep    1s
     Page Should Contain Element    ${MicrosoftSupport}
 
 *** Keywords ***
