@@ -1,0 +1,228 @@
+%定義環境變數與巨集指令
+%-------------------基本設定------------------------------------%
+% 沿用 latex 的一些標點的轉換，如 en-dash 以兩個減號表示
+\defaultfontfeatures{Mapping=tex-text}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+%-------------------------------------------------------------%
+
+%-------------------重新定義章節名稱格式--------------------------%
+\titleformat{\chapter}[hang]{\centering\huge\bfseries}{第\CJKnumber{\thechapter}章}{1em}{}
+%\renewcommand\chaptername{Chapter\hspace{.5em}\thechapter}
+\renewcommand\contentsname{目錄}
+\renewcommand\listfigurename{圖目錄}
+\renewcommand\listtablename{表目錄}
+\newcommand{\loflabel}{圖} % 定義圖目錄顯示方式
+\newcommand{\lotlabel}{表} % 定義表目錄顯示方式
+
+
+\titlecontents{chapter}[0pt]{}
+    {第\CJKnumber{\thecontentslabel}章\quad}{}
+    {\hspace{.5em}\titlerule*[10pt]{$\cdot$}\contentspage}
+\titlecontents{section}[2em]{}
+    {\thecontentslabel\quad}{}
+    {\hspace{.5em}\titlerule*[10pt]{$\cdot$}\contentspage}
+\titlecontents{subsection}[4em]{}
+    {\thecontentslabel\quad}{}
+    {\hspace{.5em}\titlerule*[10pt]{$\cdot$}\contentspage}
+
+\renewcommand{\bibname}{參考文獻}            %修改參考文獻的標題名
+\titlespacing{\chapter}{0pt}{*0}{*4}        %設定標題與四周的距離
+\titlelabel{\thetitle\quad}				    %設定章節標題的樣式
+\renewcommand{\figurename}{圖}
+\renewcommand{\tablename}{表}
+%-----------------------------------------------------------------%
+
+%-------------------設定行距--------------------------------------%
+\renewcommand{\baselinestretch}{2.1} % 大約等於word1.5倍行高
+
+%設定enumerate等的item間距
+\usepackage{enumitem}
+\setenumerate{itemsep=-5pt}
+\setitemize{itemsep=-5pt}
+\setdescription{itemsep=-5pt}
+%-----------------------------------------------------------------%
+
+%-------------------定義浮水印------------------------------------%
+\newcommand\WatermarkPicture{
+   \put(0,0){
+   \parbox[b][\paperheight]{\paperwidth}{
+     \vfill
+     \centering
+     \includegraphics[width=5cm,keepaspectratio]{watermark_ntut.png}%
+     \vfill
+     }
+   }
+}
+%-----------------------------------------------------------------%
+
+%------------------圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphic#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=\textwidth]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------小小圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphicSS#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=2cm]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------小圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphicS#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=6cm]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------中圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphicM#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=8cm]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------大圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphicB#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=12cm]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------大大圖片巨集---------------------------------------%
+
+%巨集格式
+%mygraphic{圖片KeyWord}{圖片註解}{圖片路徑}
+\def\myGraphicBB#1#2#3
+{
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=16cm]{#3}
+			\caption{#2}\label{#1}
+		\end{center}
+
+	\end{figure}
+}
+%-----------------------------------------------------------------%
+
+%------------------表格巨集---------------------------------------%
+\renewcommand{\arraystretch}{1}
+
+%巨集格式
+%myTable{Table KeyWord}{Table註解}
+\def\myTable#1#2
+{
+	\begin{table}[!htbp]
+	\setlength{\abovecaptionskip}{0pt}
+	\setlength{\belowcaptionskip}{10pt}
+	\begin{center}
+	\caption{#2}\label{#1}
+}
+
+
+\def\endmyTable
+{
+	\end{center}
+	\end{table}
+}
+
+%-----------------------------------------------------------------%
+
+%------------------修改圖與表的註解編號格式-----------------------%
+
+\makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{{#1}\quad #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    {#1}\quad #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\makeatother
+
+%-----------------------------------------------------------------%
+%------------------修改Description縮排格式--------------------------%
+%\makeatletter
+%\renewenvironment{description}
+%  {\list{}{\leftmargin\z@ \labelwidth\z@ \itemindent-\leftmargin
+%   \let\makelabel\descriptionlabel}}
+%  {\endlist}
+%\makeatother
+%-----------------------------------------------------------------%
+%------------------Use Case巨集---------------------------------------%
+%巨集格式
+%useCase{UseCase名稱}{UseCase圖片路徑}
+\def\useCase#1#2#3
+{
+	\subsection{#1}
+	\begin{figure}[!htb]
+		\begin{center}
+			\includegraphics[width=\textwidth]{#2}
+		\end{center}
+	\end{figure}
+}
+% \graphicspath{{./picture/eps/}{./picture/png/}}
+% \graphicspath{{.}}					%告訴Latex去這兩個目錄下找圖檔
+%-----------------------------------------------------------------%
+%-------------------為了方便所設定的巨集--------------------------%
+\lstset{
+	basicstyle=\small,
+    rulesepcolor= \color{gray}, %程式碼塊邊框顏色
+    breaklines=true,  %程式碼過長則換行
+	showstringspaces=false
+    commentstyle=\color{gray}, %註釋顏色
+    frame=shadowbox%用方框框住程式碼塊
+}
+
+
+%-----------------------------------------------------------------%

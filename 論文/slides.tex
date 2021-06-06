@@ -1,0 +1,1082 @@
+\documentclass[utf8x]{beamer}
+\renewcommand{\figurename}{圖}
+\usepackage[boldfont,slantfont,CJKnumber,CJKaddspaces]{xeCJK}
+\setCJKmainfont{BiauKai}
+
+\usepackage{fontspec} %加這個就可以設定字體
+\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{marvosym}
+%\usepackage{enumitem}
+
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+\useoutertheme{infolines}
+\usetheme{Singapore}%{PaloAlto}%{PaloAlto} %{Berkeley}
+
+\usecolortheme[RGB={107,142,35}]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\logo{\includegraphics[height=0.8cm]{logo.pdf}}
+%\setbeamertemplate{background canvas}{
+%\begin{picture}(364,300)(0,0)
+%\put(0,250){%(308,225){%
+%  \parbox[b]{50cm}{
+%     \includegraphics[width=1.8cm,keepaspectratio]{logo.pdf}
+%    }
+%   }
+%\end{picture}
+
+%}
+
+\begin{document}
+\date[XX/XX/2021]{XX/XX/2021 碩士學位口試}
+\title[XXXXXXXXXXXXX}
+\author[XXX]
+        { XXX\inst{\dag} \and 謝金雲老師\inst{\ddag} \and 鄭有進老師\inst{\ddag} }
+\institute[國立臺北科技大學資訊工程系]
+        {   \inst{\ddag}指導老師 \and \inst{\dag}口試學生}
+
+
+
+
+\begin{frame}%---------title page
+    \titlepage\end{frame}
+
+
+\begin{frame}%---------outline page
+
+\frametitle{Outline}
+
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item XXXX\hspace{3pt}-\hspace{3pt}XXXXXXX\hspace{2pt}\textbf{XXXXXX}\ddag\hspace{2pt}XXXXX\dag
+%\item[] 研究目的
+%\begin{itemize}
+\item XXXXX%\hspace{3pt}-\hspace{3pt}slide 7$\sim$15
+\item XXXXX%\hspace{3pt}-\hspace{3pt}slide 16$\sim$19
+%\end{itemize}
+\item XXXXX
+\item XXXXX%\hspace{3pt}-\hspace{3pt}slide 20
+\fontsize{6pt}{4pt}\selectfont
+% \item[] $\ddag$Martin Fowler's articel about Continuous Integation [online]. Available:http:// martinfowler.com/articles/originalContinuousIntegration.html.
+% \item[] $\dag$Chin-Yun Hsieh, Yu Chin Cheng, and Chien-Tsun Chen. \\Emerging patterns of continuous integration for cross-platform software development. In AsianPLoP, 2011.
+\end{itemize}
+\end{frame}
+
+ %\begin{frame}%---------背景介紹 outline page
+
+%\frametitle{背景介紹 Outline}
+
+%\begin{enumerate}
+%\item 跨平台軟體開發
+%\item 持續整合
+%\item 樣式與樣式語言
+%\item 跨平台軟體持續整合樣式語言
+%\item 於Portland Pattern Repository發表的持續整合樣式
+%\end{enumerate}
+
+ %\end{frame}
+
+
+%\begin{frame}%---------跨平台軟體開發 page
+%\frametitle{跨平台軟體開發}
+%\begin{enumerate}
+%\item 特性
+%\begin{enumerate}
+%\item 相依同一份原始碼進行開發
+%\item 同一釋出版本中包含相容不同平台之產品
+%\item 匯集於不同平台上開發軟體之工程師%、擁有不同開發程式之次文化、來自不同地區。
+%\end{enumerate}
+%\item 挑戰
+%\begin{enumerate}
+%\item 設計面
+%\item 需求面
+%\item 流程面
+%\end{enumerate}
+%\end{enumerate}
+%\end{frame}
+
+%\item 為什麼要開發跨平台軟體
+%\begin{enumerate}
+%\item 商業策略%---------Market share
+%有很多其他的作法，why bother.
+%
+%\item 比較跨平台軟體開發與移植
+%\end{enumerate}
+
+%\item 高難度開發技術
+%\begin{enumerate}
+%\item 抽象化各個平台的特性
+%\item 與平台有關的程式碼需要被侷限
+%\item 測試成本數倍於單一平台測試
+%\end{enumerate}
+
+%\begin{frame}
+%\frametitle{開發跨平台軟體的挑戰\hspace{3pt}-\hspace{3pt}設計面}
+%\begin{enumerate}%1
+%\item 如何提供抽象化介面
+%\item 抽象化介面如何運作
+%\begin{enumerate}%2
+%\item 封裝與平台相關的程式碼
+%\item 與平台無關的程式碼只與介面相依
+%\item 與平台相關之實作依循介面實作
+%\end{enumerate}%2
+%\item 好處
+%\begin{enumerate}%2
+%\item 便利不同平台之開發者分工進行實作%實作功能僅需相依與平台有關之程式碼
+%\item 避免開發者同時對同一檔案進行修改而發生衝突%不同平台之開發者相依同一檔案進行實作
+%\end{enumerate}%2
+%\end{enumerate}%1
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{開發跨平台軟體的挑戰\hspace{3pt}-\hspace{3pt}需求面}
+%\begin{enumerate}
+%\item 相同需求於不同平台實現的難易程度不一致
+%\begin{enumerate}
+%\item 於iOS, Android平台利用HTTPS存取網頁。
+%\end{enumerate}
+%\item 功能無法以最佳效能呈現
+%\begin{enumerate}
+%\item 多媒體播放軟體利用GPU加速
+%\item 相依於Windows平台專用API
+%\item 顧及相依共同介面
+%\item 需放棄
+%\end{enumerate}
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{開發跨平台軟體的挑戰\hspace{3pt}-\hspace{3pt}流程面}
+%\begin{enumerate}
+%\item 於為數眾多的平台上進行測試造成成本上升\hspace{3pt}-\hspace{3pt}必須自動化執行以降低成本
+%\item 開發者撰寫適用於特定平台的程式碼而造成軟體無法在其他平台建置\hspace{3pt}-\hspace{3pt}必須實踐跨平台軟體建置整合%不同平台的開發人員修改置放同一版本控制系統中的程式碼，因為撰寫適用於特定平台的程式碼而造成軟體無法在其他平台建置，該開發者在不知情的狀況下簽入版本控制系統，進而導致其他開發者無法進行開發工作。
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%---------持續整合
+%\frametitle{持續整合}
+%\begin{enumerate}
+%\item 特性
+%\begin{enumerate}
+%\item 有效減低風險\hspace{3pt}-\hspace{3pt}越早且經常執行高風險工作
+%\item 永續性
+%\end{enumerate}
+%\end{enumerate}
+%\begin{enumerate}
+%\item 整合
+%\begin{enumerate}
+%\item 難以估計時程
+%\item 高風險
+%\item 通常於軟體開發末期進行
+%\item 越高風險的工作應該越早、經常被執行
+%\end{enumerate}
+%\item 持續
+%\begin{enumerate}
+%\item 頻率增加\hspace{3pt}-\hspace{3pt}每次有程式碼簽入版本控制系統時，將執行一次整合工作。
+%\item 永續性
+%\end{enumerate}
+%\item 開發軟體常見風險\hspace{3pt}-\hspace{3pt}同時適用於開發跨平台軟體
+%\begin{enumerate}
+%\item 缺乏可交付的軟體
+%\item 缺乏找尋軟體缺陷的機制
+%\item 缺乏了解軟體專案狀態的機制
+%\item 低落的軟體品質
+%\end{enumerate}
+%\item Broken Build
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{持續整合}
+%\begin{enumerate}
+%\item 無法永續的原因
+%\begin{enumerate}
+%\item 進行持續整合會對軟體開發團隊造成衝擊
+%\begin{enumerate}
+%\item 測試案例量大且耗時
+%\item 軟體架構未因應實踐持續整合而修改
+%\end{enumerate}
+%\end{enumerate}
+%\item 無法只依賴工具
+%\item 注重實踐經驗傳承
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%----------樣式
+%\frametitle{樣式}
+%\begin{enumerate}%1
+%\item 目標：特定情境下解決特定問題
+%\item 產生問題之原因：互相衝突的現象
+%\item 樣式如何解決問題：平衡現象
+%\begin{enumerate}%2
+%\item 一併平衡導入樣式而形成的衝擊
+%\end{enumerate}%2
+%\item 表達樣式需包含情境、現象、解法
+%\item 樣式為經驗與知識之傳遞工具
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------樣式之間的關係
+%\frametitle{樣式之間的關係}
+%\begin{enumerate}
+%\item 如果樣式A要解決預定要解的問題，樣式B必須替樣式A解決一部分的問題。
+%\item 樣式間關係形成網絡
+%\end{enumerate}
+%\begin{center}
+%\includegraphics[width=1.5cm]{pattern-connection.eps}
+%\end{center}
+%\end{frame}
+
+%\begin{frame}%--------樣式語言
+%\frametitle{樣式語言}
+%\begin{enumerate}
+%\item 特定情境下
+%\item 目標：解決問題（更為巨大）
+ %\item 產生問題之原因：互相衝突的現象（為數更多）
+ %\item 如果樣式A要解決預定要解的問題，\\樣式B必須替樣式A解決一部分的問題。
+%\item 樣式間關係形成網絡
+%\end{enumerate}
+%\item 樣式網絡形成一種語言
+%\begin{enumerate}
+%\item 描述多個樣式如何協同合作平衡現象
+%\item 傳承解決問題之經驗與知識
+%\end{enumerate}
+%\item 導入樣式形成的衝擊一併平衡。
+%\end{enumerate}
+%\begin{center}
+%\includegraphics[width=1.5cm]{pattern-connection.eps}
+%\end{center}
+%\end{frame}
+
+\begin{frame}
+\frametitle{跨平台軟體持續整合樣式}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 情境：跨平台軟體開發團隊實踐持續整合
+\item[] 實踐持續整合之目的：降低開發風險
+\begin{itemize}
+\setlength{\itemindent}{3em}
+\item[風險] 無可交付之軟體、無法掌握專案狀況、無法掌握軟體品質、軟體產品品質不佳\ddag
+\end{itemize}
+\item[] 樣式表達、傳承下列知識
+\begin{itemize}
+\item 降低開發跨平台軟體之風險（成本）
+\item 克服實踐持續整合帶來的衝擊永續執行持續整合
+\end{itemize}
+\item[] Project, Build, Good Habit 三大範疇樣式預定達成之目的
+\begin{itemize}
+\item 如何依循separation of concern與module decomposition改善軟體架構\dag%Project 範疇樣式語言預定達成的目的
+\item 如何避免Broken Build\dag\dag%Build 範疇樣式語言預定達成的目的
+\item 如何處理Broken Build%Good Habit 範疇樣式預定達成的目的
+\end{itemize}
+\fontsize{6pt}{4pt}\selectfont
+\item[] $\dag$$\dag$,$\ddag$Paul M. Duvall, Steve Matyas, and Andrew Glover.\\Continuous Integration: Improving Software Quality and Reducing Risk.\\Addison-Wesley Professional, 2007.
+\item[] $\dag$Len Bass, Paul Clements, and Rick Kazman. Software Architecture in Practice.
+\\Addison-Wesley Professional, 2003.
+\end{itemize}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{研究目的}
+%\begin{description}
+%\item[] 於跨平台軟體專案實例中找尋已知案例
+%\item[] 演化樣式語言
+%\end{description}
+%\end{frame}
+
+\begin{frame}
+\frametitle{跨平台軟體持續整合\\樣式語言 \textendash\hspace{6pt}樣式網絡}
+\includegraphics[width=5cm]{project-catgory-pattern-language-network.eps}
+\includegraphics[width=4cm]{build-catgory-pattern-language-network.eps}
+\includegraphics[width=2.5cm]{goodhabit-pattern-language.eps}
+\end{frame}
+
+\begin{frame}
+\frametitle{Pattern in Action}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 實例概述
+\begin{itemize}
+\item[] Web介面硬體監控軟體 ezMonitor
+\item[] 與平台相關：sensor driver與利用driver讀取數據的程式碼%Linux, Windows, Driver and code need to access Driver is platform specific.%讀取硬體監控sensor數據
+\item[] 與平台無關：Web 介面、控制sensor數據呈現於Web介面之模組
+\end{itemize}
+\item[] 與建置、佈署軟體相關樣式
+\begin{itemize}
+\item[] Installation Project, Single Shared Library Project, Patch Project
+\end{itemize}
+\item[] 與架構設計相關樣式
+\begin{itemize}
+\item[] Interface Project, Native Project, Cross-Platform Project
+\end{itemize}
+\end{itemize}
+\begin{center}
+\includegraphics[width=4cm]{project-catgory-pattern-language-network.eps}
+\end{center}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{跨平台軟體持續整合\\樣式語言 \textendash\hspace{6pt}Build 範疇樣式語言}
+%\begin{center}
+%\end{center}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{跨平台軟體持續整合\\樣式語言 \textendash\hspace{6pt}Good Habit 範疇樣式語言}
+%\begin{enumerate}
+%\item 僅提出Single Responsible Person樣式
+%\item 需加入與Single Responsible Person樣式有關之樣式
+%\item 形成網絡關係進而形成樣式語言
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{於Portland Pattern Repository發表的\\持續整合樣式}
+%\begin{enumerate}
+%\item 以非正規形式表達
+%\item 分享經驗與相關知識
+%\item 與其他軟體開發知識領域相關
+%\begin{enumerate}
+%\item Software Configuration Management
+%\begin{enumerate}
+%\item Use One Code Line
+%\item Commit Early and Often
+%\item Reduce Size of Check In
+%\end{enumerate}
+%\item Extreme Programming
+%\begin{enumerate}
+%\item Collective Code Ownership
+%\end{enumerate}
+%\end{enumerate}
+%\item 擷取其中樣式加入跨平台持續整合樣式語言
+%\end{enumerate}
+%\end{frame}
+
+% \begin{frame}%---------跨平台軟體持續整合樣式語言的實例 outline page
+%\frametitle{跨平台軟體持續整合樣式語言的實例 Outline}
+%\textit{In order to discover patterns which are alive\\we must always start with observation.} \begin{flushright}Christopher Alexander, The Timeless Way of Building(1979), p.254.\end{flushright}
+%\begin{enumerate}
+%\item 研究方法
+%\item Project 範疇樣式語言實例探討
+%\item Build 範疇樣式語言實例探討
+%\item Good Habit 範疇樣式語言實例探討-\hspace{3pt}Single Responsible Person樣式
+%\end{enumerate}
+ %\end{frame}
+
+ \begin{frame}%--------觀察實例之方法
+ \frametitle{研究方法}
+ \begin{itemize}
+ \setlength{\itemindent}{1em}
+ \item[] 1
+ \item[] 2
+ \item[] 3
+ \item[] 4
+ \end{itemize}
+ \begin{center}
+ \includegraphics[width=5cm]{observation_view.eps}
+ \end{center}
+ \end{frame}
+
+\begin{frame}
+\frametitle{研究方法討論}
+\begin{table}[!htbp]
+\fontsize{9pt}{10pt}\selectfont
+	\setlength{\abovecaptionskip}{0pt}
+	\setlength{\belowcaptionskip}{10pt}
+	\begin{center}
+	%\caption{Chromium專案的子專案與子目錄}\label{subprojectfolderview}
+\begin{tabular}[width=\textwidth]{|c|c|c|c|c|}
+\hline
+樣式＼構面&軟體建置&檔案目錄結構&架構設計&專案社群文件\\
+\hline
+Installation Project&${\surd}$&&&${\surd}$\\
+\hline
+Single Shared Library Project&&&&\\
+\hline
+Interface Project&${\surd}$&${\surd}$&${\surd}$&${\surd}$\\
+\hline
+Cross-Platform Project&${\surd}$&${\surd}$&${\surd}$&${\surd}$\\
+\hline
+Native Project&${\surd}$&${\surd}$&${\surd}$&${\surd}$\\
+\hline
+Patch Project&&&&\\
+\hline
+Local Private Build&&&&${\surd}$\\
+\hline
+Remote Private Build&&&&${\surd}$\\
+\hline
+Cross-Platform Integration&&&&${\surd}$\\
+\hline
+Integration Workflow&&&&${\surd}$\\
+\hline
+Single Responsible Person&&&&${\surd}$\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{frame}
+
+%\begin{frame}%---------介紹Chromium專案
+%\frametitle{Chromium 專案介紹}
+%\begin{enumerate}
+%\item Google贊助之瀏覽器軟體專案
+%\item 佔有10\%市佔率
+%\item 開放原始碼、跨平台軟體
+%\item Windows, Linux, Mac OS X.
+%\item 以C, C++, Objective-C實作
+%\begin{enumerate}
+%\item 於Mac OS X，各平台通用的程式碼以C,C++實作，與UI相關的程式碼以Objective-C實作。
+%\end{enumerate}
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%--------介紹SWT專案
+%\frametitle{SWT 專案介紹}
+%\begin{enumerate}
+%\item Java GUI框架
+%\item JNI 技術
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%--------Chromium Project Case Study
+%\frametitle{Project 範疇樣式語言實例探討\hspace{3pt}-\hspace{3pt}Chromium}
+%\begin{enumerate}
+%\item 於Mac OS X平台觀察
+%\item 從軟體建置構面出發
+%\item 並以檔案目錄結構、架構設計與專案社群文件構面輔助說明。
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{軟體建置構面}%-------條列專案中子專案與子目錄
+%\begin{table}[!htbp]
+%	\setlength{\abovecaptionskip}{0pt}
+%	\setlength{\belowcaptionskip}{10pt}
+%	\begin{center}
+	%\caption{Chromium專案的子專案與子目錄}\label{subprojectfolderview}
+%\begin{tabular}[width=\textwidth]{|c|c|c|}
+%\hline
+%專案名稱&&\\
+%\hline
+%chrome&&\\
+%\hline
+%&\textit{子目錄}&\\
+%\hline
+%&\textit{Source}&\textit{Intermediates}\\
+%\hline
+%&\textit{Frameworks}&\textit{Product}\\
+%\hline
+%&\textit{Projects}&\textit{Build}\\
+%\hline
+%&\textit{Projects}所涵蓋的子專案&\\
+%\hline
+%&content&base\\
+%\hline
+%&WebCore&webkit\\
+%\hline
+%&Webkit&skia\\
+%\hline
+%&...&...\\
+%\hline
+%\end{tabular}
+%\end{center}
+%\end{table}
+%\end{frame}
+
+\begin{frame}%------Project範疇樣式語言
+\frametitle{XXXXXXX}
+%\begin{center}
+\includegraphics[width=4.5cm]{project-catgory-pattern-language-network.eps}
+\includegraphics[width=7.5cm]{chromium-project-category-analysis-view.eps}
+%\end{center}
+\begin{itemize}
+\fontsize{8pt}{8pt}\selectfont
+\item[\dag] \url{http://www.chromium.org/Home}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{XXXXX}
+\includegraphics[width=6cm]{deploymentview.eps}
+\includegraphics[width=6cm]{deploymentview-chrome.eps}
+\end{frame}
+
+\begin{frame}%------設計構面
+\frametitle{XXXXX}
+\begin{center}
+\includegraphics[width=10cm]{chromium-mvc.eps}
+\end{center}
+\end{frame}
+
+%\begin{frame}
+%\frametitle{軟體建置構面}
+%\includegraphics[width=10cm]{deploymentview-chrome.eps}
+%\end{frame}
+
+\begin{frame}[fragile,t]%------設計構面-介面定義
+\frametitle{XXXXX}
+\begin{table}[h]
+\begin{center}
+\begin{minipage}{72mm}
+\linespread{0.8}
+\fontsize{8pt}{6pt}\selectfont
+\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+	節錄自render_widget_host_view.h
+	    Class RenderWidgetHostView{
+	    public:
+	        virtual ~RenderWidgetHostView();
+	        ...
+	        static RenderWidgetHostView* Create
+	            ViewForWidget(RenderWidgetHost
+	            View* widget);
+	          ...
+	  }
+\end{Verbatim}
+\end{minipage}
+\end{center}
+\end{table}
+\begin{table}[h]
+\begin{center}
+\begin{minipage}{72mm}
+\linespread{0.8}
+\fontsize{8pt}{6pt}\selectfont
+\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+節錄自render_view_host_delegate_helper.cc
+    RenderWidgetHostView*
+      RenderViewHostDelegateViewHelper::
+       CreateNewWidget(int route_id,
+       WebKit::WebPopupType popup_type,
+       RenderProcessHost* process) {
+         RenderWidgetHost* widget_host =
+         new RenderWidgetHost(process, route_id);
+         RenderWidgetHostView* widget_view =
+         RenderWidgetHostView::
+         CreateViewForWidget(widget_host);
+         ...
+   }
+\end{Verbatim}
+\end{minipage}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile,t]%------設計構面-平台相關實作
+\frametitle{XXXXXXX}
+\begin{table}[h]
+\begin{center}
+\begin{minipage}{72mm}
+\linespread{0.8}
+\fontsize{8pt}{6pt}\selectfont
+\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+	節錄自render_widget_host_view_win.cc
+	    RenderWidgetHostView* RenderWidgetHostView
+	    ::CreateViewForWidget(RenderWidgetHostView*
+	    widget){
+	        return new RenderWidgetHostViewWin(widget);
+	    }
+\end{Verbatim}
+\end{minipage}
+\end{center}
+\end{table}
+\begin{table}[h]
+\begin{center}
+\begin{minipage}{72mm}
+\linespread{0.8}
+\fontsize{8pt}{6pt}\selectfont
+\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+	節錄自render_widget_host_view_gtk.cc
+	    RenderWidgetHostView* RenderWidgetHostView
+	    ::CreateViewForWidget(RenderWidgetHostView*
+	    widget){
+	        return new RenderWidgetHostViewGtk(widget);
+	    }
+\end{Verbatim}
+\end{minipage}
+\end{center}
+\end{table}
+\begin{table}[h]
+\begin{center}
+\begin{minipage}{72mm}
+\linespread{0.8}
+\fontsize{8pt}{6pt}\selectfont
+\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+	節錄自render_widget_host_view_mac.cc
+	    RenderWidgetHostView* RenderWidgetHostView
+	    ::CreateViewForWidget(RenderWidgetHostView*
+	    widget){
+	        return new RenderWidgetHostViewMac(widget);
+	    }
+\end{Verbatim}
+\end{minipage}
+\end{center}
+\end{table}
+\end{frame}
+
+\begin{frame}%-------檔案目錄結構構面
+\frametitle{XXXXXXX}
+\begin{figure}
+
+	\psscalebox{0.54}{\psset{%linecolor= bisque,%
+			nodesep=2pt,%,
+			 treemode=D,%
+			 levelsep=*1.5cm}
+\pstree{\Tr{chrome.xcodeproject}}
+			 {\pstree{\Tr{chrome}}{
+			    {\pstree{\Tr{\textit{Source}}}
+			 	{\pstree{\Tr{\textit{browser}}}
+					{\pstree{\Tr{\textit{tab\_contents}}}
+					  {\Tr{\underline{render\_view\_host\_delegate\_helper.cc}}
+					  }
+					  \pstree{\Tr{\textit{render\_host}}}
+					  {\Tr{\underline{render\_widget\_host\_view\_*}}
+					  }
+					  \Tr{...}
+					}
+				   \Tr{...}
+				}
+
+			   }
+			 	\pstree{\Tr{content}}
+				   {\pstree{\Tr{\textit{Source}}}
+					{\pstree{\Tr{\textit{browser}}}
+			 			{\pstree{\Tr{\textit{render\_host}}}
+					  	{\Tr{\underline{render\_widget\_host\_view.h}}
+					  	%{\Tr{render\_widget\_host\_view\_gtk.cc}}
+					  	%{\Tr{render\_widget\_host\_view\_mac.mm}}
+					  	}
+					  	\Tr{...}
+					}
+				 	{\Tr{...}}
+					}
+				          \Tr{...}
+				  }
+
+			 \Tr{...}
+			 }
+			}
+			}
+
+\begin{center}
+%\caption{專案結構與目錄結構 - Chromium，其中子目錄以斜體字體標示，原始碼檔案以底線標示，子專案以正常字體標示。}
+\label{fig-folderstructure}
+\end{center}
+\end{figure}
+\end{frame}
+
+%\begin{frame}[fragile]%------設計構面-Linux平台實作
+%\frametitle{設計構面-Linux平台實作}
+%\begin{figure}
+%\linespread{0.8}
+%\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+%	節錄自render_widget_host_view_gtk.cc
+%	    RenderWidgetHostView* RenderWidgetHostView
+%	    ::CreateViewForWidget(RenderWidgetHostView*
+%	    widget){
+%	        return new
+%	        RenderWidgetHostViewGtk(widget);
+%	    }
+%\end{Verbatim}
+%\linespread{1}
+%\end{figure}
+%\end{frame}
+
+%\begin{frame}[fragile]%------設計構面-Mac平台實作
+%\frametitle{設計構面-Mac平台實作}
+%\begin{figure}
+%\linespread{0.8}
+%\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+%	節錄自render_widget_host_view_mac.cc
+%	    RenderWidgetHostView* RenderWidgetHostView
+%	    ::CreateViewForWidget(RenderWidgetHostView*
+%	    widget){
+%	        return new
+%	        RenderWidgetHostViewMac(widget);
+%	    }
+%\end{Verbatim}
+%\linespread{1}
+%\end{figure}
+%\end{frame}
+
+%\begin{frame}[fragile]
+%\frametitle{與平台無關之程式碼呼叫介面}
+%\begin{figure}
+%\linespread{0.8}
+%\begin{Verbatim}[numbers=left,framesep=1mm,numbersep=1pt]
+%   節錄自render_view_host_delegate_helper.cc
+%   RenderWidgetHostView*
+%     RenderViewHostDelegateViewHelper::
+%      CreateNewWidget(int route_id,
+%      WebKit::WebPopupType popup_type,
+%      RenderProcessHost* process) {
+%         RenderWidgetHost* widget_host =
+%         new RenderWidgetHost(process, route_id);
+%         RenderWidgetHostView* widget_view =
+%         RenderWidgetHostView::
+%         CreateViewForWidget(widget_host);
+%         ...
+%   }
+%\end{Verbatim}
+%\caption{節錄程式碼 part5: 與平台無關之程式碼呼叫介面}
+%\label{crossplatformcall}
+%\end{figure}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{SWT Case Study}
+%\end{frame}
+
+%\begin{frame}
+%\frametitle{Build 範疇樣式語言實例探討}
+%\begin{enumerate}
+%\item 研究對象Chromium專案
+%\item 研究專案社群文件
+%\item 實際觀察專案持續整合系統運作與報表
+%\end{enumerate}
+%\end{frame}
+
+\begin{frame}%------Local Private Build
+\frametitle{XXXXXXXX}
+\begin{figure}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\fontsize{8pt}{8pt}\selectfont
+%\setlength{\parsep}{0ex minus5ex}
+%\setlength{\itemsep}{0ex minus5ex}
+%\setlength{\topsep}{0ex minus5ex}
+\item[] 節錄自Chromium Project文件
+\item[] Get your code ready
+\begin{itemize}
+\fontsize{8pt}{8pt}\selectfont
+\setlength{\itemindent}{1em}
+\item[1.]  Code
+\begin{itemize}
+\fontsize{8pt}{8pt}\selectfont
+\item[1.1] \textcolor{blue}{must conform to the Chromium style guidelines.}
+\item[1.2] \textcolor{blue}{must be tested, preferably with unit tests.}
+\item[1.3] should be a reasonable size to review. Giant patches are unlikely to get reviewed quickly.
+\end{itemize}
+\item[2.] \textcolor{blue}{Run the unit tests and the UI tests to make sure you haven't broken anything.} \textcolor{purple}{You can ask someone to pass it to the try server.}
+\item[3.] ...
+\end{itemize}
+\end{itemize}
+\end{figure}
+\begin{center}
+\includegraphics[width=5.6cm]{build-catgory-pattern-language-network-presentation.eps}
+\end{center}
+\end{frame}
+
+\begin{frame}%------演化Build範疇樣式語言
+\frametitle{演化Build範疇樣式語言}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 如何幫助跨平台軟體開發團隊永續實踐持續整合
+\end{itemize}
+%\begin{center}
+\includegraphics[width=12.3cm]{build-catgory-pattern-language-network-revised-evo.eps}
+%\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{加入Build範疇樣式語言的樣式\dag}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] Commit Early and Often
+\begin{itemize}
+\item Software Configuration Management 最佳實踐
+\item 簽入涵蓋一項功能之程式碼
+\item 相依Local Private Build, Remote Private Build樣式
+\end{itemize}
+\item[] Continuous Integration Relentless Testing
+\begin{itemize}
+\item 測試是開發跨平台軟體主要的挑戰之一
+\item 於整合流程中自動化執行測試
+\end{itemize}
+\item[] Single Unified Build Script
+\begin{itemize}
+\item 跨平台軟體團隊-熟悉不同平台文化之開發者組成
+\item 相依單一建置腳本產出專屬不同平台之建置流程檔案
+\end{itemize}
+\fontsize{8pt}{8pt}\selectfont
+\item[\dag]The Patterns about Continuous Integration that Portland Pattern Repository web site collected. [online]. Available:http://www.c2.com/cgi/wiki? ContinuousIntegrationPatterns.
+\end{itemize}
+\end{frame}
+
+%\begin{frame}%------Remote Private Build
+%\frametitle{Remote Private Build}
+%\fontsize{8pt}{8pt}\selectfont
+
+%\begin{description}
+%\setlength{\parsep}{0ex minus5ex}
+%\setlength{\itemsep}{0ex minus5ex}
+%\setlength{\topsep}{0ex minus5ex}
+%\item Get your code ready
+%\begin{description}
+%\item 1. Code
+%\begin{description}
+%\item 1. must conform to the Chromium style guidelines.
+%\item 2. must be tested, preferably with unit tests.
+%\item 3. should be a reasonable size to review. Giant patches are unlikely to get reviewed quickly.
+%\end{description}
+%\item 2. Run the unit tests and the UI tests to make sure you haven't broken anything. \textcolor{red}{You can ask someone to pass it to the try server.}
+%\item 3. ...
+%\end{description}
+%\end{description}
+%\fontsize{10pt}{10pt}\selectfont
+%\begin{enumerate}
+%\item 於原始碼簽入版本控制系統前，將原始碼置放於持續整合系統中，以進行整合流程。
+%\item 需要持續整合系統支援，Team City, Buildbot, Pulse, Electronic Commander。
+%\item try server是由Buildbot持續整合系統擔綱。
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Cross-Platform Integration
+%\frametitle{Cross-Platform Integration}
+%\begin{enumerate}
+%\item 每一次的建置整合工作必須被分派到各個不同的平台上執行。
+%\item 請見Chromium Project之CI 系統 http://build.chromium.org/p/chromium/console
+%\item 需要持續整合系統支援，Team City, Buildbot, ...
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Integration Workflow
+%\frametitle{Integration Workflow}
+%\begin{enumerate}
+%\item 節省建置整合工作整體時間
+%\item 建置產生Windows平台可執行檔 exe A
+%\item 於Windows XP, Vista, 7環境針對 exe A進行自動化測試
+%\end{enumerate}
+%\end{frame}
+
+\begin{frame}[c]%------Single Responsible Person樣式實例探討
+\frametitle{探討Good Habit 範疇樣式語言-\hspace{3pt}Single Responsible Person樣式之已知案例}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 實例：微軟的Excel專案\dag
+\item[] 作法：
+\begin{itemize}
+\item 專員負責監控持續整合流程是否發生問題
+\item 以輪流擔任的方式產生該名負責人員
+\end{itemize}
+\item[] 好處：
+\begin{itemize}
+\item 傳遞持續整合相關知識
+\item 提昇團隊紀律
+\item 增進團隊成員對於其他平台程式開發的知識
+\end{itemize}
+\fontsize{8pt}{8pt}\selectfont
+\item[] $\dag$Joel Spolsky. Joel on Software: And on Diverse and Occasionally Related Matters That Will Prove of Interest to Software Developers, Designers, and Managers, and to Those Who, Whether by Good Fortune or Ill Luck, Work with Them in Some Capacity, chapter Daily Builds Are Your Good Friend. Apress, 2004.
+\end{itemize}
+\end{frame}
+
+%\begin{frame}%------演化跨平台軟體持續整合樣式語言
+%\frametitle{演化跨平台軟體持續整合樣式語言}
+%\textit{A living language must constantly be re-created\\ in each person's mind.}
+
+%\textit{Just so with pattern languages.}
+
+%\textit{Then, as each person makes up his own language for himself, the language begins to be a living one.}
+
+%\begin{flushright}
+%Christopher Alexander, The Timeless Way of Building(1979), p.338$\sim$339.\end{flushright}
+
+%\begin{enumerate}
+%\item 要加入Build範疇樣式語言的樣式
+%\item 演化Build範疇樣式語言
+%\item Collective Continuous Integration Ownership, Feedbacks樣式
+%\item 演化Good Habit範疇樣式
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------要加入Build範疇樣式語言的樣式
+%\frametitle{要加入Build範疇樣式語言的樣式}
+%\begin{enumerate}
+%\item Commit Early and Often
+%\item Continuous Integration Relentless Testing
+%\item Single Unified Build Script
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Commit Early and Often
+%\frametitle{要加入Build範疇樣式語言的樣式\hspace{3pt}-\hspace{3pt}Commit Early and Often}
+%\begin{enumerate}
+%\item 簽入涵蓋一項功能之程式碼
+%\item 執行驗證確保程式碼品質
+%\item 需要Local Private Build, Remote Private Build樣式輔助
+%\item 簽入程式碼的次數低
+%\item 衝突產生機會高
+%\item 持續整合進行次數少
+%\item 持續整合機制喪失
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Continuous Integration Relentless Testing
+%\frametitle{要加入Build範疇樣式語言的樣式\hspace{3pt}-\hspace{3pt}Continuous Integration Relentless Testing}
+%\begin{enumerate}
+%\item 開發跨平台軟體測試是主要的挑戰之一
+%\item 整合流程需要涵蓋測試-與Integration Workflow之關係
+%\item 自動化
+%\item 永續進行
+%\item 絕不妥協
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Single Unified Build Script
+%\frametitle{要加入Build範疇樣式語言的樣式\hspace{3pt}-\hspace{3pt}Single Unified Build Script}
+%\begin{enumerate}
+%\item 跨平台軟體團隊-熟悉不同平台文化之開發者組成
+%\item 慣用之工具不同
+%\item 產出適用於不同編譯除錯工具之建置腳本
+%\item Chromium 利用gyp產出
+%\begin{enumerate}
+%\item solution file for Visual Studio on Windows.
+%\item MAKEFILE file for gmake on Linux.
+%\item Xcode project file for Xcode on Max OS X.
+%\end{enumerate}
+%\item 整合流程記錄於建置腳本中-與Integration Workflow之關係
+%\end{enumerate}
+%\end{frame}
+
+%\item 欲加入的樣式與原本的樣式語言建立關係
+
+%\begin{frame}%-----Collective Continuous Integration Ownership
+%\frametitle{Collective Continuous Integration Ownership}
+%\begin{enumerate}
+%\item Context
+%\item Forces
+%\item Solution
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Context
+%\frametitle{Collective Continuous Integration Ownership樣式\hspace{3pt}-\\Context}
+%\begin{enumerate}
+%\item 持續整合為軟體開發的引擎
+%\item 整合工作狀態變化需要監控
+%\item 持續整合經驗與知識僅少數成員熟悉
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Forces
+%\frametitle{Collective Continuous Integration Ownership樣式\hspace{3pt}-\\Forces}
+%\begin{enumerate}
+%\item 進行軟體開發時，必須維持持續整合的進行，不能停頓。
+%\item 當完成一次整合工作，軟體開發團隊需要即時得知專案執行持續整合的結果。
+%\item 於軟體開發團隊中，在專案成員之間，執行持續整合的知識與經驗必須廣泛流通。
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Solution
+%\frametitle{Collective Continuous Integration Ownership樣式\hspace{3pt}-\\Solution}
+%\begin{enumerate}
+%\item Feedback機制\hspace{3pt}-\hspace{3pt}與Feedbacks樣式相關
+%\item 輪流監控持續整合狀態\hspace{3pt}-\hspace{3pt}與Single Responsible Person樣式相關
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Known Used
+%\frametitle{Collective Continuous Integration Ownership樣式\hspace{3pt}-\\Known Used}
+%\begin{enumerate}
+%\item Microsoft Office 與 Windows 2000團隊
+%\item 輪流監控整合狀態
+%\item 建置團隊、QA團隊分別負責整合與測試
+%\item 開發團隊24小時on-call
+%\item 整合與測試出現問題\hspace{3pt}-\hspace{3pt}Feedbacks
+%\item 對於Feedbacks立刻回應（修正）
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Context
+%\frametitle{Feedbacks樣式\hspace{3pt}-\hspace{3pt}Context}
+%\begin{enumerate}
+%\item 開發者執行開發工作與持續整合狀態關連緊密
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Forces
+%\frametitle{Feedbacks樣式\hspace{3pt}-\hspace{3pt}Forces}
+%\begin{enumerate}
+%\item 每一個開發者期望得知持續整合流程的錯誤訊息
+%\item 每一個開發者慣用的通訊媒介不同
+%\item 為了要幫助每一個開發者了解現階段健康狀態，必須以融入開發團隊環境的方式與媒介來呈現該狀態。
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Solution
+%\frametitle{Feedbacks樣式\hspace{3pt}-\hspace{3pt}Solution}
+%\begin{enumerate}
+%\item 於各種團隊成員常用的通訊媒介中設定通知整合狀態功能
+%\item 建立團隊整合狀態之metaphor
+%\item Single Responsible Person樣式依賴此樣式提供的解決方法
+%\end{enumerate}
+%\end{frame}
+
+%\begin{frame}%------Known Used
+%\frametitle{Feedbacks樣式\hspace{3pt}-\hspace{3pt}Known Used}
+%\begin{enumerate}
+%\item Kohsuke Kawaguchi 建立Jenkins專案對於持續整合狀態之metaphor
+%\end{enumerate}
+%\end{frame}
+
+\begin{frame}%------演化Good Habit範疇樣式
+\frametitle{演化Good Habit範疇樣式}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 表達跨平台軟體開發團隊需要以積極的態度面對持續整合
+\end{itemize}
+\begin{center}
+\includegraphics[width=12cm]{goodhabit-pattern-language-network-evo.eps}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{加入Good Habit範疇樣式語言的樣式}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] Collective Continuous Integration Ownership
+\begin{itemize}
+\item 傳遞持續整合經驗知識
+\item 針對持續整合狀態變化即時反應
+\end{itemize}
+\item[] Feedbacks
+\begin{itemize}
+\item 開發者執行開發工作與持續整合狀態關連緊密
+\item 開發者（包含持續整合狀態監控者）針對狀態變化即時反應
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}%------論文貢獻
+\frametitle{結論}%\hspace{3pt}-\hspace{3pt}論文貢獻}
+\begin{itemize}
+\setlength{\itemindent}{1em}
+\item[] 論文貢獻
+\begin{itemize}
+\item 提出探討跨平台軟體持續整合樣式之研究方法
+\item 成功尋獲已知案例
+\item 演化樣式語言
+\end{itemize}
+\item[] 未來可能研究方向
+\begin{itemize}
+\item 持續地觀察與演化
+\item 針對以不同類型程式語言撰寫的軟體探討其已知案例
+\item 以貼近持續整合之觀點深入探討
+\item 針對Chromium專案進行實驗
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%\begin{frame}%------未來可能研究方向
+%\frametitle{結論\hspace{3pt}-\hspace{3pt}未來可能研究方向}
+%\begin{enumerate}
+%\item 持續地觀察與演化
+%\item 針對以不同類型程式語言撰寫的軟體探討其已知案例
+%\end{enumerate}
+%\end{frame}
+
+
+\end{document}

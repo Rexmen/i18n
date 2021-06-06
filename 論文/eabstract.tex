@@ -1,0 +1,41 @@
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+%基本資訊
+
+\noindent
+Title: Further Improvement and Extension of an Automated Web Testing Tool 
+with Robot Framework to Support Internationalization\\
+Pages: \\
+School: National Taipei University of Technology\\
+Department: Computer Science and Information Engineering\\
+Time: June,2021\\
+Degree: Master\\
+Researcher: Bing-Chen Lin\\
+Advisor: C.-Y. Hsieh and Y.C.Cheng\\
+\hspace*{\fill}\\
+Related terms: Robot Framework, xpath, Keyword, Keyword Proxy, I18n\\
+\hspace*{\fill}\\
+%
+\indent
+In the past, the test target of an acceptance test script with Robot Framework 
+was often a  web page with single language. However, 
+nowadays a web page may have multiple language versions for people 
+who live in different countries. Therefore, test engineers often need to 
+write test scripts which are highly repetitive, 
+and the cost of testing would also increase.
+
+According to the thesis “Internationalization Support for Automated Web Testing
+with Robot Framework”(i18n) written by Chun-Ping Chu, i18n tool can build 
+the mapping between words and their translations by JSON format translation 
+files given by user. Besides, through the translation logic and 
+keyword proxies implemented in i18n tool, we can run web tests which have 
+same movements but different languages by a same test script without changing a word.
+
+However, the i18n tool still have many flaws to be improved currently; namely, 
+supporting only 7 Robot Framework native keywords, limiting to 3 HTML attributes as translate targets, 
+not supporting user choices to translations of words, not supporting installation by pip.
+
+Therefore, I will improve the flaws of the i18n tool mentioned above. 
+Hoping that the i18n tool would be better and more user-friendly in the future.
+
