@@ -215,14 +215,20 @@
 % \graphicspath{{.}}					%告訴Latex去這兩個目錄下找圖檔
 %-----------------------------------------------------------------%
 %-------------------為了方便所設定的巨集--------------------------%
+\definecolor{light-gray}{gray}{0.9}
 \lstset{
-	basicstyle=\small,
+	basicstyle=\linespread{1.0}\ttfamily\footnotesize,
+	backgroundcolor= \color{light-gray},
     rulesepcolor= \color{gray}, %程式碼塊邊框顏色
+	xleftmargin = 0.7cm,
     breaklines=true,  %程式碼過長則換行
-	showstringspaces=false
-    commentstyle=\color{gray}, %註釋顏色
-    frame=shadowbox%用方框框住程式碼塊
+	showstringspaces=true,
+    % commentstyle=\color{gray}, %註釋顏色
+    frame=tlbr,    %用方框框住程式碼塊
+	framesep=0.2cm,
+	framerule=0pt,
 }
+% \setbox0 = \hbox{ttfamily}
 
 
 %-----------------------------------------------------------------%

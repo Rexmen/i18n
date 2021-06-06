@@ -5,10 +5,16 @@
 i18n系統類別圖(如圖3.1)，沿用自第一版i18n工具的架構，經過部分實作的改善，並且新增了一個用於顯示一詞多譯選項的圖形化使用者介面類別(UI)，以及20種代理關鍵字的類別。 
 
 \begin{figure}[H]
-\centering
-\includegraphics[width= 1.1\textwidth]{../UML/i18n class diagram-i18n class diagram.png}
+\flushleft
+\includegraphics[width= 180mm]{../UML/i18n class diagram-i18n class diagram.png}
 \caption{i18n系統類別圖}
 \end{figure}
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 
 以下將分別簡介本論文使用到的Robot Framework的原生類別、第一版i18n已存在的類別，以及本論文新增的類別。
 
@@ -16,43 +22,37 @@ i18n系統類別圖(如圖3.1)，沿用自第一版i18n工具的架構，經過�
 Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
 第一版i18n設計的類別則有I18nListener、MappingRoutesGenerator、I18nMap、I18nTrigger、Proxy，以及5個繼承自Proxy \cite{proxy} 的代理關鍵字類別: ShouldContainProxy、ElementTextShouldBeProxy、FindElementProxy、ListsShouldBeEqualProxy、ShouldBeEqualProxy。(詳請參考朱峻平的論文3-1)
 
+ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 \subsection{本論文新擴充的類別}
 本論文新增的UI類別，其會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的圖形化使用者介面，使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
 而其他20種新增的代理關鍵字類別(如表3.1)，皆繼承自父類別Proxy並改寫其實作，負責代理各自對應關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給原關鍵字。
+\hspace*{\fill} \\
 
 \begin{table}[H]
     \centering
-    \setlength{\tabcolsep}{20mm}{
-        \begin{tabular}{|l|}
+        \begin{tabular}{|l|l|}
         \hline
-        代理關鍵字類别 \\
+        \multicolumn{2}{|c|}{新增的代理關鍵字類别} \\ \hline
+        1. AlertShouldBePresentProxy & 11. ListShouldNotContainDuplicatesProxy\\ 
+        2. CountValuesInListProxy & 12. RemoveFromDictionaryProxy\\ 
+        3. DictionariesShouldBeEqualProxy & 13. RemoveValuesFromListProxy\\
+        4. DictionaryShouldContainItemProxy & 14. SelectFromListByLabelProxy\\
+        5. DictionaryShouldContainKeyProxy & 15. SelectFromListByValueProxy\\
+        6. DictionaryShouldContainValueProxy & 16. TableCellShouldContainProxy\\
+        7. GetMatchCountProxy & 17. TableColumnShouldContainProxy\\
+        8. ListSelectionShouldBeProxy & 18. TableRowShouldContainProxy\\
+        9. ListShouldContainSubListProxy & 19. TableShouldContainProxy\\
+        10. ListShouldContainValueProxy & 20. TitleShouldBeProxy\\   
         \hline
-        % \noalign
-        1.AlertShouldBePresentProxy \\
-        2.CountValuesInListProxy \\
-        3. DictionariesShouldBeEqualProxy\\
-        4. DictionaryShouldContainItemProxy\\
-        5. DictionaryShouldContainKeyProxy\\
-        6. DictionaryShouldContainValueProxy\\
-        7. GetMatchCountProxy\\
-        8. ListSelectionShouldBeProxy\\
-        9. ListShouldContainSubListProxy\\
-        10. ListShouldContainValueProxy\\
-        11. ListShouldNotContainDuplicatesProxy\\
-        12. RemoveFromDictionaryProxy\\
-        13. RemoveValuesFromListProxy\\
-        14. SelectFromListByLabelProxy\\
-        15. SelectFromListByValueProxy\\
-        16. TableCellShouldContainProxy\\
-        17. TableColumnShouldContainProxy\\
-        18. TableRowShouldContainProxy\\
-        19. TableShouldContainProxy\\
-        20. TitleShouldBeProxy\\        
-        \hline
-        \end{tabular}}
+        \end{tabular}
     \caption{本論文新增的20種代理關鍵字類別}
 \end{table}
 
+\hspace*{\fill} \\
 \subsection{系統執行流程}
 在使用此i18n工具執行測試腳本前，首先使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數(如圖3.2)，設定為-d out –L debug -–listener i18n/listeners/I18nListener.py:zh-TW。
 
@@ -64,23 +64,33 @@ Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
 測試腳本執行時，系統會先去呼叫I18nListener.py並執行其實作，zh-TW代表當前語言為繁體中文-台灣。之後讀取由使用者自行提供的JSON格式翻譯檔(圖3.3)，建立出一份“Key階層”對應“翻譯”的翻譯路徑檔(圖3.4)，以及建立出所有自定義的代理關鍵字物件。每當腳本運行到一個有定義代理之關鍵字，系統就會去呼叫對應的代理關鍵字物件，並執行翻譯邏輯。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/3-1-3-2 JSON格式翻譯檔.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/3-1-3-2 JSON格式翻譯檔.png}
 \caption{JSON格式翻譯檔}
 \end{figure}
-
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/3-1-3-3 翻譯路徑檔.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/3-1-3-3 翻譯路徑檔.png}
 \caption{翻譯路徑檔示例}
 \end{figure}
 
-而相較第一版i18n改動較大的部份，是在測試腳本結束後。除了將一詞多譯的warning資訊顯示在報表上外，若是遭遇過一詞多譯，便會跳出一詞多譯的UI(詳見章節3-4)，其記錄了執行翻譯當下關鍵字的參數組合，並顯示所有可能的翻譯詞，讓使用者可以從中去選擇並產生一個設定檔。之後再次執行測試腳本時，系統便會根據設定檔的內容去選擇適當的翻譯詞，同時消除報表上的warning提示資訊。
+系統流程相較於第一版i18n改動較大的部份，是在測試腳本結束後。除了將一詞多譯的warning資訊顯示在報表上外，若是遭遇過一詞多譯，便會跳出一詞多譯的UI(詳見章節3-4)，其記錄了執行翻譯當下關鍵字的參數組合，並顯示所有可能的翻譯詞，讓使用者可以從中去選擇並產生一個設定檔。之後再次執行測試腳本時，系統便會根據設定檔的內容去選擇適當的翻譯詞，同時消除報表上的warning提示資訊。
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+%3.2
 \section{擴充與修改代理關鍵字實作}
 在此前，第一版i18n工具只支援7種Robot Framework原生關鍵字(如表3.2)。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去跑多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得所有原生關鍵字的參數部分都能正確得被翻譯。
 
+\renewcommand\arraystretch{0.8}
 \begin{table}[H]
     \centering
-    \setlength{\tabcolsep}{20mm}{
+    \setlength{\tabcolsep}{10mm}{
         \begin{tabular}{|l|}
         \hline
         第一版i18n已提供代理的關鍵字 \\
@@ -101,19 +111,12 @@ Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
 input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29種原生關鍵字需要提供代理(如表3.3)。(‘*’標示為因版本更新導致被淘汰的原生關鍵字)
 
 \begin{table}[H]
-    \centering
-    \setlength{\tabcolsep}{54mm}{
-        \begin{tabular}{|c|}
-            \hline
-            待擴充代理的關鍵字 \\
-            \hline
-        \end{tabular}
-    }    
-    \setlength{\tabcolsep}{3mm}{
+    \centering 
+    \setlength{\tabcolsep}{5mm}{
         \begin{tabular}{|l|l|}
         \hline
-        Collections Libaray (3.0.4) & SeleniumLibrary (4.5.0) \\
-        \hline
+        \multicolumn{2}{|c|}{待擴充的代理關鍵字}\\ \hline
+        Collections Libaray (3.0.4) & SeleniumLibrary (4.5.0) \\ \hline
         1. count\_values\_in\_list & 1. alert\_should\_be\_present \\
         2. dictionaries\_should\_be\_equal & 2. input\_text\_into\_alert \\
         3. dictionary\_should\_contain\_item & 3. *input\_text\_into\_prompt\\    
@@ -134,11 +137,10 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
         \end{tabular}}
     \caption{新版i18n將擴充代理的Robot Framework原生關鍵字}
 \end{table}
-
 以下將以 FindElementsProxy的Activity Diagram為例，詳述現今配合新增的一詞多譯UI下，本論文是如何完成代理關鍵字的擴充和修改。
 
 \begin{figure}[H]
-    \includegraphics[width= .85\textwidth]{../UML/i18n activity diagram-FindElementsProxy.png}
+    \includegraphics[width= .87\textwidth]{../UML/i18n activity diagram-FindElementsProxy.png}
     \caption{FindElementsProxy的Activity Diagram}
 \end{figure}
 
@@ -148,13 +150,13 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
 
 \item[2.]執行翻譯。如:
 \begin{lstlisting}[language={python}]
-locator = i18n.I18nListener.MAP.locator(BuiltIn().replace_variables(value),full_args)
+locator = i18n.I18nListener.MAP.locator(value,full_args)
 \end{lstlisting}
 透過i18nListener類別的MAP變數(其內裝著i18nMap類別的初始化資訊)，去呼叫i18nMap類別的locator函式，對待翻譯詞value執行翻譯，且必須代入full\_args以實現1.的內容。
 
 \item[3.]若判定此代理關鍵字遭遇一詞多譯，則產生warning資訊於報表上，如:
 \begin{lstlisting}[language={python}]
-FindElementsProxy.show_warning(self,value,multiple_translation_words,full_args)
+FindElementsProxy.show_warning(value,multi_trans_words,full_args)
 \end{lstlisting}
 
 \item[4.]之後判斷此一詞多譯情況，最後會使測試通過或是失敗，如:
@@ -186,6 +188,16 @@ return func(self, by, BuiltIn().replace_variables(xpath))
 
 其他未能一一介紹的代理關鍵字，儘管彼此間實作仍然存在著差異，但都是遵循著以上的架構去設計。
 
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+%3.3
 \section{改善XPath翻譯邏輯使其能應對各種html屬性}
 在第一版i18n的翻譯邏輯中，若一個XPath內部存在多種html屬性，i18n工具使用了列舉法(如圖3.6)，僅提供了@title、text()、normalize-space()三種屬性的翻譯規則。屆時，若測試腳本的XPath是用沒有列舉出來的屬性撰寫，但卻有翻譯的需求，例如:@placeholder、@arial-label等等，則會導致測試出錯。
 
@@ -234,6 +246,13 @@ if match not in self.no_need_trans_attirbutes:
 
 最後，將翻譯後的translated\_xpath，回傳給FindElementsProxy類別，完成一次XPath的翻譯。
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %3.4
 \section{提供圖形化使用者介面解決一詞多譯的問題}
 先前遇到一詞多譯問題時，第一版i18n工具提供了warning資訊於測試結束後的報表上，此作法確實提醒了使用者該腳本存在著一詞多譯問題，且也顯示出目前系統採用的翻譯詞，這是好的部分，本論文將繼續沿用。此翻譯邏輯是站在一個”最大化讓測試腳本通過”的立場，當遭遇一詞多譯時，系統會將所有的翻譯都執行看看，直到一包可能的翻譯中，出現了一個會使測試通過的翻譯，則算測試通過，並將該翻譯詞呈現於報表上。
@@ -278,6 +297,11 @@ if match not in self.no_need_trans_attirbutes:
 
 此外，在UI類別中定義的add\_translations()函式，雖然不會在一詞多譯UI執行期間被呼叫，但在測試腳本執行期間，卻能負責將代理關鍵字傳入的待翻譯詞與其對應翻譯，分別儲存於變數中，方便之後get\_transdic\_keys\_and\_values()函式的讀取。並且，其還會將關鍵字的參數部分和待翻譯詞結合，成為可以辨別“該次測試腳本是否執行過相同翻譯”的字串，存入unique\_log變數中。
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %3.5
 \section{將i18n工具設計成為可以安裝的模組}
 本論文透過Python的build模組，將i18n工具包裝成名為”RF-AWT-i18n”的Library，並透過twine模組上傳至PYPI\cite{PYPI}網站上，使之成為可以直接讓使用者安裝的Python模組。解決了先前使用者只能從github上將i18n工具clone下來，並在該專案上開發測試腳本的不方便。
@@ -292,6 +316,6 @@ if match not in self.no_need_trans_attirbutes:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width= .7\textwidth]{../論文截圖/3-5-8 安裝RF-AWT-i18n指令.png}
+    \includegraphics[width= .5\textwidth]{../論文截圖/3-5-8 安裝RF-AWT-i18n指令.png}
     \caption{安裝RF-AWT-i18n指令}
 \end{figure}

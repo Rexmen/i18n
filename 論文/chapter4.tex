@@ -36,6 +36,11 @@ Alert should be present
 \caption{Alert Should Be Equal測試通過}
 \end{figure}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4.1.2
 \subsection{Count Values In List}
 \begin{figure}[H]
@@ -60,6 +65,11 @@ Count values in list
 \caption{Count Values In List測試腳本第二次執行通過}
 \end{figure}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4.1.3
 \subsection{Dictionaries Should Be Equal}
 \begin{figure}[H]
@@ -108,20 +118,28 @@ List Selection Should Be    ${selectionList}    Support
 此測試腳本(如圖4.10)，會打開i18n Testing Website，並使用Select From List By Label選取畫面上selection list的Support選項(如圖4.11)。之後用List Selection Should Be驗證結果是否正確。第一次測試通過(如圖4.12)，而畫面上選擇了‘支援’，代表參數Support有成功被翻譯，且系統將‘支援’當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了‘支援服務’當作Support的唯一翻譯。第二次測試腳本通過(如圖4.13)，畫面上被選擇的selection list顯示‘支援服務’，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-1-7 Select from list by label要驗證的網頁元件.png}
+\centering
+\includegraphics[width= .6\textwidth]{../論文截圖/4-1-7 Select from list by label要驗證的網頁元件.png}
 \caption{Select From List By Label測試腳本要驗證的網頁元件}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4.1.4-2 select from list by label 1st run.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/4.1.4-2 select from list by label 1st run.png}
 \caption{Select From List By Label測試腳本第一次執行通過}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4.1.4-3 select from list by label 2nd run.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/4.1.4-3 select from list by label 2nd run.png}
 \caption{Select From List By Label測試腳本第二次執行通過}
 \end{figure}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4.1.5
 \subsection{*Page Should Contain Element}
 \begin{figure}[H]
@@ -145,20 +163,27 @@ Check "Microsoft Support" webelement is on the support page
 此測試腳本(如圖4.14)，會打開Microsoft中文官方網頁，前往支援頁面，之後使用Page Should Contain Element驗證畫面上的Support文字(如圖4.15)。第一次測試通過(如圖4.16)，代表參數Support有成功被翻譯，且系統將‘支援服務’當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了‘支援服務’當作Support的唯一翻譯。第二次測試腳本通過(如圖4.17)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-1-9 Page should contain element要驗證的網頁元件.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/4-1-9 Page should contain element要驗證的網頁元件.png}
 \caption{*Page Should Contain Element 測試腳本要驗證的網頁元件}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4.1.5-2 page should contain element 1st run.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/4.1.5-2 page should contain element 1st run.png}
 \caption{*Page Should Contain Element測試腳本第一次執行通過}
 \end{figure}
-
 \begin{figure}[H]
+\centering
 \includegraphics[width= \textwidth]{../論文截圖/4.1.5-3 page should contain element 2nd run.png}
 \caption{*Page Should Contain Element測試腳本第二次執行通過}
 \end{figure}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4.1.6
 \subsection{Table Should Contain}
 \begin{figure}[H]
@@ -196,6 +221,11 @@ Table should contain "Support"
 \caption{Table Should Contain 測試腳本第二次執行通過}
 \end{figure}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4-2
 \section{改善翻譯邏輯後的驗收測試示例}
 以下將舉Page Should Contain Element關鍵字的測試腳本為例，去驗證Microsoft中文官方網頁上的文字。並說明在改善XPath翻譯邏輯前後，執行含有@placeholder屬性的XPath之腳本，將分別得到何種結果。
@@ -220,16 +250,19 @@ Test web element is on th support page by given special attributes
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-2-2 畫面上@placeholder的實際文字.png}
+\centering
+\includegraphics[width= .9\textwidth]{../論文截圖/4-2-2 畫面上@placeholder的實際文字.png}
 \caption{中文版Microsoft網頁@placeholder屬性對應的實際文字}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-2-3 @placeholder運行在第一版i18n.png}
+\centering
+\includegraphics[width= .8\textwidth]{../論文截圖/4-2-3 @placeholder運行在第一版i18n.png}
 \caption{待翻譯XPath運行在未改善翻譯邏輯時的i18n工具之結果}
 \end{figure}
 
 \begin{figure}[H]
+\centering
 \includegraphics[width= \textwidth]{../論文截圖/4-2-4 @placeholder運行在當前i18n版本.png}
 \caption{待翻譯XPath運行在改善翻譯邏輯後的i18n工具之結果}
 \end{figure}
@@ -335,7 +368,8 @@ Support Button Text Should Be
 第一次執行測試腳本(如圖4.34)結束後，使用者分別為三種不同情況下遭遇一詞多譯的Support，選擇了支援、支援、支援服務為其正確翻譯，並點擊Submit按鈕，將選擇寫入設定檔中。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-4-3 test multiple user behaviors測試腳本2nd run.png}
+\centering
+\includegraphics[width= .9\textwidth]{../論文截圖/4-4-3 test multiple user behaviors測試腳本2nd run.png}
 \caption{Test multiple user behaviors on Microsoft website測試腳本第二次執行結果}
 \end{figure}
 
