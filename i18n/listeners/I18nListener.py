@@ -70,14 +70,14 @@ class I18nListener:
                     # logger.warn("in for")
                     split_key_value = []
                     split_key_value=line.strip("\n").split('~')
-                    read_args = split_key_value[0].split('#')
+                    read_args = split_key_value[1].split('#')
                     # logger.warn(split_key_value)]
                     #FIXME 這邊將'翻譯詞'(key)當成去取'翻譯' 和 '參數部分'(full_args)的媒介
                     #  但是，此種作法在 有多個相同翻譯詞(例如:多個support)在不同情況下有不同的翻譯，
                     #  便會導致後面的 新翻譯 和 新full_args 將前面的洗掉(因為Dictionary的特性)
                     #  因為 翻譯詞的不唯一性，我不該把其他資料與它連結，必須想另一種可能不借助dict的實作
-                    I18nListener.SETTING_KEYS[i] = split_key_value[1]
-                    I18nListener.SETTING_TRANS[i] = split_key_value[2]
+                    I18nListener.SETTING_KEYS[i] = split_key_value[2]
+                    I18nListener.SETTING_TRANS[i] = split_key_value[3]
                     I18nListener.SETTING_ARGS[i] = read_args
                     # logger.warn(read_args)
                     # logger.warn(type(read_args))

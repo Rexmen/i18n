@@ -15,8 +15,10 @@ Test multiple user behaviors on Microsoft website
     Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     Click Element    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
+    ${searchBox} =    Set Variable    //*[@id ='supHomeAndLandingPageSearchBox' and @placeholder ='How can we help you?']
     Sleep    1s
     Page Should Contain Element    ${MicrosoftSupport}
+    Page Should Contain Element    ${searchBox}
 
 *** Keywords ***
 Support Button Text Should Be

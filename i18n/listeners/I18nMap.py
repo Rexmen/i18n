@@ -99,6 +99,7 @@ class I18nMap:
                 self.is_exist_multiple_translation_words(match[match_group], full_args) #檢驗是否有一個以上翻譯
                 # match[match_group]是可以被翻譯的word
                 #以下實際將xpath翻譯,
+                #FIXME 此處translated_xpath會被覆蓋??
                 translated_xpath = self.translate(full_args, match=match[match_group], quot=match[quot_group], 
                 xpaths=translated_xpath) # group 0 as self, group 4 as match, group 3 as quot 
         if xpath != list(translated_xpath)[0] : # 表示有成功被翻譯(不管個數)，所以長的不一樣了
