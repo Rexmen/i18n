@@ -1,35 +1,21 @@
 \chapter{研究方法與實作}
-本章節將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並與朱峻平的論文“支援多國語言的Robot Framework網頁自動化驗收測試” (第一版i18n工具)進行比較，呈現出先後的差異。
+本章節將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並點出與朱峻平的論文「支援多國語言的Robot Framework網頁自動化驗收測試」(第一版i18n工具)的不同之處。
 
-\section{系統設計}
-i18n系統類別圖(如圖3.1)，沿用自第一版i18n工具的架構，經過部分實作的改善，並且新增了一個用於顯示一詞多譯選項的圖形化使用者介面類別(UI)，以及20種代理關鍵字的類別。 
+%3.1
+\section{系統擴充}
+新版i18n系統類別圖(如圖~\ref{新版i18n系統類別圖})，沿用第一版i18n工具的架構(如圖~\ref{1stI18nClassDiagram})，經過部分實作的改善，並且新增了一個用於顯示一詞多譯選項的圖形化使用者介面類別(UI)，以及20種代理關鍵字的類別。新增的類別在圖中以紅色方框標示。
 
 \begin{figure}[H]
 \flushleft
 \includegraphics[width= 180mm]{../UML/i18n class diagram-i18n class diagram.png}
-\caption{i18n系統類別圖}
+\caption{新版i18n系統類別圖}
+\label{新版i18n系統類別圖}
 \end{figure}
 
-\hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
+本論文新增的UI類別會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的圖形化使用者介面，使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
 
-以下將分別簡介本論文使用到的Robot Framework的原生類別、第一版i18n已存在的類別，以及本論文新增的類別。
+而其他20種新增的代理關鍵字類別(如表~\ref{本論文新增的20種代理關鍵字類別})，皆實作父類別Proxy，負責代理對應原生關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給原生關鍵字。
 
-\subsection{第一版i18n工具的現存類別與原生類別}
-Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
-第一版i18n設計的類別則有I18nListener、MappingRoutesGenerator、I18nMap、I18nTrigger、Proxy，以及5個繼承自Proxy \cite{proxy} 的代理關鍵字類別: ShouldContainProxy、ElementTextShouldBeProxy、FindElementProxy、ListsShouldBeEqualProxy、ShouldBeEqualProxy。(詳請參考朱峻平的論文3-1)
-
- \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\subsection{本論文新擴充的類別}
-本論文新增的UI類別，其會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的圖形化使用者介面，使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
-而其他20種新增的代理關鍵字類別(如表3.1)，皆繼承自父類別Proxy並改寫其實作，負責代理各自對應關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給原關鍵字。
 \hspace*{\fill} \\
 
 \begin{table}[H]
@@ -50,42 +36,17 @@ Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
         \hline
         \end{tabular}
     \caption{本論文新增的20種代理關鍵字類別}
+    \label{本論文新增的20種代理關鍵字類別}
 \end{table}
 
-\hspace*{\fill} \\
-\subsection{系統執行流程}
-在使用此i18n工具執行測試腳本前，首先使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數(如圖3.2)，設定為-d out –L debug -–listener i18n/listeners/I18nListener.py:zh-TW。
-
-\begin{figure}[H]
-\includegraphics[width= 1.1\textwidth]{../論文截圖/3-1-3-1 設定系統參數.png}
-\caption{Robot Framework系統參數設定}
-\end{figure}
-
-測試腳本執行時，系統會先去呼叫I18nListener.py並執行其實作，zh-TW代表當前語言為繁體中文-台灣。之後讀取由使用者自行提供的JSON格式翻譯檔(圖3.3)，建立出一份“Key階層”對應“翻譯”的翻譯路徑檔(圖3.4)，以及建立出所有自定義的代理關鍵字物件。每當腳本運行到一個有定義代理之關鍵字，系統就會去呼叫對應的代理關鍵字物件，並執行翻譯邏輯。
-
-\begin{figure}[H]
-\centering
-\includegraphics[width= .8\textwidth]{../論文截圖/3-1-3-2 JSON格式翻譯檔.png}
-\caption{JSON格式翻譯檔}
-\end{figure}
-\begin{figure}[H]
-\centering
-\includegraphics[width= .8\textwidth]{../論文截圖/3-1-3-3 翻譯路徑檔.png}
-\caption{翻譯路徑檔示例}
-\end{figure}
-
-系統流程相較於第一版i18n改動較大的部份，是在測試腳本結束後。除了將一詞多譯的warning資訊顯示在報表上外，若是遭遇過一詞多譯，便會跳出一詞多譯的UI(詳見章節3-4)，其記錄了執行翻譯當下關鍵字的參數組合，並顯示所有可能的翻譯詞，讓使用者可以從中去選擇並產生一個設定檔。之後再次執行測試腳本時，系統便會根據設定檔的內容去選擇適當的翻譯詞，同時消除報表上的warning提示資訊。
+系統執行流程相較於第一版i18n改動較大的部份，是在測試腳本結束後；除了將一詞多譯的warning資訊顯示在報表上外，若是遭遇過一詞多譯，便會跳出一詞多譯的UI(詳見3-4節)，記錄了執行翻譯當下關鍵字的參數組合，並顯示所有可能的翻譯詞，讓使用者可以從中去選擇並產生一個設定檔。之後再次執行測試腳本時，系統便會根據設定檔的內容去選擇適當的翻譯詞，同時消除報表上的warning提示資訊。
 
 \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
+
 %3.2
 \section{擴充與修改代理關鍵字實作}
-在此前，第一版i18n工具只支援7種Robot Framework原生關鍵字(如表3.2)。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去跑多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得所有原生關鍵字的參數部分都能正確得被翻譯。
+第一版i18n工具只支援7種Robot Framework原生關鍵字(如表~\ref{第一版i18n已提供的原生關鍵字})\cite{i18n}。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去跑多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得所有原生關鍵字的參數部分都能正確的被翻譯。
 
 \renewcommand\arraystretch{0.8}
 \begin{table}[H]
@@ -105,10 +66,11 @@ Robot Framework的原生類別分別有RobotFramework，Listener，和Report。
         \hline
         \end{tabular}}
     \caption{第一版i18n已提供代理的Robot Framework原生關鍵字}
+    \label{第一版i18n已提供的原生關鍵字}
 \end{table}
 
 且又因為先前的i18n工具分別在Robot Framework版本3.0.4、SeleniumLibrary版本3.1.1下開發，而現在的Robot Framework版本已更新到3.2.2，SeleniumLibrary版本則更新到4.5.0，導致原先需要被支援的31種原生關鍵字，有兩種已被淘汰:
-input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29種原生關鍵字需要提供代理(如表3.3)。(‘*’標示為因版本更新導致被淘汰的原生關鍵字)
+input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29種原生關鍵字需要提供代理(如表~\ref{新版i18n將擴充代理的Robot Framework原生關鍵字})。(‘*’標示為因版本更新導致被淘汰的原生關鍵字)
 
 \begin{table}[H]
     \centering 
@@ -136,25 +98,27 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
         \hline
         \end{tabular}}
     \caption{新版i18n將擴充代理的Robot Framework原生關鍵字}
+    \label{新版i18n將擴充代理的Robot Framework原生關鍵字}
 \end{table}
-以下將以 FindElementsProxy的Activity Diagram為例，詳述現今配合新增的一詞多譯UI下，本論文是如何完成代理關鍵字的擴充和修改。
+以下將以 FindElementsProxy的Flow Chart為例，詳述現今配合新增的一詞多譯UI下，本論文是如何完成代理關鍵字的擴充和修改。(沿用第一版i18n的部分會以‘*’號標註)
 
 \begin{figure}[H]
-    \includegraphics[width= .87\textwidth]{../UML/i18n activity diagram-FindElementsProxy.png}
-    \caption{FindElementsProxy的Activity Diagram}
+    \includegraphics[width= .85\textwidth]{../UML/i18n flow chart-FindElementsProxy.png}
+    \caption{FindElementsProxy的Flow Chart}
+    \label{FindElementsProxy的Flow Chart}
 \end{figure}
 
-由圖3.5 FindElementProxy的Acitivity Diagram可以得知，在新的i18n版本下，擴充一個新的代理關鍵字必須遵從著以下步驟:
+由圖~\ref{FindElementsProxy的Flow Chart} FindElementProxy的Flow Chart可以得知，在新的i18n版本下，擴充一個新的代理關鍵字必須遵從著以下步驟:(以下編號可以對應到Flow Chart的數字)
 \begin{itemize}
 \item[1.]創出該次關鍵字呼叫的參數紀錄變數，full\_args。此變數之後會成為判斷當下待翻譯詞是否“已被使用者選擇翻譯” 的依據。並於測試腳本結束後，顯示於一詞多譯UI上，最後隨著使用者的選擇一併存入設定檔內。
 
-\item[2.]執行翻譯。如:
+\item[2*.]執行翻譯。如:
 \begin{lstlisting}[language={python}]
 locator = i18n.I18nListener.MAP.locator(value,full_args)
 \end{lstlisting}
 透過i18nListener類別的MAP變數(其內裝著i18nMap類別的初始化資訊)，去呼叫i18nMap類別的locator函式，對待翻譯詞value執行翻譯，且必須代入full\_args以實現1.的內容。
 
-\item[3.]若判定此代理關鍵字遭遇一詞多譯，則產生warning資訊於報表上，如:
+\item[3*.]若判定此代理關鍵字遭遇一詞多譯，則產生warning資訊於報表上，如:
 \begin{lstlisting}[language={python}]
 FindElementsProxy.show_warning(value,multi_trans_words,full_args)
 \end{lstlisting}
@@ -174,13 +138,13 @@ ui.UI.add_translations(self, multiple_translation_words, word_translation, full_
 \end{lstlisting}
 先設定再測試結束後，需要開啟一詞多譯UI。若該”參數+翻譯詞”組合尚未被翻譯過，則記錄下該次翻譯的參數部分和翻譯資訊。
 
-\item[6.]若此次代理關鍵字沒有遭遇一詞多譯，則如:
+\item[6*.]若此次代理關鍵字沒有遭遇一詞多譯，則如:
 \begin{lstlisting}[language={python}]
 xpath = locator[0]
 \end{lstlisting}
 將第一筆翻譯同時也是唯一一筆翻譯指派給之後要回傳的xpath。
 
-\item[7.]將翻譯好的參數部分回傳給原生的Robot Framework原生關鍵字，如:
+\item[7*.]將翻譯好的參數部分回傳給原生的Robot Framework原生關鍵字，如:
 \begin{lstlisting}[language={python}]
 return func(self, by, BuiltIn().replace_variables(xpath))
 \end{lstlisting}
@@ -198,8 +162,8 @@ return func(self, by, BuiltIn().replace_variables(xpath))
 \\ \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
 %3.3
-\section{改善XPath翻譯邏輯使其能應對各種html屬性}
-在第一版i18n的翻譯邏輯中，若一個XPath內部存在多種html屬性，i18n工具使用了列舉法(如圖3.6)，僅提供了@title、text()、normalize-space()三種屬性的翻譯規則。屆時，若測試腳本的XPath是用沒有列舉出來的屬性撰寫，但卻有翻譯的需求，例如:@placeholder、@arial-label等等，則會導致測試出錯。
+\section{改善XPath翻譯邏輯使其能應對各種HTML屬性}
+在第一版i18n的翻譯邏輯中，若一個XPath內部存在多種HTML屬性，i18n工具使用了列舉法(如圖~\ref{以列舉法定義要被翻譯的HTML屬性})，僅提供了@title、text()、normalize-space()三種屬性的翻譯規則。屆時，若測試腳本的XPath是用沒有列舉出來的屬性撰寫，但卻有翻譯的需求，例如:@placeholder、@arial-label等等，則會導致測試出錯。
 
 \begin{figure}[H]
 \begin{lstlisting}[language={python}]
@@ -211,20 +175,22 @@ default_rule = {
 }
 \end{lstlisting}
 \caption{以列舉法定義要被翻譯的HTML屬性}
+\label{以列舉法定義要被翻譯的HTML屬性}
 \end{figure}
 
-為了解決以上問題，本論文在多方考量下，最後採用了“負面表列法”，將確定不會執行翻譯的HTML屬性在程式中用list的方式儲存。若XPath中的HTML屬性不在該list中，則都去執行翻譯檢查。
+為了解決以上問題，本論文最後決定採用“負面表列法”，將確定不會執行翻譯的HTML屬性在程式中用list的方式儲存。若XPath中的HTML屬性不在該list中，則都去執行翻譯檢查。
 
-此種作法相較於把所有HTML屬性都執行翻譯檢查，顧及到了系統執行效能，來的更加省時。相較於AI的作法，讓系統自行判斷該HTML屬性是否要翻譯，在實作上則更為簡單，且把翻譯的決定權交給了測試者，而非全部靠系統。相較於第一版i18n，把翻譯規則用列舉法固定，此作法則更能顧及到未來測試腳本的不確定性，因為我們無法預期使用者會用怎麼樣的方式去編寫XPath。
+此種作法相較於把所有HTML屬性都執行翻譯檢查，顧及到了系統執行效能，來的更加省時。相較於設計一個複雜邏輯，來訓練系統自行判斷當前HTML屬性是否要翻譯，在實作上則更為簡單，且把翻譯的決定權交給了測試者，而非全部靠系統。相較於第一版i18n，把翻譯規則用列舉法固定，此作法則更能顧及到未來測試腳本的不確定性，因為我們無法預期使用者會用怎麼樣的方式去編寫XPath。
 
-以下將以新版i18n XPath翻譯邏輯的Sequence Diagram為例(如圖3.7)，輔以部分程式碼，詳述系統是如何根據當下情況，產生一套新的翻譯邏輯，以解決先前某些HTML屬性無法被翻譯的問題。
+以下將以新版i18n XPath翻譯邏輯的Sequence Diagram為例(如圖~\ref{新版i18n XPath翻譯邏輯的Sequence Diagram})，輔以部分程式碼，詳述系統是如何根據當下情況，產生一套新的翻譯邏輯，以解決先前某些HTML屬性無法被翻譯的問題。
 
 \begin{figure}[H]
     \includegraphics[width= 1.1\textwidth]{../UML/i18n sequence diagram-xpath翻譯邏輯.png}
     \caption{新版i18n XPath翻譯邏輯的Sequence Diagram}
+    \label{新版i18n XPath翻譯邏輯的Sequence Diagram}
 \end{figure}
 
-首先，FindElementsProxy會透過I18nListener呼叫I18nMap類別的locator()函式執行XPath的翻譯。之後，先定義一個內含HTML屬性特徵的rule\_for\_filter變數，如:
+首先，被呼叫後，FindElementsProxy透過I18nListener類別，呼叫I18nMap類別的locator()函式執行XPath的翻譯。之後，I18nMap先定義一個內含HTML屬性特徵的rule\_for\_filter變數，如:
 \begin{lstlisting}[language={python}]
 rule_for_filter = {
     "(@[a-z-]*)":"@",
@@ -233,16 +199,17 @@ rule_for_filter = {
 \end{lstlisting}
 隨後呼叫find\_all\_match\_word()函式，來過濾出XPath中包含的所有屬性。
 
-接著，先判斷這些屬性是否包含在“不需被翻譯屬性”的list中。如:
+接著，先判斷這些屬性是否包含在「不需被翻譯屬性」的list中。如:
 \begin{lstlisting}[language={python}]
-if match not in self.no_need_trans_attirbutes:
+for rule, matches in all_match_attributes.items():
+    for match in matches:
+        if match not in self.no_need_trans_attirbutes:
 \end{lstlisting}
-
 若不包含其中，則根據屬性含有 ‘@’ 或 ‘()’，分別分配給rule\_for\_at和rule\_for\_bracket變數，並呼叫combine\_locate\_rule()函式，得到一套新的翻譯邏輯，locate\_rule。
 
 之後，再次呼叫find\_all\_match\_word()函式，得到所有符合新翻譯邏輯的HTML屬性，all\_match\_words。並利用迴圈遍歷all\_match\_words中的屬性，執行translate()函式，進行翻譯檢查。
 	
-接著，判斷經過翻譯後，原先的xpath是否發生變化。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
+接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的//*[text()= 'Software']，變成了翻譯後的//*[text()= '軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
 
 最後，將翻譯後的translated\_xpath，回傳給FindElementsProxy類別，完成一次XPath的翻譯。
 
@@ -255,36 +222,40 @@ if match not in self.no_need_trans_attirbutes:
 \\ \hspace*{\fill} \\
 %3.4
 \section{提供圖形化使用者介面解決一詞多譯的問題}
-先前遇到一詞多譯問題時，第一版i18n工具提供了warning資訊於測試結束後的報表上，此作法確實提醒了使用者該腳本存在著一詞多譯問題，且也顯示出目前系統採用的翻譯詞，這是好的部分，本論文將繼續沿用。此翻譯邏輯是站在一個”最大化讓測試腳本通過”的立場，當遭遇一詞多譯時，系統會將所有的翻譯都執行看看，直到一包可能的翻譯中，出現了一個會使測試通過的翻譯，則算測試通過，並將該翻譯詞呈現於報表上。
+先前遇到一詞多譯問題時，第一版i18n工具提供了warning資訊於測試結束後的報表上，此作法確實提醒了使用者該腳本存在著一詞多譯問題，且也顯示出目前系統採用的翻譯詞，這是好的部分，本論文將繼續沿用。此翻譯邏輯是站在一個「最大化讓測試腳本通過」的立場，當遭遇一詞多譯時，系統會將所有的翻譯都執行看看，直到一包可能的翻譯中，出現了一個會使測試通過的翻譯，則算測試通過，並將該翻譯詞呈現於報表上。
 
-然而，以上作法卻存在著一個缺陷，即是"使用者無法自由的選擇真正想要的翻譯詞"去執行腳本測試，而把決定全權授予系統。並有機會產生以下兩點問題:
+然而，以上作法卻存在著一個缺陷，即是「使用者無法自由的選擇真正想要的翻譯詞」去執行腳本測試，而把決定全權授予系統。並有機會產生以下兩點問題:
 \begin{itemize}
-\item[1.]假如存在"多個翻譯都會使測試通過"，翻譯過後的腳本測試對象，就有機會偏離使用者原先的預期。其原因可能是XPath使用contains撰寫，使得翻譯只要包含特定詞即會讓測試通過。又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。 
-\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。 
+\item[1.]假如存在「多個翻譯都會使測試通過」，翻譯過後的腳本測試對象，就有機會偏離使用者原先的預期。其原因可能是XPath使用contains撰寫，使得翻譯只要包含特定詞即會讓測試通過。如: 翻譯過後的XPath為//*[@id= ‘supHomeAndLandingPageHeaderContainer]//*[contains(@text, ‘支援’)]，而畫面上待驗證的元件顯示的詞是支援服務，測試會通過，但遺憾的是使用者預期‘Support’在此處應該要被翻譯為「支援服務」。
+         又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。如: 畫面上兩個元件，分別顯示支援與支援服務；原本使用者預期要驗證的是畫面上存在「支援服務」字樣，但因為‘Support’先被系統檢查的翻譯為「支援」，導致翻譯後的XPath //*[@text= '支援']率先通過了測試，而不會再去檢驗後續的翻譯。 
+\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。如: 原腳本要驗證//*[@text= 'Service']，測試會失敗，經過翻譯後XPath變成//*[@text= '支援服務']，測試卻會通過，因為畫面上剛好存在「支援服務」字樣。
 \end{itemize}
 
 所以，本論文將提供一個圖形化使用者介面，記錄下執行翻譯時當下的關鍵字參數組合，並顯示所有可能的翻譯詞，讓使用者從中去選擇，並產生一個設定檔，以便之後再次執行同一測試腳本時，根據設定檔的內容去選擇適當的翻譯詞。期望透過如此的方法來改善上述兩點一詞多譯所遭遇的問題。
 
 以下，將透過圖表和Sequence Diagram的方式，來詳述一詞多譯UI的介面設計與整體實作:
 
-一詞多譯UI的介面設計(如圖3.8)，本論文將其設計成兩個區塊，上半部以條列的方式呈現完整的翻譯資訊，包含完整參數部分、待翻譯詞、可能的翻譯。下半部包含一行功能資訊的提示、一個用於開啟翻譯紀錄頁面的TransRecord按鈕，以及提交使用者選擇並寫入設定檔的Submit按鈕。
+一詞多譯UI的介面設計(如圖~\ref{一詞多譯UI的介面設計})，本論文將其設計成兩個區塊，上半部以條列的方式呈現完整的翻譯資訊，包含完整參數部分、待翻譯詞、可能的翻譯。其中，完整參數部分，記錄了當前關鍵字接受的使用者傳入參數，以作為和其他相同待翻譯詞的區別；因為相同的待翻譯詞，在不同情況下，可能擁有不同的翻譯。下半部包含一行功能資訊的提示、一個用於開啟翻譯紀錄頁面的TransRecord按鈕，以及提交使用者選擇並寫入設定檔的Submit按鈕。
 \begin{figure}[H]
     \includegraphics[width= \textwidth]{../論文截圖/3-4-1一詞多譯UI介面設計.png}
     \caption{一詞多譯UI的介面設計}
+    \label{一詞多譯UI的介面設計}
 \end{figure}
 
-翻譯紀錄的介面設計(如圖3.9)，本論文同樣將其設計成兩個區塊，上半部以條列式呈現設定檔中現存的使用者翻譯選擇，下半部包含一個Undo按鈕，用於將使用者的選擇從設定檔中刪除。
+翻譯紀錄的介面設計(如圖~\ref{翻譯紀錄的介面設計})，本論文同樣將其設計成兩個區塊，上半部以條列式呈現設定檔中現存的使用者翻譯選擇；第一個‘~’前為完整參數部分，之後分別為待翻譯詞和使用者選擇的翻譯。下半部包含一個Undo按鈕，考量到使用者可能不小心選錯了翻譯，用於將使用者的選擇從設定檔中刪除。
 \begin{figure}[H]
     \centering
     \includegraphics[width= 0.7\textwidth]{../論文截圖/3-4-2 翻譯紀錄介面設計.png}
     \caption{翻譯紀錄的介面設計}
+    \label{翻譯紀錄的介面設計}
 \end{figure}
 
-一詞多譯UI的實作，大致可以分成7個部分: run()、draw\_trans\_options()、get\_transdic\_keys\_and\_values()、open\_record()、undo\_trans()、output\_setting\_file()、\\add\_translations()。各實作彼此之間的互動關係，則如圖3.10:
+一詞多譯UI的實作，大致可以分成7個部分: run()、draw\_trans\_options()、get\_transdic\_keys\_and\_values()、open\_record()、undo\_trans()、output\_setting\_file()、\\add\_translations()。各實作彼此之間的互動關係，則如圖~\ref{產生一詞多譯UI的sequence diagram}:
 \begin{figure}[H]
     \centering
     \includegraphics[width= \textwidth]{../UML/i18n sequence diagram-一詞多譯UI.png}
     \caption{產生一詞多譯UI的sequence diagram}
+    \label{產生一詞多譯UI的sequence diagram}
 \end{figure}
 
 當測試腳本結束時，會呼叫I18nListener類別的end\_suite()函式。
