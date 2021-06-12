@@ -69,18 +69,18 @@ class ShouldContainProxy(Proxy):   #container要包含item才算pass
                             # logger.warn(container)
                             # logger.warn(container[i])
                             if len(lt)>1 and str(full_args)+container[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
-                                multi_trans_word = [container[i]]                            # 還是要移交add_translations處理
+                                multi_trans_word = [container[i]]                            # 還是要移交add_trans_info處理
                                 ui.UI.origin_xpaths_or_arguments.append(full_args)
-                                ui.UI.add_translations(self, multi_trans_word, lt, full_args)
+                                ui.UI.add_trans_info(self, multi_trans_word, lt, full_args, func.__name__)
                     elif is_string(container):
                         if len(container_trans)>1 and str(full_args)+container not in ui.UI.unique_log:
                             multiple_translation_word = [container]     
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            ui.UI.add_translations(self, multiple_translation_word, container_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                            ui.UI.add_trans_info(self, multiple_translation_word, container_trans, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
                     if len(item_trans)>1 and str(full_args)+item not in ui.UI.unique_log:
                         multiple_translation_word = [item]     
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
-                        ui.UI.add_translations(self, multiple_translation_word, item_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.add_trans_info(self, multiple_translation_word, item_trans, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
 
             #將處理好的翻譯回傳給robot原生keyword
             #  原本預期會pass,因為有可能container是抓畫面上翻譯過網頁的值，

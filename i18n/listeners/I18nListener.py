@@ -16,7 +16,7 @@ from robot.libraries.Collections import Collections
 from robot.api import logger
 from robot.libraries.Screenshot import Screenshot
 from selenium.webdriver.remote.webelement import WebElement
-from I18nTrigger import I18nTrigger
+from I18nTrigger import I18nTrigger # 此行會執行Ii18nTrigger
 # from ManyTranslations import run
 
 class I18nListener:

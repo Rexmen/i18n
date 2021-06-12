@@ -39,9 +39,9 @@ class ListShouldNotContainDuplicatesProxy(Proxy):
 
                     for i, lt in enumerate(list_trans):
                         if len(lt)>1 and str(full_args)+list_[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
-                            multi_trans_word = [list_[i]]                            # 還是要移交add_translations處理
+                            multi_trans_word = [list_[i]]                            # 還是要移交add_trans_info處理
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            ui.UI.add_translations(self, multi_trans_word, lt, full_args)
+                            ui.UI.add_trans_info(self, multi_trans_word, lt, full_args, func.__name__)
             #將處理好的翻譯回傳給robot原生keyword
             return func(self, list_trans, msg)
         return proxy

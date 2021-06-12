@@ -53,9 +53,9 @@ class I18nTrigger:
             eval(instance_text)  #計算instance_text
 
     #get proxy
-    def get_func_proxy(self, func):
+    def get_func_proxy(self, func): #重要!用來判斷該keyword是否有代理keyword存在
         args_declaration = self.get_argument_declaration(func) #得出該func的參數宣告部分
-        if repr(args_declaration) in list(self.arg_format.keys()):  #如果參數宣告在arg_format這個dict的keys中
+        if repr(args_declaration) in list(self.arg_format.keys()):  #***如果參數宣告在arg_format這個dict的keys中
             return self.arg_format[repr(args_declaration)].i18n_Proxy(func)  #回傳arg_format中value(是proxy的類別名).i18n_Proxy(func)
         return func #否則回傳原本的func屬性值
 
@@ -64,7 +64,7 @@ class I18nTrigger:
         defaults = inspect.getfullargspec(func).defaults #get出該func參數的default部分
         varargs = inspect.getfullargspec(func).varargs
         keywords = inspect.getargspec(func).keywords
-        if defaults:            #幫args加上default值，如果有的話
+        if defaults:            # 幫args加上default值，如果有的話
             defaults = ['=' + repr(default) for default in defaults]
             defaults = [''] * (len(args) - len(defaults)) + defaults
             args = list(arg[0] + arg[1] for arg in zip(args, defaults))

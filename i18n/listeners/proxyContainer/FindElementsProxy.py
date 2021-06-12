@@ -49,7 +49,7 @@ class FindElementsProxy(Proxy):
                     if str(full_args)+multiple_translation_words[0] not in ui.UI.unique_log:
                         word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
-                        ui.UI.add_translations(self, multiple_translation_words, word_translation, full_args)
+                        ui.UI.add_trans_info(self, multiple_translation_words, word_translation, full_args, func.__name__)
                         
                     actual_locator_message = "System use the locator:'%s' to run!\n" %translation_locator
                     logger.info(actual_locator_message)

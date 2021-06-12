@@ -20,7 +20,7 @@ class MappingRoutesGenerator:
                     if isinstance(key_mappings[key], dict):  #判斷是否是一個dict
                         parse_route_record.append("['%s']" % key)
                         parse_i18n_key_mapping(key_mappings[key]) #遞迴往下找，因為 key_mappings[key]是一個dictionary
-                    else: #value 若非是一個dictionary
+                    else: #value 若不是一個dictionary
                         append_route_to_map(key, key_mappings[key])
                 #pop out parent node when all children node had already been append to parse_route_record
                 else:

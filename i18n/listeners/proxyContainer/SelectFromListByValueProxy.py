@@ -58,12 +58,12 @@ class SelectFromListByValueProxy(Proxy):
                         if len(word_trans)>1 and str(full_args)+multiple_translation_words[i] not in ui.UI.unique_log:
                             multi_trans_word = [multiple_translation_words[i]]                                
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            ui.UI.add_translations(self, multi_trans_word, word_trans, full_args)
+                            ui.UI.add_trans_info(self, multi_trans_word, word_trans, full_args, func.__name__)
                     for i, lt in enumerate(values_trans):
                         if len(lt) > 1 and str(full_args)+values[i] not in ui.UI.unique_log:
                             multi_trans_word = [values[i]]     
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            ui.UI.add_translations(self, multi_trans_word, lt, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                            ui.UI.add_trans_info(self, multi_trans_word, lt, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
             else: #沒有一詞多譯
                 xpath = locator_trans[0]
             #將處理好的翻譯回傳給robot原生keyword

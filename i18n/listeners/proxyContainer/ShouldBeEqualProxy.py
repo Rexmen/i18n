@@ -38,18 +38,18 @@ class ShouldBeEqualProxy(Proxy):
                             # FIXME 現在會fail的話不顯示UI(但會過的話會把"所有"翻譯詞顯示在UI上)(參考下面實作)
                             # 並且也會把完整xpath或arguments顯示在UI上
                             i18n.I18nListener.Is_Multi_Trans = True
-                            
+
                             if len(first_trans) > 1 and str(full_args)+first not in ui.UI.unique_log:
                                 multiple_translation_word = []     
                                 multiple_translation_word.append(first) #將expected word包裝成list格式
                                 ui.UI.origin_xpaths_or_arguments.append(full_args)
-                                ui.UI.add_translations(self, multiple_translation_word, first_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                                ui.UI.add_trans_info(self, multiple_translation_word, first_trans, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
 
                             if len(second_trans) > 1 and str(full_args)+second not in ui.UI.unique_log:
                                 multiple_translation_word = []     
                                 multiple_translation_word.append(second) #將expected word包裝成list格式
                                 ui.UI.origin_xpaths_or_arguments.append(full_args)
-                                ui.UI.add_translations(self, multiple_translation_word, second_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                                ui.UI.add_trans_info(self, multiple_translation_word, second_trans, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
                             return func(self, ft, st, msg, values, ignore_case, formatter)
             return func(self, first_trans[0], second_trans[0], msg, values, ignore_case, formatter) 
             #執行到這行可能有兩種情況: 1.沒有一詞多譯(回傳第一組翻譯，也就是原本的翻譯) 2.一詞多譯的翻譯詞找不到會讓case過的(回傳第一組翻譯)

@@ -37,13 +37,13 @@ class DictionaryShouldContainItemProxy(Proxy):
                     
                     for i, dt in enumerate(dict_values_trans):
                         if len(dt)>1 and str(full_args)+list(dictionary.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
-                            multi_trans_word = [list(dictionary.values())[i]]                                # 還是要移交add_translations處理
+                            multi_trans_word = [list(dictionary.values())[i]]                                # 還是要移交add_trans_info處理
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)
+                            ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)
                     if len(value_trans) > 1 and str(full_args)+value not in ui.UI.unique_log:
                         multiple_translation_word = [value]     
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
-                        ui.UI.add_translations(self, multiple_translation_word, value_trans, full_args) #將翻譯詞加進等等UI會用到的dictionary中
+                        ui.UI.add_trans_info(self, multiple_translation_word, value_trans, full_args, func.__name__) #將翻譯詞加進等等UI會用到的dictionary中
             #將dictionary 翻譯過後的key,value合併 
             # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替
             dictionary = dict(zip(list(dictionary.keys()), dict_values_trans))         

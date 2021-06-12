@@ -33,7 +33,7 @@ class ElementTextShouldBeProxy(Proxy): #FIXME 此proxy還有待refactor
                     multiple_translation_words = []
                     multiple_translation_words.append(expected) #將expected word包裝成list格式
                     ui.UI.origin_xpaths_or_arguments.append(full_args)
-                    ui.UI.add_translations(self, multiple_translation_words, possible_translations, full_args)
+                    ui.UI.add_trans_info(self, multiple_translation_words, possible_translations, full_args, func.__name__)
 
                 BuiltIn().import_library('SeleniumLibrary')
                 actual_text = BuiltIn().run_keyword('Get Text', locator) #有多種翻譯，取得locator的字當作actual text #FIXME 此作法不是很好

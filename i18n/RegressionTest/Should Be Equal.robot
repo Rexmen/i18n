@@ -21,8 +21,10 @@ First argument or second argument Exist multiple translations of the word
     Should Be Equal    ${supportButtonText}    Support
 
 Test should be equal
-    Should Be Equal    More    More
-    Should Be Equal    Support    Support
+    ${word1} =    Set Variable    More
+    ${word2} =    Set Variable    Support
+    Should Be Equal    ${word1}    More
+    Should Be Equal    ${word2}    Support
 
 *** Keywords ***
 Open Browser To Microsoft Page

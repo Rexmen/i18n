@@ -83,23 +83,23 @@ class DictionariesShouldBeEqualProxy(Proxy):
                     for i, dt in enumerate(dict1_keys_trans):
                         if len(dt)>1 and str(full_args)+list(dict1.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict1.keys())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)
+                            multi_trans_word = [list(dict1.keys())[i]]                                # 還是要移交add_trans_info處理
+                            ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)
                     for i, dt in enumerate(dict1_values_trans):
                         if len(dt)>1 and str(full_args)+list(dict1.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict1.values())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)                    
+                            multi_trans_word = [list(dict1.values())[i]]                                # 還是要移交add_trans_info處理
+                            ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)                    
                     for i, dt in enumerate(dict2_keys_trans):
                         if len(dt)>1 and str(full_args)+list(dict2.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict2.keys())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)                    
+                            multi_trans_word = [list(dict2.keys())[i]]                                # 還是要移交add_trans_info處理
+                            ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)                    
                     for i, dt in enumerate(dict2_values_trans):
                         if len(dt)>1 and str(full_args)+list(dict2.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict2.values())[i]]                                # 還是要移交add_translations處理
-                            ui.UI.add_translations(self, multi_trans_word, dt, full_args)  
+                            multi_trans_word = [list(dict2.values())[i]]                                # 還是要移交add_trans_info處理
+                            ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)  
             #以下不管(pass, fail) (有無一詞多譯)都要做 
             #將dict1、dict2的 翻譯過後的key,value合併 
             # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替

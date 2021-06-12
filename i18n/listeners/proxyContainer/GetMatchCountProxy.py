@@ -43,9 +43,9 @@ class GetMatchCountProxy(Proxy):
                 
                 for i, lt in enumerate(list_trans):
                     if len(lt)>1 and str(full_args)+list[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
-                        multi_trans_word = [list[i]]                                # 還是要移交add_translations處理
+                        multi_trans_word = [list[i]]                                # 還是要移交add_trans_info處理
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
-                        ui.UI.add_translations(self, multi_trans_word, lt, full_args)
+                        ui.UI.add_trans_info(self, multi_trans_word, lt, full_args, func.__name__)
             
             #此處不將翻譯過後的詞回傳，因為可能導致get不到正確的數量
             #僅在報表上會顯示list中會有一詞多譯warning的詞，並跳UI
