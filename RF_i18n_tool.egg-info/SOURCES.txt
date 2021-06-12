@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.cfg
+RF_i18n_tool.egg-info/PKG-INFO
+RF_i18n_tool.egg-info/SOURCES.txt
+RF_i18n_tool.egg-info/dependency_links.txt
+RF_i18n_tool.egg-info/top_level.txt
+i18n/Code_i18n_LibraryParser_parser.py
+i18n/__init__.py
+i18n/self_util.py

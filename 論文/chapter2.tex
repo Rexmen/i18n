@@ -39,25 +39,27 @@ I18nListener類別實作Listener類別，負責程式開始與結束時執行sta
     \caption{第一版i18n的系統流程Sequence Diagram}
     \label{1stI18nSequenceDiagram}
 \end{figure}
-系統流程的部分(如圖~\ref{1stI18nSequenceDiagram})，在使用i18n工具執行測試腳本前，使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數為-d out –L debug -–listener i18n/listeners/I18nListener.py:zh-TW，zh-TW代表當前語言為繁體中文-台灣(如圖~\ref{rfSysArgsSetting})。
+第一版i18n系統流程的部分(如圖~\ref{1stI18nSequenceDiagram})，在使用i18n工具執行測試腳本前，使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數為-d out –L debug -–listener i18n/listeners/I18nListener.py:zh-TW，zh-TW代表當前語言為繁體中文-台灣(如圖~\ref{rfSysArgsSetting})。
 
 \begin{figure}[H]
-    \includegraphics[width= 1.1\textwidth]{../論文截圖/3-1-3-1 設定系統參數.png}
+    \centering
+    \includegraphics[width= 0.8\textwidth]{../論文截圖/3-1-3-1 設定系統參數.png}
     \caption{Robot Framework系統參數設定}
     \label{rfSysArgsSetting}
 \end{figure}
 測試執行時，系統會先去呼叫I18nListener類別並執行其實作。之後初始化MappingRoutesGenerator類別，藉由讀取由使用者自行提供的JSON格式翻譯檔(如圖~\ref{英文的JSON格式翻譯檔示例})，建立出一份由「待翻譯詞」和「Key階層」構成的翻譯路徑檔(如圖~\ref{翻譯路徑檔})；例如待翻譯詞‘Support’，有兩種Key階層的路徑: "['SUPPORT']" 和 "['SUB\_BAR']['BLUE\_TITLE']['MICROSOFT\_SUPPORT']"，代表‘Support’在多國語言網頁中，會在不同情境下被翻譯成兩種不同的詞彙。接著系統會依序初始化I18nMap、I18nTrigger，以及所有代理關鍵字類別。
 
-當執行完上述工作後，測試腳本才會正式開始執行；每當腳本運行到一個有定義代理的關鍵字，系統就會去呼叫對應的代理關鍵字物件，並執行翻譯邏輯。最後，當測試腳本執行結束，系統則會將一詞多譯的warning資訊顯示在報表上。
-
 \begin{figure}[H]
-    \includegraphics[width= 1.1\textwidth]{../論文截圖/3-1-3-2 JSON格式翻譯檔.png}
+    \centering
+    \includegraphics[width= .7\textwidth]{../論文截圖/3-1-3-2 JSON格式翻譯檔.png}
     \caption{英文的JSON格式翻譯檔示例}
     \label{英文的JSON格式翻譯檔示例}
 \end{figure}
 
 \begin{figure}[H]
-    \includegraphics[width= 1.1\textwidth]{../論文截圖/3-1-3-3 翻譯路徑檔.png}
+    \centering
+    \includegraphics[width= .7\textwidth]{../論文截圖/3-1-3-3 翻譯路徑檔.png}
     \caption{翻譯路徑檔部分示例}
     \label{翻譯路徑檔}
 \end{figure}
+當執行完上述工作後，測試腳本才會正式開始執行；每當腳本運行到一個有定義代理的關鍵字，系統就會去呼叫對應的代理關鍵字物件，並執行翻譯邏輯。最後，當測試腳本執行結束，系統則會將一詞多譯的warning資訊顯示在報表上。

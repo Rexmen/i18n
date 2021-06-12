@@ -1,5 +1,5 @@
 \chapter{測試案例分析}
-本章節將為擴充的代理關鍵字撰寫單元測試\cite{ut}，並且將改善翻譯邏輯與一詞多譯功能後的i18n工具，做功能的展示。最後將i18n工具套用至一個使用到多項代理關鍵字的Robot Framework測試腳本，以呈現“多國語言網頁自動化驗收測試”的效果。
+本章將為擴充的代理關鍵字撰寫單元測試\cite{ut}，並且為改善翻譯邏輯與一詞多譯功能後的i18n工具，做功能的展示。最後將i18n工具套用至一個使用到多項代理關鍵字的Robot Framework測試腳本，以呈現「多國語言網頁自動化驗收測試」的效果。
 
 %4.1
 \section{新增與修改之代理關鍵字的單元測試}
@@ -23,17 +23,20 @@ Alert should be present
     Alert Should Be Present    Welcome to Bing's website
 \end{lstlisting}
 \caption{Alert Should Be Present在代理關鍵字下執行的測試腳本}
+\label{Alert Should Be Present在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.1)會打開i18n Testing Website，並雙擊Show Alert Message按鈕，使畫面跳出alert視窗(如圖4.2)。最後使用Alert Should Be Present來驗證alert資訊是否為“歡迎光臨Bing的網頁”。測試通過，代表參數“Welcome to Bing’s website”有成功被翻譯為“歡迎光臨Bing的網頁”(如圖4.3)。
+此測試腳本(如圖~\ref{Alert Should Be Present在代理關鍵字下執行的測試腳本})會打開i18n Testing Website，並雙擊Show Alert Message按鈕，使畫面跳出alert視窗(如圖~\ref{網頁上的alert視窗顯示的文字})。最後使用Alert Should Be Present來驗證alert資訊是否為“歡迎光臨Bing的網頁”。測試通過，代表參數“Welcome to Bing’s website”有成功被翻譯為“歡迎光臨Bing的網頁”(如圖~\ref{Alert Should Be Equal測試通過})。
 
 \begin{figure}[H]
 \includegraphics[width= \textwidth]{../論文截圖/4-1-2 alert視窗的文字.png}
 \caption{網頁上的alert視窗顯示的文字}
+\label{網頁上的alert視窗顯示的文字}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[width= \textwidth]{../論文截圖/4.1.1-3 pass.png}
 \caption{Alert Should Be Equal測試通過}
+\label{Alert Should Be Equal測試通過}
 \end{figure}
 
 \hspace*{\fill} \\
@@ -53,10 +56,11 @@ Count values in list
 \end{lstlisting}
 \caption{Count Values In List在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.4)，一開始會利用Create List創出一個包含「支援」和‘Software’的list，並使用Count Values In List來計算參數‘Support’出現在此list中幾次。第一次執行測試通過(如圖4.5)，透過Log印出的數字為1，代表參數‘Support’被翻譯為「支援」後，出現在list中一次，所以測試通過；且系統將支援當成“Support”翻譯的其中一種，並跳出一詞多譯UI。之後，使用者選擇「支援」作為唯一翻譯。第二次測試通過(如圖4.6)，透過Log印出的數字為1，且不跳出一詞多譯UI與warning資訊。
+此測試腳本(如圖4.4)，一開始會利用Create List創出一個包含「支援」和‘Software’的list，並使用Count Values In List來計算參數‘Support’出現在此list中幾次。第一次執行測試通過(如圖4.5)，透過Log印出的數字為1，代表參數‘Support’被翻譯為「支援」後，出現在list中一次，所以測試通過；且系統將支援當成‘Support’翻譯的其中一種，並跳出一詞多譯UI。之後，使用者選擇「支援」作為唯一翻譯。第二次測試通過(如圖4.6)，透過Log印出的數字為1，且不跳出一詞多譯UI與warning資訊。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4.1.2-2 count values in list 1st run.png}
+\centering
+\includegraphics[width= .9\textwidth]{../論文截圖/4.1.2-2 count values in list 1st run.png}
 \caption{Count Values In List測試腳本第一次執行通過}
 \end{figure}
 
@@ -82,7 +86,7 @@ Dictionaries Should Be Equal    ${dict1}    ${dict2}
 \end{lstlisting}
 \caption{Dictionaries Should Be Equal在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.7)，會利用Create Dictionary創出兩個dictionaries，分別是{'軟體': '支援'}和{'Software', 'Support'}(測試腳本的 ‘=’左側為key，右側為value)，並使用Dictionaries Should Be Equal檢查兩者是否相同。第一次執行測試通過(如圖4.8)，代表dictionary {‘Software’, ‘Support’}有成功被翻譯，且系統將“支援”當成“Support”翻譯的其中一種，並跳出一詞多譯UI。之後，使用者選擇“支援”作為唯一翻譯。第二次測試通過(如圖4.9)，且不跳出一詞多譯UI與warning資訊，代表’Support’ 根據使用者選擇成功被翻譯為‘支援’。
+此測試腳本(如圖4.7)，會利用Create Dictionary創出兩個dictionaries，分別是\{'軟體': '支援'\}和\{'Software': 'Support'\}(測試腳本的‘=’左側為key，右側為value)，並使用Dictionaries Should Be Equal檢查兩者是否相同。第一次執行測試通過(如圖4.8)，代表dictionary \{'Software': 'Support'\}有成功被翻譯，且系統將「支援」當成“Support”翻譯的其中一種，並跳出一詞多譯UI。之後，使用者選擇「支援」作為唯一翻譯。第二次測試通過(如圖4.9)，且不跳出一詞多譯UI與warning資訊，代表‘Support’根據使用者選擇成功被翻譯為「支援」。
 
 \begin{figure}[H]
 \includegraphics[width= \textwidth]{../論文截圖/4.1.3-2 dictionaries should be equal 1st run.png}
@@ -115,7 +119,7 @@ List Selection Should Be    ${selectionList}    Support
 \end{lstlisting}
 \caption{Select From List By Label在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.10)，會打開i18n Testing Website，並使用Select From List By Label選取畫面上selection list的Support選項(如圖4.11)。之後用List Selection Should Be驗證結果是否正確。第一次測試通過(如圖4.12)，而畫面上選擇了‘支援’，代表參數Support有成功被翻譯，且系統將‘支援’當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了‘支援服務’當作Support的唯一翻譯。第二次測試腳本通過(如圖4.13)，畫面上被選擇的selection list顯示‘支援服務’，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
+此測試腳本(如圖4.10)，會打開i18n Testing Website，並使用Select From List By Label選取畫面上selection list的Support選項(如圖4.11)。之後用List Selection Should Be驗證結果是否正確。第一次測試通過(如圖4.12)，而畫面上選擇了「支援」，代表參數‘Support’有成功被翻譯，且系統將「支援」當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了「支援服務」當作‘Support’的唯一翻譯。第二次測試腳本通過(如圖4.13)，畫面上被選擇的selection list顯示「支援服務」，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
 \centering
@@ -160,17 +164,17 @@ Check "Microsoft Support" webelement is on the support page
 \end{lstlisting}
 \caption{*Page Should Contain Element在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.14)，會打開Microsoft中文官方網頁，前往支援頁面，之後使用Page Should Contain Element驗證畫面上的Support文字(如圖4.15)。第一次測試通過(如圖4.16)，代表參數Support有成功被翻譯，且系統將‘支援服務’當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了‘支援服務’當作Support的唯一翻譯。第二次測試腳本通過(如圖4.17)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
+此測試腳本(如圖4.14)，會打開Microsoft中文官方網頁，前往支援頁面，之後使用Page Should Contain Element驗證畫面上的‘Support’文字(如圖4.15)。第一次測試通過(如圖4.16)，代表參數‘Support’有成功被翻譯，且系統將「支援服務」當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了「支援服務」當作‘Support’的唯一翻譯。第二次測試腳本通過(如圖4.17)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
 \centering
 \includegraphics[width= .8\textwidth]{../論文截圖/4-1-9 Page should contain element要驗證的網頁元件.png}
-\caption{*Page Should Contain Element 測試腳本要驗證的網頁元件}
+\caption{*Page Should Contain Element 測試腳本要驗證的網頁元件\cite{microsoft}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width= .8\textwidth]{../論文截圖/4.1.5-2 page should contain element 1st run.png}
+\includegraphics[width= .7\textwidth]{../論文截圖/4.1.5-2 page should contain element 1st run.png}
 \caption{*Page Should Contain Element測試腳本第一次執行通過}
 \end{figure}
 \begin{figure}[H]
@@ -204,7 +208,7 @@ Table should contain "Support"
 \end{lstlisting}
 \caption{Table Should Contain在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.18)，會打開I18n Testing Website，之後使用Table Should Contain 驗證畫面上的Support文字(如圖4.19)。第一次測試通過(如圖4.20)，代表參數‘Support’有成功被翻譯，且系統將‘支援’當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了‘支援’當作‘Support’的唯一翻譯。第二次執行測試腳本通過(如圖4.21)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
+此測試腳本(如圖4.18)，會打開I18n Testing Website，之後使用Table Should Contain 驗證畫面上的‘Support’文字(如圖4.19)。第一次測試通過(如圖4.20)，代表參數‘Support’有成功被翻譯，且系統將「支援」當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了「支援」當作‘Support’的唯一翻譯。第二次執行測試腳本通過(如圖4.21)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
 \includegraphics[width= \textwidth]{../論文截圖/4-1-13 Table should contain要驗證的網頁元件.png}
@@ -267,7 +271,7 @@ Test web element is on the support page by given special attributes
 \caption{待翻譯XPath運行在改善翻譯邏輯後的i18n工具之結果}
 \end{figure}
 
-由以上的結果我們可以發現，第一版的i18n工具，會因為無法對XPath內的@placeholder屬性做翻譯，而使得測試發生錯誤。本論文新版的i18n工具，因為改善了翻譯邏輯，所以支援各種HTML屬性的翻譯。並成功將”how can we help you?”翻譯為”我們該如何協助您”，進而使測試通過。
+由以上的結果我們可以發現，第一版的i18n工具，會因為無法對XPath內的@placeholder屬性做翻譯，而使得測試發生錯誤。本論文新版的i18n工具，因為改善了翻譯邏輯，所以支援各種HTML屬性的翻譯。並成功將“how can we help you?”翻譯為「我們該如何協助您」，進而使測試通過。
 
 %4-3
 \section{一詞多譯情況下所產生的圖形化使用者介面}
@@ -301,13 +305,13 @@ Test should be equal
 
 \begin{figure}[H]
 \centering
-\includegraphics[width= .5\textwidth]{../論文截圖/4-3-4 介面上記錄著使用者翻譯選擇.png}
+\includegraphics[width= \textwidth]{../論文截圖/4-3-4 介面上記錄著使用者翻譯選擇.png}
 \caption{打開翻譯紀錄介面，上面記錄著使用者翻譯選擇}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width= .5\textwidth]{../論文截圖/4-3-5 將選擇的翻譯清除後，再次打開翻譯紀錄介面.png}
+\includegraphics[width= \textwidth]{../論文截圖/4-3-5 將選擇的翻譯清除後，再次打開翻譯紀錄介面.png}
 \caption{清除選擇的翻譯紀錄後，再次打開翻譯紀錄介面}
 \end{figure}
 
@@ -328,11 +332,18 @@ Test should be equal
 \end{figure}
 \end{itemize}
 
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
 %4-4
 \section{使用涵蓋多項代理關鍵字的測試腳本}
-以上介紹的測試案例，分別呈現了本論文各項功能改善後的實際成果，但因為都偏向單一關鍵字或單一功能的測試，在此將設計一個較複雜的Robot Framework網頁自動化驗收測試腳本，內部使用到多種代理關鍵字，來對Microsoft的中文版網頁進行一系列操作。同時，會遭遇到一詞多譯，並且會使用相別於第一版i18n所列舉的html待翻譯屬性來撰寫XPath。藉此來對新版i18n工具作一個驗收測試。
+以上介紹的測試案例，分別呈現了本論文各項功能改善後的實際成果，但因為都偏向單一關鍵字或單一功能的測試，在此將設計一個較複雜的Robot Framework網頁自動化驗收測試腳本，內部使用到多種代理關鍵字，來對Microsoft的中文版網頁進行一系列操作。同時，會遭遇到一詞多譯，並且會使用相別於第一版i18n所列舉的HTML屬性來撰寫XPath。藉此來對新版i18n工具作一個驗收測試。
 
-以下將執行Test multiple user behaviors on Microsoft website測試腳本兩次，分別呈現選擇一詞多譯翻譯前後，測試結果有何差異之處。
+以下將執行“Test multiple user behaviors on Microsoft website”測試腳本兩次，分別呈現選擇一詞多譯翻譯前後，測試結果有何差異之處。
 
 \begin{figure}[H]
 \begin{lstlisting}[language={python}]
@@ -350,7 +361,9 @@ Test multiple user behaviors on Microsoft website
     Wait Until Element Is Visible    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     Click Element    //*[@id = 'uhfCatLogo' ]//*[normalize-space()='Support']
     ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
+    ${searchBox} =    Set Variable    //*[@id ='supHomeAndLandingPageSearchBox' and @placeholder ='How can we help you?']
     Page Should Contain Element    ${MicrosoftSupport}
+    Page Should Contain Element    ${searchBox}
 
 *** Keywords ***
 Support Button Text Should Be
@@ -360,19 +373,20 @@ Support Button Text Should Be
 \end{lstlisting}
 \caption{Test multiple user behaviors on Microsoft website測試腳本實作}
 \end{figure}
-此測試腳本(如圖4.33)，會打開Microsoft中文官方網頁，先到支援頁面，之後點擊‘支援’的Logo，到新的支援頁面。最後，驗證畫面上的橫向標語有包含‘支援服務’字樣。因為同時遭遇到3種Support需要被翻譯，系統便會逐一將它們紀錄下來，待測試腳本結束後，分別顯示於一詞多譯UI上。
+此測試腳本(如圖4.33)，會打開Microsoft中文官方網頁，先到支援頁面，之後點擊「支援」的Logo，到新的支援頁面。最後，驗證畫面上的橫向標語有包含「支援服務」字樣。因為同時遭遇到3種‘Support’需要被翻譯，系統便會逐一將它們紀錄下來，待測試腳本結束後，分別顯示於一詞多譯UI上。
 
 \begin{figure}[H]
-\includegraphics[width= \textwidth]{../論文截圖/4-4-2 test multiple user behaviors測試腳本1st run.png}
+\includegraphics[width= 1.1\textwidth]{../論文截圖/4-4-2 test multiple user behaviors測試腳本1st run.png}
 \caption{Test multiple user behaviors on Microsoft website測試腳本第一次執行結果}
 \end{figure}
+\hspace*{\fill} \\
 
-第一次執行測試腳本(如圖4.34)結束後，使用者分別為三種不同情況下遭遇一詞多譯的Support，選擇了支援、支援、支援服務為其正確翻譯，並點擊Submit按鈕，將選擇寫入設定檔中。
+第一次執行測試腳本(如圖4.34)結束後，使用者分別為三種不同情況下遭遇一詞多譯的‘Support’，選擇了「支援」、「支援」、「支援服務」為其正確翻譯，並點擊Submit按鈕，將選擇寫入設定檔中。
 
 \begin{figure}[H]
 \centering
-\includegraphics[width= .9\textwidth]{../論文截圖/4-4-3 test multiple user behaviors測試腳本2nd run.png}
+\includegraphics[width= .85\textwidth]{../論文截圖/4-4-3 test multiple user behaviors測試腳本2nd run.png}
 \caption{Test multiple user behaviors on Microsoft website測試腳本第二次執行結果}
 \end{figure}
 
-第二次執行測試腳本時(如圖4.35)，會根據設定檔內的翻譯紀錄，分別對三種Support進行翻譯。因為被系統判定為單一翻譯，所以測試結束後，並不會顯示一詞多譯UI。
+第二次執行測試腳本時(如圖4.35)，會根據設定檔內的翻譯紀錄，分別對三種‘Support’進行翻譯。因為被系統判定為單一翻譯，所以測試結束後，並不會顯示一詞多譯UI。

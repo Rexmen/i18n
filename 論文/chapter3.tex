@@ -1,9 +1,9 @@
 \chapter{研究方法與實作}
-本章節將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並點出與朱峻平的論文「支援多國語言的Robot Framework網頁自動化驗收測試」(第一版i18n工具)的不同之處。
+本章將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並點出與朱峻平的論文「支援多國語言的Robot Framework網頁自動化驗收測試」(第一版i18n工具)的不同之處。
 
 %3.1
 \section{系統擴充}
-新版i18n系統類別圖(如圖~\ref{新版i18n系統類別圖})，沿用第一版i18n工具的架構(如圖~\ref{1stI18nClassDiagram})，經過部分實作的改善，並且新增了一個用於顯示一詞多譯選項的圖形化使用者介面類別(UI)，以及20種代理關鍵字的類別。新增的類別在圖中以紅色方框標示。
+新版i18n系統類別圖(如圖~\ref{新版i18n系統類別圖})，沿用第一版i18n工具的架構(如圖~\ref{1stI18nClassDiagram})，經過部分實作的改善，並且新增了一個用於顯示一詞多譯選項的圖形化使用者介面類別(UI)，以及20種代理關鍵字的類別。(新增的類別在圖中以紅色方框標示)
 
 \begin{figure}[H]
 \flushleft
@@ -12,9 +12,9 @@
 \label{新版i18n系統類別圖}
 \end{figure}
 
-本論文新增的UI類別會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的圖形化使用者介面，使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
+本論文新增的UI類別會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的UI；使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
 
-而其他20種新增的代理關鍵字類別(如表~\ref{本論文新增的20種代理關鍵字類別})，皆實作父類別Proxy，負責代理對應原生關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給原生關鍵字。
+而其他20種新增的代理關鍵字類別(如表~\ref{本論文新增的20種代理關鍵字類別})，皆實作父類別Proxy，負責代理各自對應之原生關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給對應的原生關鍵字。
 
 \hspace*{\fill} \\
 
@@ -46,7 +46,7 @@
 
 %3.2
 \section{擴充與修改代理關鍵字實作}
-第一版i18n工具只支援7種Robot Framework原生關鍵字(如表~\ref{第一版i18n已提供的原生關鍵字})\cite{i18n}。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去跑多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得所有原生關鍵字的參數部分都能正確的被翻譯。
+第一版i18n工具只支援7種Robot Framework原生關鍵字(如表~\ref{第一版i18n已提供的原生關鍵字})\cite{i18n}。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去執行多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得有翻譯需求的原生關鍵字，其參數部分都能正確的被翻譯。
 
 \renewcommand\arraystretch{0.8}
 \begin{table}[H]
@@ -108,9 +108,9 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
     \label{FindElementsProxy的Flow Chart}
 \end{figure}
 
-由圖~\ref{FindElementsProxy的Flow Chart} FindElementProxy的Flow Chart可以得知，在新的i18n版本下，擴充一個新的代理關鍵字必須遵從著以下步驟:(以下編號可以對應到Flow Chart的數字)
+由圖~\ref{FindElementsProxy的Flow Chart} FindElementProxy的Flow Chart可以得知，在新的i18n版本下，擴充一個新的代理關鍵字必須遵從著以下步驟:(以下編號可對應到Flow Chart的數字)
 \begin{itemize}
-\item[1.]創出該次關鍵字呼叫的參數紀錄變數，full\_args。此變數之後會成為判斷當下待翻譯詞是否“已被使用者選擇翻譯” 的依據。並於測試腳本結束後，顯示於一詞多譯UI上，最後隨著使用者的選擇一併存入設定檔內。
+\item[1 .]創出該次關鍵字呼叫的參數紀錄變數，full\_args。此變數之後會成為判斷當下待翻譯詞是否「已被使用者選擇翻譯」的依據。並於測試腳本結束後，顯示於一詞多譯UI上，最後隨著使用者的選擇一併存入設定檔內。
 
 \item[2*.]執行翻譯。如:
 \begin{lstlisting}[language={python}]
@@ -123,20 +123,20 @@ locator = i18n.I18nListener.MAP.locator(value,full_args)
 FindElementsProxy.show_warning(value,multi_trans_words,full_args)
 \end{lstlisting}
 
-\item[4.]之後判斷此一詞多譯情況，最後會使測試通過或是失敗，如:
+\item[4 .]之後判斷此一詞多譯情況，最後會使測試通過或是失敗，如:
 \begin{lstlisting}[language={python}]
 is_actual = BuiltIn().run_keyword_and_return_status('Get WebElement', translation_locator)
 if is_actual:
 \end{lstlisting}
 
-\item[5.]若測試會通過，則對預計開啟的UI做一些資料的準備，如:
+\item[5 .]若測試會通過，則對預計開啟的UI做一些資料的準備，如:
 \begin{lstlisting}[language={python}]
 i18n.I18nListener.Is_Multi_Trans=True
 if str(full_args)+multiple_translation_words[0] not in ui.UI.unique_log
 ui.UI.origin_xpaths_or_arguments.append(full_args)
-ui.UI.add_translations(self, multiple_translation_words, word_translation, full_args)
+ui.UI.add_trans_info(self, multiple_translation_words, word_translation, full_args, func.__name__)
 \end{lstlisting}
-先設定再測試結束後，需要開啟一詞多譯UI。若該”參數+翻譯詞”組合尚未被翻譯過，則記錄下該次翻譯的參數部分和翻譯資訊。
+先設定再測試結束後，需要開啟一詞多譯UI。若該「參數+翻譯詞」組合尚未被翻譯過，則記錄下該次翻譯的參數部分和翻譯資訊。
 
 \item[6*.]若此次代理關鍵字沒有遭遇一詞多譯，則如:
 \begin{lstlisting}[language={python}]
@@ -209,7 +209,7 @@ for rule, matches in all_match_attributes.items():
 
 之後，再次呼叫find\_all\_match\_word()函式，得到所有符合新翻譯邏輯的HTML屬性，all\_match\_words。並利用迴圈遍歷all\_match\_words中的屬性，執行translate()函式，進行翻譯檢查。
 	
-接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的//*[text()= 'Software']，變成了翻譯後的//*[text()= '軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
+接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的 //*[text()= 'Software']，變成了翻譯後的//*[text()= '軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
 
 最後，將翻譯後的translated\_xpath，回傳給FindElementsProxy類別，完成一次XPath的翻譯。
 
@@ -226,31 +226,35 @@ for rule, matches in all_match_attributes.items():
 
 然而，以上作法卻存在著一個缺陷，即是「使用者無法自由的選擇真正想要的翻譯詞」去執行腳本測試，而把決定全權授予系統。並有機會產生以下兩點問題:
 \begin{itemize}
-\item[1.]假如存在「多個翻譯都會使測試通過」，翻譯過後的腳本測試對象，就有機會偏離使用者原先的預期。其原因可能是XPath使用contains撰寫，使得翻譯只要包含特定詞即會讓測試通過。如: 翻譯過後的XPath為//*[@id= ‘supHomeAndLandingPageHeaderContainer]//*[contains(@text, ‘支援’)]，而畫面上待驗證的元件顯示的詞是支援服務，測試會通過，但遺憾的是使用者預期‘Support’在此處應該要被翻譯為「支援服務」。
-         又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。如: 畫面上兩個元件，分別顯示支援與支援服務；原本使用者預期要驗證的是畫面上存在「支援服務」字樣，但因為‘Support’先被系統檢查的翻譯為「支援」，導致翻譯後的XPath //*[@text= '支援']率先通過了測試，而不會再去檢驗後續的翻譯。 
-\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。如: 原腳本要驗證//*[@text= 'Service']，測試會失敗，經過翻譯後XPath變成//*[@text= '支援服務']，測試卻會通過，因為畫面上剛好存在「支援服務」字樣。
+\item[1.]假如存在「多個翻譯都會使測試通過」，翻譯過後的腳本測試對象，就有機會偏離使用者原先的預期。其原因可能是XPath使用contains撰寫，使得翻譯只要包含特定詞即會讓測試通過。如: 翻譯過後的XPath為//*[@id= ‘supHomeAndLandingPageHeaderContainer]//*[contains(@text, ‘支援’)]，而畫面上待驗證的元件顯示的詞是「支援服務」，測試會通過，但遺憾的是使用者預期‘Support’在此處應該要被翻譯為「支援服務」。
+ 
+\hspace{5mm} 又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。如: 畫面上兩個元件，分別顯示「支援」與「支援服務」；原本使用者預期要驗證的是畫面上存在「支援服務」字樣，但因為‘Support’先被系統檢查的翻譯為「支援」，導致翻譯後的XPath //*[@text= '支援']率先通過了測試，而不會再去檢驗後續的翻譯。 
+\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。如: 原腳本要驗證 //*[@text='Service']，測試會失敗，但經過翻譯後XPath變成//*[@text= '支援服務']，測試卻會通過，因為畫面上剛好存在「支援服務」字樣。
 \end{itemize}
 
 所以，本論文將提供一個圖形化使用者介面，記錄下執行翻譯時當下的關鍵字參數組合，並顯示所有可能的翻譯詞，讓使用者從中去選擇，並產生一個設定檔，以便之後再次執行同一測試腳本時，根據設定檔的內容去選擇適當的翻譯詞。期望透過如此的方法來改善上述兩點一詞多譯所遭遇的問題。
 
 以下，將透過圖表和Sequence Diagram的方式，來詳述一詞多譯UI的介面設計與整體實作:
 
-一詞多譯UI的介面設計(如圖~\ref{一詞多譯UI的介面設計})，本論文將其設計成兩個區塊，上半部以條列的方式呈現完整的翻譯資訊，包含完整參數部分、待翻譯詞、可能的翻譯。其中，完整參數部分，記錄了當前關鍵字接受的使用者傳入參數，以作為和其他相同待翻譯詞的區別；因為相同的待翻譯詞，在不同情況下，可能擁有不同的翻譯。下半部包含一行功能資訊的提示、一個用於開啟翻譯紀錄頁面的TransRecord按鈕，以及提交使用者選擇並寫入設定檔的Submit按鈕。
+一詞多譯UI的介面設計(如圖~\ref{一詞多譯UI的介面設計})，本論文將其設計成兩個區塊，上半部以條列的方式呈現完整的翻譯資訊，包含關鍵字名稱、參數部分、待翻譯詞、可能的翻譯。其中，參數部分記錄了當前關鍵字接受的使用者傳入參數，以作為和其他相同待翻譯詞的區別；因為相同的待翻譯詞，在不同情況下，可能擁有不同的翻譯。下半部包含一行功能資訊的提示、一個用於開啟翻譯紀錄頁面的TransRecord按鈕，以及提交使用者選擇並寫入設定檔的Submit按鈕。
 \begin{figure}[H]
-    \includegraphics[width= \textwidth]{../論文截圖/3-4-1一詞多譯UI介面設計.png}
+    \centering
+    \includegraphics[width= 1.1\textwidth]{../論文截圖/3-4-1一詞多譯UI介面設計.png}
     \caption{一詞多譯UI的介面設計}
     \label{一詞多譯UI的介面設計}
 \end{figure}
 
-翻譯紀錄的介面設計(如圖~\ref{翻譯紀錄的介面設計})，本論文同樣將其設計成兩個區塊，上半部以條列式呈現設定檔中現存的使用者翻譯選擇；第一個‘~’前為完整參數部分，之後分別為待翻譯詞和使用者選擇的翻譯。下半部包含一個Undo按鈕，考量到使用者可能不小心選錯了翻譯，用於將使用者的選擇從設定檔中刪除。
+翻譯紀錄的介面設計(如圖~\ref{翻譯紀錄的介面設計})，本論文同樣將其設計成兩個區塊，上半部以條列式呈現設定檔中現存的使用者翻譯選擇。下半部包含一個Undo按鈕，考量到使用者可能不小心選錯了翻譯，用於將使用者的選擇從設定檔中刪除。
 \begin{figure}[H]
     \centering
-    \includegraphics[width= 0.7\textwidth]{../論文截圖/3-4-2 翻譯紀錄介面設計.png}
+    \includegraphics[width= .9\textwidth]{../論文截圖/3-4-2 翻譯紀錄介面設計.png}
     \caption{翻譯紀錄的介面設計}
     \label{翻譯紀錄的介面設計}
 \end{figure}
 
-一詞多譯UI的實作，大致可以分成7個部分: run()、draw\_trans\_options()、get\_transdic\_keys\_and\_values()、open\_record()、undo\_trans()、output\_setting\_file()、\\add\_translations()。各實作彼此之間的互動關係，則如圖~\ref{產生一詞多譯UI的sequence diagram}:
+一詞多譯UI的實作，大致可以分成8個部分: run()、draw\_trans\_options()、get\_transdic\_keys\_and\_values()、open\_record()、undo\_trans()、output\_setting\_file()、\\add\_trans\_info()、add\_keyword\_name()。各實作彼此之間的互動關係，則如圖~\ref{產生一詞多譯UI的sequence diagram}:
+\hspace*{\fill} \\
+
 \begin{figure}[H]
     \centering
     \includegraphics[width= \textwidth]{../UML/i18n sequence diagram-一詞多譯UI.png}
@@ -260,33 +264,31 @@ for rule, matches in all_match_attributes.items():
 
 當測試腳本結束時，會呼叫I18nListener類別的end\_suite()函式。
 
-若本次測試腳本遭遇一詞多譯，則呼叫UI類別，使其初始化並執行run()函式，產生一詞多譯UI的介面，包含”Choose the translation(s) you want!!” 字樣、顯示翻譯紀錄的 TransRecord按鈕，以及寫入使用者選擇的Submit按鈕。之後，run()函式內部會呼叫draw\_trans\_options()函式，其內會再呼叫get\_transdic\_keys\_and\_values()函式，取出待翻譯詞與其對應的翻譯，最後隨著翻譯當下的完整參數一併顯示於一詞多譯UI的介面上。
+若本次測試腳本遭遇一詞多譯，則呼叫UI類別，使其初始化並執行run()函式，產生一詞多譯UI的介面，包含“Choose the translation(s) you want!!” 字樣、顯示翻譯紀錄的 TransRecord按鈕，以及寫入使用者選擇的Submit按鈕。之後，run()函式內部會呼叫draw\_trans\_options()函式，其內會再呼叫get\_transdic\_keys\_and\_values()函式，取出待翻譯詞與其對應的翻譯，最後隨著翻譯當下的關鍵字名稱和參數部分一併顯示於一詞多譯UI的介面上。
 
 在一詞多譯介面上，點擊TransRecord按鈕會呼叫open\_record()函式，打開翻譯紀錄介面，其會將先前使用者選擇過的翻譯詞，以條列式的方式呈現，且介面上還包含一顆Undo按鈕。點擊Undo按鈕會呼叫undo\_trans()函式，將使用者選擇的翻譯紀錄從設定檔中清除掉，同時關閉翻譯紀錄頁面。
 
-在一詞多譯介面上，點擊Submit按鈕則會呼叫output\_setting\_file()函式，將使用者選擇的待翻譯詞對應其翻譯以及完整參數寫入設定檔”i18n/listeners/setting.txt”中，同時將剛剛已寫入的翻譯資訊從一詞多譯UI上隱藏。
+在一詞多譯介面上，點擊Submit按鈕則會呼叫output\_setting\_file()函式，將使用者選擇的待翻譯詞對應其翻譯以及完整參數寫入設定檔“i18n/listeners/setting.txt”中，同時將剛剛已寫入的翻譯資訊從一詞多譯UI上隱藏。
 
-此外，在UI類別中定義的add\_translations()函式，雖然不會在一詞多譯UI執行期間被呼叫，但在測試腳本執行期間，卻能負責將代理關鍵字傳入的待翻譯詞與其對應翻譯，分別儲存於變數中，方便之後get\_transdic\_keys\_and\_values()函式的讀取。並且，其還會將關鍵字的參數部分和待翻譯詞結合，成為可以辨別“該次測試腳本是否執行過相同翻譯”的字串，存入unique\_log變數中。
+此外，在UI類別中定義的add\_translations()和add\_keyword\_name()函式，雖然不會在一詞多譯UI執行期間被呼叫，但在測試腳本執行期間，卻能負責將代理關鍵字傳入的關鍵字名稱、待翻譯詞，與其對應翻譯，分別儲存於變數中，方便之後一詞多譯UI的讀取。並且，還會將關鍵字的參數部分和待翻譯詞結合，成為可以辨別「該次測試腳本是否執行過相同翻譯」的字串，存入unique\_log變數中。
 
 \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
+
 %3.5
 \section{將i18n工具設計成為可以安裝的模組}
-本論文透過Python的build模組，將i18n工具包裝成名為”RF-AWT-i18n”的Library，並透過twine模組上傳至PYPI\cite{PYPI}網站上，使之成為可以直接讓使用者安裝的Python模組。解決了先前使用者只能從github上將i18n工具clone下來，並在該專案上開發測試腳本的不方便。
+本論文透過Python的build模組，將i18n工具包裝成名為“RF-i18n-tool”的Library，並透過twine模組上傳至PYPI\cite{PYPI}網站上，使之成為可以直接讓使用者安裝的Python模組。解決了先前使用者只能從github上將i18n工具clone下來，並在該專案上開發測試腳本的不方便。
 
 以下將詳述將i18n包裝成Python模組的步驟:
 
 在將i18n工具打包成為一個Library前，必須先準備以下四個檔案: setup.cfg、pyproject.toml、README.md、LICENSE\cite{license}。此外必須確認將打包的資料夾下，包含\_\_init\_\_.py檔案，以被系統辨識為一個Python模組。
 
-上述的檔案準備就緒後，便可以在i18n專案目錄下執行python –m build 指令，待建置完畢，便會產生一個名為dist的資料夾，裡面裝著打包好的RF-AWT-i18n模組檔案。接下來執行python –m twine upload –repository pypi dist/* 指令，輸入帳號密碼後，便能成功將dist資料夾中的RF-AWT-i18n模組上傳至Pypi.org網站上了。之後在PYPI網站上搜尋RF-AWT-i18n，便能看到上傳的模組。
+上述的檔案準備就緒後，便可以在i18n專案目錄下執行python –m build 指令，待建置完畢，便會產生一個名為dist的資料夾，裡面裝著打包好的RF-i18n-tool模組檔案。接下來執行python –m twine upload –-repository pypi dist/* 指令，輸入帳號密碼後，便能成功將dist資料夾中的RF-i18n-tool模組上傳至PYPI了。之後在PYPI網站上搜尋RF-i18n-tool，便能看到上傳的模組。
 
-使用者若要安裝此模組，只需執行pip install RF-AWT-i18n 指令即可(如圖3.11)。最後，使用者便可透過import此模組來使用i18n工具的功能。
+使用者若要安裝此模組，只需執行pip install RF-i18n-tool 指令即可(如圖3.11)。最後，使用者便可透過import此模組來使用i18n工具的功能。
 
 \begin{figure}[H]
     \centering
     \includegraphics[width= .5\textwidth]{../論文截圖/3-5-8 安裝RF-AWT-i18n指令.png}
-    \caption{安裝RF-AWT-i18n指令}
+    \caption{安裝RF-i18n-tool指令}
 \end{figure}
