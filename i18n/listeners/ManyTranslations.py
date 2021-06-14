@@ -42,7 +42,7 @@ class UI:
                 self.radio_texts.append(value)
 
     def output_setting_file(self):
-        with open("i18n/listeners/setting.txt", "a") as out_file:
+        with open("./setting.txt", "a") as out_file:
             contents = ""
             for i in range(len(self.label_texts)):
                 now_selected = self.radio_vars[i].get()               
@@ -65,8 +65,8 @@ class UI:
             self.btn_submit.grid_forget()
     
     def undo_trans(self):
-        with open("i18n/listeners/setting.txt", "a+") as modi_file:
-            if os.stat("i18n/listeners/setting.txt").st_size != 0:
+        with open("./setting.txt", "a+") as modi_file:
+            if os.stat("./setting.txt").st_size != 0:
                 modi_file.seek(0)  #這行很重要，將指針指到文件頭
 
                 #先準備要清除的資料
@@ -126,8 +126,8 @@ class UI:
         self.record_ui.geometry('+250+250')
 
         #讀取setting.txt的內容，並列出
-        with open("i18n/listeners/setting.txt", 'a+') as file:
-            if os.stat("i18n/listeners/setting.txt").st_size != 0:
+        with open("./setting.txt", 'a+') as file:
+            if os.stat("./setting.txt").st_size != 0:
                 file.seek(0)  #這行很重要，將指針指到文件頭
 
                 #準備好checkbox資訊

@@ -31,7 +31,7 @@ class I18nListener:
     SETTING_TRANS = {}
     SETTING_ARGS = {}
 
-    def __init__(self, locale='en-US', not_show_warning_words='None'):
+    def __init__(self, locale='en-US', language_file_path='.',not_show_warning_words='None'):
         self.is_admin_language_set=False
         self.is_ui_open=False
         self.locale = locale
@@ -42,8 +42,13 @@ class I18nListener:
                             'zh-CN':'中国 - 简体中文', 
                             'zh-TW':'台灣 - 繁體中文',  
                             'de-CH':'Schweiz - Deutsch'}
-        MappingRoutesGenerator().generate()
-        for f in glob('%s/languageFiles/%s/*%s.json' % (os.path.dirname(os.path.abspath(__file__)), locale, locale)): #各種語言翻譯檔(common-xx.json more-xx.json etc.)
+
+        #decide language file's path. It's '.' by default. 
+        if language_file_path == 'i18njson':
+            language_file_path = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
+
+        MappingRoutesGenerator().generate(language_file_path)
+        for f in glob('%s/languageFiles/%s/*%s.json' % (language_file_path, locale, locale)): #各種語言翻譯檔(common-xx.json more-xx.json etc.)
             with open(f, 'r', encoding='UTF-8') as i18n_file: #將json檔打開
                 i18n_dict = json.load(i18n_file)  #將裏頭的json結構轉換成python dict
             self.combine_i18n_dict(source_dict=i18n_dict, target_dict=I18nListener.TRANSLATION_FILE)
@@ -63,8 +68,8 @@ class I18nListener:
         if not self.is_admin_language_set:#set the admin language in the first suite start
             self.is_admin_language_set=True
             BuiltIn().set_global_variable('${language}',self.locale_dict[self.locale])
-        with open("i18n/listeners/setting.txt", 'a+') as file:
-            if os.stat("i18n/listeners/setting.txt").st_size != 0:
+        with open("./setting.txt", 'a+') as file:
+            if os.stat("./setting.txt").st_size != 0:
                 file.seek(0)  #這行很重要，將指針指到文件頭
                 for i, line in enumerate(file.readlines()):
                     # logger.warn("in for")

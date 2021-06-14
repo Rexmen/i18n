@@ -3,9 +3,8 @@ import os
 
 class MappingRoutesGenerator:
 
-    def generate(self):
-            current_dir = os.path.normpath(os.path.dirname(__file__))
-            language_files = os.scandir(os.path.join(current_dir, 'languageFiles/en-US')) # 'en-US' is a standard language file for this generator 
+    def generate(self, language_file_path):
+            language_files = os.scandir(os.path.join(language_file_path, 'languageFiles/en-US')) # 'en-US' is a standard language file for this generator 
             parse_route_record = []
             i18n_json_routes_map = {} # Use this dict dump to json file
 
@@ -31,7 +30,7 @@ class MappingRoutesGenerator:
                 with open(os.path.normpath(language_file.path), 'r', encoding='utf-8') as f:
                     language_key_text_mappings = json.load(f) # json-> python
                     parse_i18n_key_mapping(language_key_text_mappings)
-            json.dump(i18n_json_routes_map, open('./i18n/listeners/mappingRoutes.json', "w"),indent=4) 
+            json.dump(i18n_json_routes_map, open('./mappingRoutes.json', "w"),indent=4) 
 
 if __name__=='__main__':
     MappingRoutesGenerator().generate()

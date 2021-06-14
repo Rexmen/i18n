@@ -16,7 +16,7 @@ class I18nMap:
         self.no_need_trans_attirbutes = ["@id", "@class"]
 
     def read_translation_mapping_routes(self):
-        json_path = glob('%s/mappingRoutes.json' % (os.path.dirname(os.path.abspath(__file__))))[0]
+        json_path = glob('./mappingRoutes.json')[0]
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f) # json -> python
     
