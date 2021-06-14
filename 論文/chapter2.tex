@@ -47,7 +47,7 @@ I18nListener類別實作Listener類別，負責程式開始與結束時執行sta
     \caption{Robot Framework系統參數設定}
     \label{rfSysArgsSetting}
 \end{figure}
-測試執行時，系統會先去呼叫I18nListener類別並執行其實作。之後初始化MappingRoutesGenerator類別，藉由讀取由使用者自行提供的JSON格式翻譯檔(如圖~\ref{英文的JSON格式翻譯檔示例})，建立出一份由「待翻譯詞」和「Key階層」構成的翻譯路徑檔(如圖~\ref{翻譯路徑檔})；例如待翻譯詞‘Support’，有兩種Key階層的路徑: "['SUPPORT']" 和 "['SUB\_BAR']['BLUE\_TITLE']['MICROSOFT\_SUPPORT']"，代表‘Support’在多國語言網頁中，會在不同情境下被翻譯成兩種不同的詞彙。接著系統會依序初始化I18nMap、I18nTrigger，以及所有代理關鍵字類別。
+測試執行時，系統會先去呼叫I18nListener類別並執行其實作。之後初始化MappingRoutesGenerator類別，藉由讀取由使用者自行提供的JSON格式翻譯檔(如圖~\ref{英文的JSON格式翻譯檔示例})，建立出一份由「待翻譯詞」和「Key階層」構成的翻譯路徑檔(如圖~\ref{翻譯路徑檔})；例如待翻譯詞‘Support’，有兩種Key階層的路徑: “['SUPPORT']" 和 “['SUB\_BAR']['BLUE\_TITLE']['MICROSOFT\_SUPPORT']"，代表‘Support’在多國語言網頁中，會在不同情境下被翻譯成兩種不同的詞彙。接著系統會依序初始化I18nMap、I18nTrigger，以及所有代理關鍵字類別。
 
 \begin{figure}[H]
     \centering
