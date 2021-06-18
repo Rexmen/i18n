@@ -1,30 +1,49 @@
 \chapter{背景知識}
 
+%2.1
 \section{國際化}
 國際化(Internationalization)\cite{internationalization}，簡寫為i18n，其中18代表i和n之間的18個英文字母。國際化是開發軟體時，將軟體本身和特定語言、地區脫鉤的一個過程，除了可以滿足不同的地區、文化的大眾需求，移植軟體到不同的語言環境時，也不須改變內部程式的實作。
 
+%2.2
 \section{自動化驗收測試}
 驗收測試(Acceptance Testing)\cite{se}，是一種站在使用者的立場，去檢驗一個真實存在的系統，是否滿足使用者需求與預期的測試方法。
 
 而透過撰寫自動化測試腳本\cite{AT}，如今我們可以執行更符合成本，且更加精確的自動化驗收測試。改善了過往手動執行驗收測試時，存在的人為操作誤差、系統問題無法即時呈現、成本較高等問題。
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+%2.3
 \section{Robot Framework}
 Robot Framework\cite{rf}\cite{rfguide}是一個開源的框架語言，可以用來執行自動化驗收測試或機器人自動化，核心框架是由Python\cite{python}編寫而成，測試者可以使用Python或Java擴充其函式庫。其特色是擁有簡單的語法，以及容易理解的原生關鍵字(Keyword)，測試者可以視需求使用並包裝成更接近自然語言的關鍵字。
 
 \subsection{Robot Framework測試腳本}
-一個Robot Framework 的測試腳本基本上由三個區塊構成，分別是:
+一個Robot Framework 的測試腳本基本上由四個區塊構成，分別是:
 \begin{itemize}
     \item[1.]Settings: 包含了使用到的library與resource file，也可以將Test Setup(測試腳本執行前要做的動作)、Test Teardown(測試腳本執行後要做的動作)定義於此。
     \item[2.]Test Cases: 在此測試者可以為各項想要驗證的使用者需求，撰寫核心的測試腳本
     \item[3.]Keywords: 如果測試腳本使用並非Robot Framework的原生關鍵字，或未被定義於其他resource file中，測試者可以在此處撰寫出新的關鍵字去達到測試目的。
+    \item[4.]Variables: 測試者可以在此處定義測試案例需要用到的Global變數。 
 \end{itemize}
 
 \subsection{Robot Framework測試報表}
 在測試腳本運行結束後，Robot Framework會產生出一份測試報表，記錄了整體的執行狀況，包含測試通過或失敗、腳本執行時間，並透過可展開的階層式圖表，方便測試者去追蹤到當前出現問題的關鍵字，進而修復錯誤。
 
+\subsection{Robot Framework Listener}
+Robot Framework提供了Listener\cite{rfguide}的介面，用以接收測試不同時期的資訊，並可以實作此介面，在測試腳本執行的不同時期做出額外的反應；例如實作end\_suite()函式，在測試結束後開啟一詞多譯UI，供使用者選擇。
+
+此外，Robot Framework的Listener分為Version2和Version3兩種版本；以本論文來說，使用到的是版本Version2，必須在實作Listener處加上:
+\begin{lstlisting}[language={python}]
+ROBOT_LISTENER_API_VERSION=2
+\end{lstlisting}
+以供系統辨認要實作的Listener版本。而為了讓系統在測試執行時呼叫Listener，在執行測試腳本前必須設定- -listener組態，來指定需要使用到哪些自定義的Listener。
+
+%2.4
 \section{XPath}
 XPath\cite{xpath}，全名為 XML Path Language，可以用來定位XML檔案中某節點所處在的位置。在使用Robot Framework撰寫的網頁自動化驗收測試中，我們便時常需要藉助XPath，去找到並確定畫面上某元件的位置，以對其狀態進行測試。
 
-\section{第一版i18n的系統架構與運作原理}
+%2.5
+\section{第一版i18n的系統架構與流程}
 \begin{figure}[H]
     \includegraphics[width= 1.1\textwidth]{../UML/i18n class diagram-第一版i18n class diagram.png}
     \caption{第一版i18n的系統類別圖}
@@ -39,7 +58,7 @@ I18nListener類別實作Listener類別，負責程式開始與結束時執行sta
     \caption{第一版i18n的系統流程Sequence Diagram}
     \label{1stI18nSequenceDiagram}
 \end{figure}
-第一版i18n系統流程的部分(如圖~\ref{1stI18nSequenceDiagram})，在使用i18n工具執行測試腳本前，使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數為-d out –L debug -–listener i18n/listeners/I18nListener.py:zh-TW，zh-TW代表當前語言為繁體中文-台灣(如圖~\ref{rfSysArgsSetting})。
+第一版i18n系統流程的部分(如圖~\ref{1stI18nSequenceDiagram})，在使用i18n工具執行測試腳本前，使用者必須於Red編輯器\cite{red}中的Additional Robot Framework arguments設定系統參數為-d out –L debug - -listener i18n/listeners/I18nListener.py:zh-TW，zh-TW代表當前語言為繁體中文-台灣(如圖~\ref{rfSysArgsSetting})。
 
 \begin{figure}[H]
     \centering

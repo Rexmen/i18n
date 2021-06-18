@@ -78,7 +78,7 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
         \begin{tabular}{|l|l|}
         \hline
         \multicolumn{2}{|c|}{待擴充的代理關鍵字}\\ \hline
-        Collections Libaray (3.0.4) & SeleniumLibrary (4.5.0) \\ \hline
+        Collections Libaray (3.2.2) & SeleniumLibrary (4.5.0) \\ \hline
         1. count\_values\_in\_list & 1. alert\_should\_be\_present \\
         2. dictionaries\_should\_be\_equal & 2. input\_text\_into\_alert \\
         3. dictionary\_should\_contain\_item & 3. *input\_text\_into\_prompt\\    
@@ -144,7 +144,7 @@ xpath = locator[0]
 \end{lstlisting}
 將第一筆翻譯同時也是唯一一筆翻譯指派給之後要回傳的xpath。
 
-\item[7*.]將翻譯好的參數部分回傳給原生的Robot Framework原生關鍵字，如:
+\item[7*.]將翻譯好的參數部分回傳給Robot Framework原生關鍵字，如:
 \begin{lstlisting}[language={python}]
 return func(self, by, BuiltIn().replace_variables(xpath))
 \end{lstlisting}
@@ -209,7 +209,7 @@ for rule, matches in all_match_attributes.items():
 
 之後，再次呼叫find\_all\_match\_word()函式，得到所有符合新翻譯邏輯的HTML屬性，all\_match\_words。並利用迴圈遍歷all\_match\_words中的屬性，執行translate()函式，進行翻譯檢查。
 	
-接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的 //*[text()= 'Software']，變成了翻譯後的//*[text()= '軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
+接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的 //*[text()=‘Software']，變成了翻譯後的//*[text()=‘軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
 
 最後，將翻譯後的translated\_xpath，回傳給FindElementsProxy類別，完成一次XPath的翻譯。
 
@@ -228,8 +228,8 @@ for rule, matches in all_match_attributes.items():
 \begin{itemize}
 \item[1.]假如存在「多個翻譯都會使測試通過」，翻譯過後的腳本測試對象，就有機會偏離使用者原先的預期。其原因可能是XPath使用contains撰寫，使得翻譯只要包含特定詞即會讓測試通過。如: 翻譯過後的XPath為//*[@id= ‘supHomeAndLandingPageHeaderContainer]//*[contains(@text, ‘支援’)]，而畫面上待驗證的元件顯示的詞是「支援服務」，測試會通過，但遺憾的是使用者預期‘Support’在此處應該要被翻譯為「支援服務」。
  
-\hspace{5mm} 又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。如: 畫面上兩個元件，分別顯示「支援」與「支援服務」；原本使用者預期要驗證的是畫面上存在「支援服務」字樣，但因為‘Support’先被系統檢查的翻譯為「支援」，導致翻譯後的XPath //*[@text= '支援']率先通過了測試，而不會再去檢驗後續的翻譯。 
-\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。如: 原腳本要驗證 //*[@text='Service']，測試會失敗，但經過翻譯後XPath變成//*[@text= '支援服務']，測試卻會通過，因為畫面上剛好存在「支援服務」字樣。
+\hspace{5mm} 又或是畫面上同時存在含有不同翻譯的元件，且滿足測試腳本的XPath，而導致測試通過。如: 畫面上兩個元件，分別顯示「支援」與「支援服務」；原本使用者預期要驗證的是畫面上存在「支援服務」字樣，但因為‘Support’先被系統檢查的翻譯為「支援」，導致翻譯後的XPath //*[@text= ‘支援’]率先通過了測試，而不會再去檢驗後續的翻譯。 
+\item[2.]假如此測試腳本原先就會發生錯誤，經過翻譯後的XPath卻因為碰巧滿足畫面上的某個元件，而導致測試通過。在此特殊情形下，翻譯過後的測試對象，則更明顯的偏離了使用者原先的預期，且也改變了測試結果。如: 原腳本要驗證 //*[@text='Service']，測試會失敗，但經過翻譯後XPath變成//*[@text= ‘支援服務’]，測試卻會通過，因為畫面上剛好存在「支援服務」字樣。
 \end{itemize}
 
 所以，本論文將提供一個圖形化使用者介面，記錄下執行翻譯時當下的關鍵字參數組合，並顯示所有可能的翻譯詞，讓使用者從中去選擇，並產生一個設定檔，以便之後再次執行同一測試腳本時，根據設定檔的內容去選擇適當的翻譯詞。期望透過如此的方法來改善上述兩點一詞多譯所遭遇的問題。
@@ -281,14 +281,43 @@ for rule, matches in all_match_attributes.items():
 
 以下將詳述將i18n包裝成Python模組的步驟:
 
-在將i18n工具打包成為一個Library前，必須先準備以下四個檔案: setup.cfg、pyproject.toml、README.md、LICENSE\cite{license}。此外必須確認將打包的資料夾下，包含\_\_init\_\_.py檔案，以被系統辨識為一個Python模組。
+在將i18n工具打包成為一個Library前，必須先準備以下五個檔案: setup.cfg、pyproject.toml、README.md、LICENSE\cite{license}、MANIFEST.in。此外必須確認將打包的資料夾下，包含\_\_init\_\_.py檔案，以被系統辨識為一個Python模組。
 
-上述的檔案準備就緒後，便可以在i18n專案目錄下執行python –m build 指令，待建置完畢，便會產生一個名為dist的資料夾，裡面裝著打包好的RF-i18n-tool模組檔案。接下來執行python –m twine upload –-repository pypi dist/* 指令，輸入帳號密碼後，便能成功將dist資料夾中的RF-i18n-tool模組上傳至PYPI了。之後在PYPI網站上搜尋RF-i18n-tool，便能看到上傳的模組。
+上述的檔案準備就緒後，便可以在i18n專案目錄下執行python –m build 指令，待建置完畢，便會產生一個名為dist的資料夾，裡面裝著打包好的RF-i18n-tool模組檔案。接下來執行python –m twine upload - -repository pypi dist/* 指令，輸入帳號密碼後，便能成功將dist資料夾中的RF-i18n-tool模組上傳至PYPI了。之後在PYPI網站上搜尋RF-i18n-tool，便能看到上傳的模組。
 
-使用者若要安裝此模組，只需執行pip install RF-i18n-tool 指令即可(如圖3.11)。最後，使用者便可透過import此模組來使用i18n工具的功能。
+使用者若要安裝此模組，只需執行pip install RF-i18n-tool 指令即可(如圖3.11)。
 
 \begin{figure}[H]
     \centering
     \includegraphics[width= .5\textwidth]{../論文截圖/3-5-8 安裝RF-AWT-i18n指令.png}
     \caption{安裝RF-i18n-tool指令}
+\end{figure}
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+
+最後，使用者便可透過在Additional Robot Framework arguments中設定系統參數(如圖~\ref{以i18n預設JSON翻譯檔來執行i18n工具}、~\ref{以使用者提供的JSON翻譯檔來執行i18n工具})，來使用i18n工具。自定義的JSON翻譯檔路徑必須遵守以下格式(如圖~\ref{JSON翻譯檔路徑格式})
+
+\begin{figure}[H]
+\begin{lstlisting}[language={python}]
+-d out -L debug --listener %YOUR_PYTHON_PATH%/Lib/site-packages/i18n/listeners/I18nListener.py:YOUR_LOCALE:i18njson
+\end{lstlisting}
+\caption{以i18n預設JSON翻譯檔來執行i18n工具}
+\label{以i18n預設JSON翻譯檔來執行i18n工具}
+\end{figure}
+
+\begin{figure}[H]
+\begin{lstlisting}[language={python}]
+-d out -L debug --listener %YOUR_PYTHON_PATH%/Lib/site-packages/i18n/listeners/I18nListener.py:YOUR_LOCALE
+\end{lstlisting}
+\caption{以使用者提供的JSON翻譯檔來執行i18n工具}
+\label{以使用者提供的JSON翻譯檔來執行i18n工具}
+\end{figure}
+
+\begin{figure}[H]
+\begin{lstlisting}[language={python}]
+YOUR_PROJECT_DIR/languageFiles/YOUR_LOCALE(ex:zh-TW)/xxxYOUR_LOCALE.json
+\end{lstlisting}
+\caption{JSON翻譯檔路徑格式}
+\label{JSON翻譯檔路徑格式}
 \end{figure}

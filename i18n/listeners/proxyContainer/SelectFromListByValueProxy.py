@@ -70,15 +70,18 @@ class SelectFromListByValueProxy(Proxy):
             #這邊labels是tuple可以用'*' unpack argument，但labels_trans內部item還是list
             #為了下面回傳時好處理，此處必須把list包list的一詞多譯壓縮成一個string
             
+            # logger.warn(values_trans)
             # 若有翻譯會使case過，則用其置換labels_trans中的翻譯 #FIXME 可優化
             all_options = SelectElementKeywords._get_options(self, locator)
-            all_values = SelectElementKeywords._get_labels(self, all_options)
+            all_values = SelectElementKeywords._get_values(self, all_options)
             for i, lt in enumerate(values_trans): 
                     for single_tran in lt:
                         if single_tran in all_values:
                             values_trans[i] = single_tran
                             break
-
+        
+            # logger.warn(values_trans)
+            # logger.warn(*tuple(values_trans))
             return func(self, BuiltIn().replace_variables(xpath), *tuple(values_trans))
         return proxy
 

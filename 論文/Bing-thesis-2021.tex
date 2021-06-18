@@ -42,10 +42,12 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{listings}
+\usepackage{pdfpages}
 
 \input{def.tex}
 
 \begin{document}
+\includepdf[pages={1}]{bookname.pdf}                        %封面
 
 \AddToShipoutPicture{\WatermarkPicture}                     % 加入浮水印
 
