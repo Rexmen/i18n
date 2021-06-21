@@ -1,5 +1,4 @@
 *** Settings ***
-Force Tags    TableShouldContain
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    ../self_util.py

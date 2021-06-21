@@ -1,5 +1,4 @@
 *** Settings ***
-Force Tags    FindElement
 Resource    ../CommonVariables.txt
 Library    SeleniumLibrary
 Library    ../self_util.py
@@ -8,15 +7,16 @@ Test Setup    Run Keywords    Open Browser To Microsoft Page
 Test Teardown    Close Browser
 
 *** Test Cases ***
+Test web element is on th support page by given special attributes
+    Go To Support Page
+    ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageSearchBox' and @placeholder ='How can we help you?']
+    Page Should Contain Element    ${MicrosoftSupport}
+
 Check "Microsoft Support" webelement is on the support page
     Go To Support Page
     ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageHeaderContainer']//*[contains(text(), 'Support')]
     Page Should Contain Element    ${MicrosoftSupport}
 
-Test web element is on th support page by given special attributes
-    Go To Support Page
-    ${MicrosoftSupport} =    Set Variable    //*[@id ='supHomeAndLandingPageSearchBox' and @placeholder ='How can we help you?']
-    Page Should Contain Element    ${MicrosoftSupport}
 
 *** Keywords ***
 Open Browser To Microsoft Page

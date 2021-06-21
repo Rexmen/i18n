@@ -164,7 +164,7 @@ Check "Microsoft Support" webelement is on the support page
 \end{lstlisting}
 \caption{*Page Should Contain Element在代理關鍵字下執行的測試腳本}
 \end{figure}
-此測試腳本(如圖4.14)，會打開Microsoft中文官方網頁，前往支援頁面，之後使用Page Should Contain Element驗證畫面上的‘Support’文字(如圖4.15)。第一次測試通過(如圖4.16)，代表參數‘Support’有成功被翻譯，且系統將「支援服務」當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了「支援服務」當作‘Support’的唯一翻譯。第二次測試腳本通過(如圖4.17)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
+此測試腳本(如圖4.14)，會打開Microsoft中文官方網頁，前往支援頁面，之後使用Page Should Contain Element驗證畫面上的‘Support’文字(如圖4.15)。第一次測試通過(如圖4.16)，代表參數‘Support’有成功被翻譯，且系統將「支援」當作‘Support’的其中一種翻譯，隨後跳出了一詞多譯UI。之後，使用者選擇了「支援服務」當作‘Support’的唯一翻譯。第二次測試腳本通過(如圖4.17)，且沒有跳出一詞多譯UI，代表參數‘Support’成功被翻譯為使用者前一次的選擇。
 
 \begin{figure}[H]
 \centering
@@ -375,7 +375,7 @@ Support Button Text Should Be
 \end{lstlisting}
 \caption{Test multiple user behaviors on Microsoft website測試腳本實作}
 \end{figure}
-此測試腳本(如圖4.33)，會打開Microsoft中文官方網頁，先到支援頁面，之後點擊「支援」的Logo，到新的支援頁面。最後，驗證畫面上的橫向標語有包含「支援服務」字樣。因為同時遭遇到3種‘Support’需要被翻譯，系統便會逐一將它們紀錄下來，待測試腳本結束後，分別顯示於一詞多譯UI上。
+此測試腳本(如圖4.33)，會打開Microsoft中文官方網頁，先到支援頁面，之後點擊「支援」的Logo，到新的支援頁面。最後，驗證畫面上的橫向標語有包含‘Support’字樣，以及畫面上搜尋框有包含 “How can we help you”字樣。因為同時遭遇到3種‘Support’需要被翻譯，系統便會逐一將它們紀錄下來，待測試腳本結束後，分別顯示於一詞多譯UI上。
 
 \begin{figure}[H]
 \includegraphics[width= 1.1\textwidth]{../論文截圖/4-4-2 test multiple user behaviors測試腳本1st run.png}
@@ -391,4 +391,4 @@ Support Button Text Should Be
 \caption{Test multiple user behaviors on Microsoft website測試腳本第二次執行結果}
 \end{figure}
 
-第二次執行測試腳本時(如圖4.35)，會根據設定檔內的翻譯紀錄，分別對三種‘Support’進行翻譯。因為被系統判定為單一翻譯，所以測試結束後，並不會顯示一詞多譯UI。
+第二次執行測試腳本時(如圖4.35)，會根據設定檔內的翻譯紀錄，分別對三種‘Support’進行翻譯。因為‘Support’被i18n系統根據不同情況判定為含有唯一翻譯，所以測試結束後，並不會顯示一詞多譯 UI。，所以測試結束後，並不會顯示一詞多譯UI。

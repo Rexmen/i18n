@@ -8,6 +8,13 @@ Library    ../self_util.py
 # Test Teardown    Close Browser
 
 *** Test Cases ***
+Test should be equal
+    [Tags]    one
+    ${word1} =    Set Variable    More
+    ${word2} =    Set Variable    Support
+    Should Be Equal    ${word1}    More
+    Should Be Equal    ${word2}    Support
+
 Check "More" Text is expected
     Go To Support Page
     ${more} =    Set Variable    //*[text()='More' and ../../preceding-sibling::*[contains(@class,'LNK_OFFICE_TEMPLATES')]//*[text()='Templates']]
@@ -20,11 +27,6 @@ First argument or second argument Exist multiple translations of the word
     ${supportButtonText} =    Get Text After It Is Visible    ${supportButton}
     Should Be Equal    ${supportButtonText}    Support
 
-Test should be equal
-    ${word1} =    Set Variable    More
-    ${word2} =    Set Variable    Support
-    Should Be Equal    ${word1}    More
-    Should Be Equal    ${word2}    Support
 
 *** Keywords ***
 Open Browser To Microsoft Page
