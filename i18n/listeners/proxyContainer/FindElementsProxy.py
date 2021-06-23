@@ -46,7 +46,7 @@ class FindElementsProxy(Proxy):
                     # 對預計開啟的UI做一些準備
                     i18n.I18nListener.Is_Multi_Trans = True
                     
-                    if str(full_args)+multiple_translation_words[0] not in ui.UI.unique_log:
+                    if str(full_args)+multiple_translation_words[0] not in ui.UI.unique_log:#FIXME
                         word_translation = i18n.I18nListener.MAP.values(multiple_translation_words, full_args)
                         ui.UI.origin_xpaths_or_arguments.append(full_args)
                         ui.UI.add_trans_info(self, multiple_translation_words, word_translation, full_args, func.__name__)

@@ -51,13 +51,18 @@ class RemoveValuesFromListProxy(Proxy):
             # 將'list_的翻譯值' 賦予給 '原本的list_'，
             # 否則之後並不會實際刪除list內的values
             # 並且將list包list格式化成只有一層list
-            for i in range(len(list_)):
-                #格式化成string並過濾雜訊
-                list_[i] = str(list_trans[i]).strip("[]").replace(',','').replace('\'', '').replace(' ', '')
-            for i in range(len(values)):
-                #格式化成string並過濾雜訊    
-                values_trans[i] = str(values_trans[i]).strip("[]").replace(',','').replace('\'', '').replace(' ', '')
-            # logger.warn(list_)
+            
+            # 將翻譯後的list_整理成只有唯一翻譯
+            for i,lt in enumerate(list_trans):
+                list_[i] = lt[0]
+            
+            #若value_trans中有翻譯在list_中，則將value_trans[i]設為此值，以利回傳
+            for i,vt in enumerate(values_trans):
+                for j in range(len(vt)):
+                    if vt[j] in list_:
+                        values_trans[i] = vt[j]
+                        break;
+            
             return func(self, list_, *tuple(values_trans))
         return proxy
 

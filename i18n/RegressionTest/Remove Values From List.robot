@@ -11,3 +11,9 @@ Remove values from list
     Remove Values From List    ${list1}    Support
     List Should Not Contain Value    ${list1}    支援
     Log    ${list1}
+
+Second test
+    @{list1} =    Create List    Support    Software
+    Remove Values From List    ${list1}    Support
+    List Should Not Contain Value    ${list1}    Support
+    Log    ${list1}
