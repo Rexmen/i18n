@@ -1,5 +1,5 @@
-\chapter{研究方法與實作}
-本章將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並點出與朱峻平的論文「支援多國語言的Robot Framework網頁自動化驗收測試」(第一版i18n工具)的不同之處。
+\chapter{新版i18n的系統設計}
+本章將詳述如何針對i18n工具現存的四項問題，進行思考與改善，並點出與朱峻平的論文「支援多國語言的Robot Framework網頁自動化驗收測試」(第一版i18n工具)\cite{i18n}的不同之處。
 
 %3.1
 \section{系統擴充}
@@ -7,19 +7,20 @@
 
 \begin{figure}[H]
 \flushleft
-\includegraphics[width= 180mm]{../UML/i18n class diagram-i18n class diagram.png}
+\includegraphics[width= 1.1\textwidth]{../UML/i18n class diagram-i18n正式版 class diagram .png}
 \caption{新版i18n系統類別圖}
 \label{新版i18n系統類別圖}
 \end{figure}
 
 本論文新增的UI類別會在程式執行期間，記錄下遭遇到一詞多譯的詞語以及其翻譯。在程式執行後，產生一詞多譯的UI；使用者選擇並提交希望的翻譯後，便會產生一個系統設定檔記錄翻譯選擇。
+\hspace*{\fill} \\
 
 而其他20種新增的代理關鍵字類別(如表~\ref{本論文新增的20種代理關鍵字類別})，皆實作父類別Proxy，負責代理各自對應之原生關鍵字的參數部分翻譯，並將翻譯好的參數部分回傳給對應的原生關鍵字。
 
-\hspace*{\fill} \\
-
 \begin{table}[H]
     \centering
+    \caption{本論文新增的20種代理關鍵字類別}
+    \hspace*{\fill} \\
         \begin{tabular}{|l|l|}
         \hline
         \multicolumn{2}{|c|}{新增的代理關鍵字類别} \\ \hline
@@ -35,22 +36,40 @@
         10. ListShouldContainValueProxy & 20. TitleShouldBeProxy\\   
         \hline
         \end{tabular}
-    \caption{本論文新增的20種代理關鍵字類別}
     \label{本論文新增的20種代理關鍵字類別}
 \end{table}
 
 系統執行流程相較於第一版i18n改動較大的部份，是在測試腳本結束後；除了將一詞多譯的warning資訊顯示在報表上外，若是遭遇過一詞多譯，便會跳出一詞多譯的UI(詳見3-4節)，記錄了執行翻譯當下關鍵字的參數組合，並顯示所有可能的翻譯詞，讓使用者可以從中去選擇並產生一個設定檔。之後再次執行測試腳本時，系統便會根據設定檔的內容去選擇適當的翻譯詞，同時消除報表上的warning提示資訊。
 
 \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
 
 %3.2
 \section{擴充與修改代理關鍵字實作}
-第一版i18n工具只支援7種Robot Framework原生關鍵字(如表~\ref{第一版i18n已提供的原生關鍵字})\cite{i18n}。尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去執行多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得有翻譯需求的原生關鍵字，其參數部分都能正確的被翻譯。
+以下將分為新版i18n需要擴充的代理關鍵字、未來遭遇Robot Framework相關Library版本更新的應對，以及新版i18n擴充代理關鍵字的實作步驟來做說明。
+
+%3.2.1
+\subsection{新版i18n需要擴充的代理關鍵字}
+
+我們需要為一個Robot Framework的原生關鍵字撰寫代理關鍵字，有以下兩點情況:
+
+\begin{itemize}
+\item[1 .]關鍵字的參數部分包含純文字部分，所以有翻譯的需求，可能是基本的string、list、dictionary；例如: 關鍵字should\_be\_equal，其參數部分代入‘Support’，‘Support’，去驗證兩者是否相同。
+
+\item[2 .]關鍵字的參數部分包含XPath，且XPath內的HTML屬性會包含純文字的部分，所以有翻譯的需求；例如: 關鍵字find\_element，其參數部分代入XPath “//*[@id =‘supHomeAndLandingPageHeaderContainer’]//*[contains(text(), ‘Support’)]”，去驗證畫面上的橫向標題container是否包含‘Support’字樣。
+\end{itemize}
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+
+根據朱峻平的論文\cite{i18n}，第一版i18n工具只支援7種Robot Framework原生關鍵字(如表~\ref{第一版i18n已提供的原生關鍵字})；並整理出尚有31種參數部分需要翻譯的原生關鍵字，未提供支援。如果測試腳本使用到這些未支援的原生關鍵字去執行多國語言網頁測試，則會導致出錯。因此，本論文的解法是擴充完目前Robot Framework版本剩下的代理關鍵字，使得有翻譯需求的原生關鍵字，其參數部分都能正確的被翻譯。
 
 \renewcommand\arraystretch{0.8}
 \begin{table}[H]
     \centering
+    \caption{第一版i18n已提供代理的Robot Framework原生關鍵字}
+    \hspace*{\fill} \\
     \setlength{\tabcolsep}{10mm}{
         \begin{tabular}{|l|}
         \hline
@@ -65,7 +84,6 @@
         7. should\_not\_contain\\       
         \hline
         \end{tabular}}
-    \caption{第一版i18n已提供代理的Robot Framework原生關鍵字}
     \label{第一版i18n已提供的原生關鍵字}
 \end{table}
 
@@ -74,6 +92,8 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
 
 \begin{table}[H]
     \centering 
+    \caption{新版i18n將擴充代理的Robot Framework原生關鍵字}
+    \hspace*{\fill} \\
     \setlength{\tabcolsep}{5mm}{
         \begin{tabular}{|l|l|}
         \hline
@@ -97,9 +117,44 @@ input\_text\_into\_prompt、xpath\_should\_match\_x\_times。因此，還有29�
         & 16. table\_column\_should\_contain\\
         \hline
         \end{tabular}}
-    \caption{新版i18n將擴充代理的Robot Framework原生關鍵字}
     \label{新版i18n將擴充代理的Robot Framework原生關鍵字}
 \end{table}
+
+\hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+\\ \hspace*{\fill} \\
+
+%3.2.2
+\subsection{未來遭遇Robot Framework相關Library版本更新的應對}
+
+未來若又經歷了Robot Framework和SeleniumLibrary版本的更新，可以透過查閱Robot Framework和SeleniumLibrary在官方github上\cite{robotframeworkgithub}\cite{seleniumlibrarygithub}的release notes來了解版本變更資訊，並對新版本新增/修改/刪除的原生關鍵字進行代理關鍵字實作上的更新。在此將以實際的操作步驟，說明本論文是如何透過查閱SeleniumLibrary官方github上的release notes，發現input\_text\_into\_prompt 和 xpath\_should\_match\_x\_times關鍵字已被淘汰。
+
+首先，到SeleniumLibrary的release頁面，因為本次i18n工具是從SeleniumLibrary的版本3.1.1升至4.5.0，所以從3.1.1版一個個往上找，最後於版本4.0.0的release notes處發現了issue編號\#1274 “Remove keywords which where officially deprecated in previos releases”有異樣(如圖~\ref{seleniumlibrary4.0.0issue})，點擊連結進入此issue；進一步發現issue編號\#1334，再次點擊進入，並在Files changed頁面中，發現input\_text\_into\_prompt和xpath\_should\_match\_x\_times關鍵字已在此次更新後被移除(如圖~\ref{removeinput_text_into_prompt}、圖~\ref{removexpath_should_match_x_times})。
+\hspace*{\fill} \\
+
+\begin{figure}[H]
+    \includegraphics[width= \textwidth]{../論文截圖/seleniumlibrary4.0.0issue.png}
+    \caption{SeleniumLibrary4.0.0版修復之編號\#1274 issue}
+    \label{seleniumlibrary4.0.0issue}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= .9\textwidth]{../論文截圖/remove input_text_into_prompt.png}
+    \caption{input\_text\_into\_prompt關鍵字已在SeleniumLibrary版本4.0.0被移除}
+    \label{removeinput_text_into_prompt}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= .9\textwidth]{../論文截圖/remove xpath_should_match_x_times.png}
+    \caption{xpath\_should\_match\_x\_times關鍵字已在SeleniumLibrary版本4.0.0被移除}
+    \label{removexpath_should_match_x_times}
+\end{figure}
+
+%3.2.3
+\subsection{新版i18n擴充代理關鍵字的實作步驟}
+
 以下將以 FindElementsProxy的Flow Chart為例，詳述現今配合新增的一詞多譯UI下，本論文是如何完成代理關鍵字的擴充和修改。(沿用第一版i18n的部分會以‘*’號標註)
 
 \begin{figure}[H]
@@ -138,6 +193,7 @@ ui.UI.add_trans_info(self, multiple_translation_words, word_translation, full_ar
 \end{lstlisting}
 先設定再測試結束後，需要開啟一詞多譯UI。若該「參數+翻譯詞」組合尚未被翻譯過，則記錄下該次翻譯的參數部分和翻譯資訊。
 
+\hspace*{\fill} \\
 \item[6*.]若此次代理關鍵字沒有遭遇一詞多譯，則如:
 \begin{lstlisting}[language={python}]
 xpath = locator[0]
@@ -205,16 +261,16 @@ for rule, matches in all_match_attributes.items():
     for match in matches:
         if match not in self.no_need_trans_attirbutes:
 \end{lstlisting}
+\hspace*{\fill} \\
 若不包含其中，則根據屬性含有 ‘@’ 或 ‘()’，分別分配給rule\_for\_at和rule\_for\_bracket變數，並呼叫combine\_locate\_rule()函式，得到一套新的翻譯邏輯，locate\_rule。
 
 之後，再次呼叫find\_all\_match\_word()函式，得到所有符合新翻譯邏輯的HTML屬性，all\_match\_words。並利用迴圈遍歷all\_match\_words中的屬性，執行translate()函式，進行翻譯檢查。
-	
+
 接著，判斷經過翻譯後，原先的xpath是否發生變化；例如xpath從原本的 //*[text()=‘Software']，變成了翻譯後的//*[text()=‘軟體']。若xpath改變，則執行log\_translation\_info()函式，將翻譯資訊顯示於測試報表上。
 
 最後，將翻譯後的translated\_xpath，回傳給FindElementsProxy類別，完成一次XPath的翻譯。
 
 \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
 \\ \hspace*{\fill} \\
@@ -285,7 +341,7 @@ for rule, matches in all_match_attributes.items():
 
 上述的檔案準備就緒後，便可以在i18n專案目錄下執行python –m build 指令，待建置完畢，便會產生一個名為dist的資料夾，裡面裝著打包好的RF-i18n-tool模組檔案。接下來執行python –m twine upload - -repository pypi dist/* 指令，輸入帳號密碼後，便能成功將dist資料夾中的RF-i18n-tool模組上傳至PYPI了。之後在PYPI網站上搜尋RF-i18n-tool，便能看到上傳的模組。
 
-使用者若要安裝此模組，只需執行pip install RF-i18n-tool 指令即可(如圖3.11)。
+使用者若要安裝此模組，只需執行pip install RF-i18n-tool 指令即可(如圖3.11)。且之後會持續修復bug，並推出新的版本，因此版本數字僅供參考。
 
 \begin{figure}[H]
     \centering
@@ -294,7 +350,6 @@ for rule, matches in all_match_attributes.items():
 \end{figure}
 
 \hspace*{\fill} \\
-\\ \hspace*{\fill} \\
 
 最後，使用者便可透過在Additional Robot Framework arguments中設定系統參數(如圖~\ref{以i18n預設JSON翻譯檔來執行i18n工具}、~\ref{以使用者提供的JSON翻譯檔來執行i18n工具})，來使用i18n工具。自定義的JSON翻譯檔路徑必須遵守以下格式(如圖~\ref{JSON翻譯檔路徑格式})
 
