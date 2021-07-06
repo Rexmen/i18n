@@ -10,21 +10,16 @@ from robot.libraries.Collections import _Dictionary
 class DictionariesShouldBeEqualProxy(Proxy):
     def __init__(self, arg_format):
         arg_format[repr(['dict1', 'dict2', 'msg=None', 'values=True'])] = self
-        # DictionariesShouldBeEqual 和 DictionaryShouldContainSubDictionary 都會呼叫此proxy
+        
     def i18n_Proxy(self, func):
         def proxy(self, dict1, dict2, msg=None, values=True):
-            #定義'比較'的邏輯
-            compare = lambda x,y:True if x == y else False
-            #創出該次呼叫的參數紀錄
-            full_args = [str(dict1), str(dict2)] #將dictionary轉str, 方便之後資料讀寫
+            full_args = [str(dict1), str(dict2)]
 
-            #翻譯
-            #因為dictionary無法直接翻譯，所以拆成keys和values去分別翻譯，回傳值是list
             dict1_keys_trans = i18n.I18nListener.MAP.values(list(dict1.keys()), full_args)
             dict1_values_trans = i18n.I18nListener.MAP.values(list(dict1.values()), full_args)
             dict2_keys_trans = i18n.I18nListener.MAP.values(list(dict2.keys()), full_args)
             dict2_values_trans = i18n.I18nListener.MAP.values(list(dict2.values()), full_args)
-            whole_trans = []  # 將所有翻譯結果放在一起，用來判斷是否有包含一詞多譯
+            whole_trans = []
             whole_trans.append(dict1_keys_trans)
             whole_trans.append(dict1_values_trans)
             whole_trans.append(dict2_keys_trans)
@@ -32,21 +27,17 @@ class DictionariesShouldBeEqualProxy(Proxy):
             dict_have_multi_trans = False
             for i in range(4):
                 for dt in whole_trans[i]: 
-                    # logger.warn(dt)
                     if len(dt)>1:
                         dict_have_multi_trans = True 
                         break
 
-            #FIXME
             new_dict1 = {}
             new_dict2 = {}
             new_dict2=dict(zip(list(dict2.keys()), dict2_values_trans))
 
-            #遭遇一詞多譯
             if dict_have_multi_trans:
-                DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2, full_args) #show warning
-                #檢查case會pass or fail(使用原生library的function)
-                if 'contain_sub' in func.__name__: #呼叫此proxy的是DictionaryShouldContainSubDictionary
+                DictionariesShouldBeEqualProxy.show_warning(self, dict1, dict2, full_args)
+                if 'contain_sub' in func.__name__:
                     keys = self.get_dictionary_keys(dict2)
                     contain_key = True  
                     for k in keys:
@@ -57,7 +48,7 @@ class DictionariesShouldBeEqualProxy(Proxy):
                         diffs = False
                     else:
                         diffs = True
-                elif 'equal' in func.__name__: #呼叫此proxy的是DictionaryShouldBeEqual
+                elif 'equal' in func.__name__:
                     try:
                         keys = _Dictionary._keys_should_be_equal(self, dict1, dict2, msg, values)
                         diffs = list(_Dictionary._yield_dict_diffs(self, keys, dict1, dict2))
@@ -65,8 +56,6 @@ class DictionariesShouldBeEqualProxy(Proxy):
                             if dict1[k] in dict2_values_trans[0]:
                                 diffs = False
                     except:
-                    # 為了避免{['軟體']:['支援']}、{['軟體']:['支援', '支援服務']}
-                    # 被系統判定為不相等的情形: #FIXME
                         for dict1_key in dict1.keys():
                             for dict2_key in new_dict2.keys():
                                 if [dict1_key] in dict2_keys_trans and dict1[dict1_key] in new_dict2[dict2_key][0]:
@@ -75,39 +64,32 @@ class DictionariesShouldBeEqualProxy(Proxy):
                                 else:
                                     diffs = True
                                     break
-                if not diffs:  # pass
-                    # 對預計開啟的UI做一些準備
-                    # logger.warn("有一詞多譯，並且pass")
+                if not diffs:
                     i18n.I18nListener.Is_Multi_Trans = True
 
                     for i, dt in enumerate(dict1_keys_trans):
-                        if len(dt)>1 and str(full_args)+list(dict1.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict1.keys())[i] not in ui.UI.unique_log:
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict1.keys())[i]]                                # 還是要移交add_trans_info處理
+                            multi_trans_word = [list(dict1.keys())[i]]                                
                             ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)
                     for i, dt in enumerate(dict1_values_trans):
-                        if len(dt)>1 and str(full_args)+list(dict1.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict1.values())[i] not in ui.UI.unique_log:
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict1.values())[i]]                                # 還是要移交add_trans_info處理
+                            multi_trans_word = [list(dict1.values())[i]]                                
                             ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)                    
                     for i, dt in enumerate(dict2_keys_trans):
-                        if len(dt)>1 and str(full_args)+list(dict2.keys())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict2.keys())[i] not in ui.UI.unique_log:
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict2.keys())[i]]                                # 還是要移交add_trans_info處理
+                            multi_trans_word = [list(dict2.keys())[i]]                                
                             ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)                    
                     for i, dt in enumerate(dict2_values_trans):
-                        if len(dt)>1 and str(full_args)+list(dict2.values())[i] not in ui.UI.unique_log: #FIXME dict keys是否要在這邊判斷
+                        if len(dt)>1 and str(full_args)+list(dict2.values())[i] not in ui.UI.unique_log:
                             ui.UI.origin_xpaths_or_arguments.append(full_args)
-                            multi_trans_word = [list(dict2.values())[i]]                                # 還是要移交add_trans_info處理
+                            multi_trans_word = [list(dict2.values())[i]]                                
                             ui.UI.add_trans_info(self, multi_trans_word, dt, full_args, func.__name__)  
-            #以下不管(pass, fail) (有無一詞多譯)都要做 
-            #將dict1、dict2的 翻譯過後的key,value合併 
-            # 這邊會出錯，因為key要是唯一值， 暫時用原先的key代替
             dict1 = dict(zip(list(dict1.keys()), dict1_values_trans)) 
             dict2 = dict(zip(list(dict2.keys()), dict2_values_trans))
-            #將處理好的翻譯回傳給robot原生keyword
             
-            #FIXME
             for dict1_key in dict1.keys():
                 for dict2_key in dict2.keys():
                     if [dict1_key] in dict2_keys_trans and dict1[dict1_key]== dict2[dict2_key]:

@@ -29,8 +29,6 @@ class Proxy():
         raise('You should implement it!')
     
     def deal_warning_message_for_one_word(self, word,full_args, message_title):
-        # should be equal 搬來的
-        # from I18nListener import I18nListener
         message = ' '*3
         counter = 1
         should_return = False
@@ -41,7 +39,6 @@ class Proxy():
             message_for_list = ('\'%s\'' + ' can translate to: ' + '[ ' + ', '.join(possible_translations) +' ]') %word + '\n'
             message = message + message_value + message_for_list
             counter = counter + 1 
-        # list1_to_sring =  '[' + ', '.join(argu) + ']'
         if should_return:
             message =  ('   %s Word:' + ' ' + '\'' + word+ '\'' + '\n' + ' '*3 + message) % message_title
         else:

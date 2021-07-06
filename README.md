@@ -17,6 +17,8 @@ Installation
 
     pip install RF-i18n-tool
 
+See more detail on [RF-i18n-tool of PYPI](https://pypi.org/project/RF-i18n-tool/).
+
 How to use
 --------------
 * Set Additional Robot Framework arguments: (RED->Window->Preferences->Default Launch Configurations)
